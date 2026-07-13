@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matthew Buchman | Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --blue:#003087;--blue-l:#e8eef7;--blue-m:#b5c9e8;
+  --orange:#FA4616;--orange-l:#fff0ec;
+  --text:#111;--muted:#6b6b6b;--bg:#f9f9f7;--surface:#fff;
+  --border:rgba(0,0,0,0.07);--border-h:rgba(0,0,0,0.15);
+}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s cubic-bezier(.22,1,.36,1),transform 0.6s cubic-bezier(.22,1,.36,1);}
+.reveal.visible{opacity:1;transform:none;}
+
+/* NAV */
+nav{background:var(--blue);padding:0 5vw;display:flex;justify-content:space-between;align-items:center;height:62px;position:sticky;top:0;z-index:200;}
+.nav-logo img{height:38px;filter:brightness(0) invert(1);}
+.nav-links{display:flex;gap:1.75rem;list-style:none;}
+.nav-links a{font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;transition:color 0.2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--orange);transition:width 0.25s;}
+.nav-links a:hover{color:#fff;}
+.nav-links a:hover::after{width:100%;}
+
+/* HERO */
+.hero{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden;}
+.hero-slides{position:absolute;inset:0;z-index:0;}
+.hero-slide{position:absolute;inset:0;opacity:0;transition:opacity 1.2s cubic-bezier(.4,0,.2,1);background-size:cover;background-position:center;}
+.hero-slide.active{opacity:1;}
+.hero-slide::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,rgba(0,30,87,0.82) 0%,rgba(0,30,87,0.55) 50%,rgba(0,0,0,0.25) 100%);}
+.slide-dots{position:absolute;bottom:2.5rem;left:5vw;display:flex;gap:8px;z-index:10;}
+.dot{width:28px;height:3px;border-radius:2px;background:rgba(255,255,255,0.3);cursor:pointer;transition:background 0.3s,width 0.3s;}
+.dot.active{background:#fff;width:44px;}
+.hero-content{position:relative;z-index:5;padding:7rem 5vw 6rem;max-width:860px;margin:0 auto;width:100%;}
+.hero-eyebrow{display:flex;gap:10px;margin-bottom:1.75rem;flex-wrap:wrap;}
+.etag{font-size:12px;letter-spacing:0.07em;text-transform:uppercase;padding:4px 14px;border-radius:20px;font-weight:500;}
+.etag.blue{background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.25);backdrop-filter:blur(6px);}
+.etag.orange{background:var(--orange);color:#fff;}
+h1{font-family:'DM Serif Display',serif;font-size:clamp(2.8rem,5.5vw,4.2rem);font-weight:400;line-height:1.05;letter-spacing:-0.025em;margin-bottom:1.5rem;color:#fff;}
+.h1-line{display:block;overflow:hidden;}
+.h1-inner{display:block;animation:slideUp 0.8s cubic-bezier(.22,1,.36,1) both;}
+.h1-line:nth-child(1) .h1-inner{animation-delay:.2s;}
+.h1-line:nth-child(2) .h1-inner{animation-delay:.35s;}
+.h1-line:nth-child(3) .h1-inner{animation-delay:.5s;}
+@keyframes slideUp{from{transform:translateY(110%)}to{transform:none}}
+h1 em{font-style:italic;color:rgba(255,255,255,0.6);}
+.hero-sub{font-size:17px;color:rgba(255,255,255,0.75);max-width:480px;margin-bottom:2.5rem;line-height:1.65;animation:fadeUp 0.7s 0.65s cubic-bezier(.22,1,.36,1) both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;animation:fadeUp 0.7s 0.78s cubic-bezier(.22,1,.36,1) both;}
+.hero-bar{position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--orange));z-index:10;transform-origin:left;animation:barGrow 5s linear infinite;}
+@keyframes barGrow{0%{transform:scaleX(0)}100%{transform:scaleX(1)}}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;text-decoration:none;border-radius:8px;cursor:pointer;border:none;transition:transform 0.15s,background 0.15s;}
+.btn:active{transform:scale(0.97);}
+.btn-white{background:#fff;color:var(--blue);font-weight:600;}
+.btn-white:hover{background:#f0f4ff;transform:translateY(-1px);}
+.btn-orange{background:var(--orange);color:#fff;}
+.btn-orange:hover{background:#e03a0e;transform:translateY(-1px);}
+.btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.4);}
+.btn-outline:hover{background:rgba(255,255,255,0.1);transform:translateY(-1px);}
+.btn-primary{background:var(--blue);color:#fff;}
+.btn-primary:hover{background:#002070;transform:translateY(-1px);}
+.btn-ghost{background:var(--surface);color:var(--text);border:1px solid var(--border-h);}
+.btn-ghost:hover{background:#f0f0ee;transform:translateY(-1px);}
+
+/* SECTIONS */
+.section{padding:5rem 5vw;max-width:960px;margin:0 auto;}
+.sec-header{display:flex;align-items:center;gap:12px;margin-bottom:2.5rem;}
+.sec-pill{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue);background:var(--blue-l);padding:4px 12px;border-radius:20px;font-weight:500;white-space:nowrap;}
+.sec-line{flex:1;height:1px;background:var(--border);}
+
+/* EXPERIENCE GRID */
+.stage{position:relative;}
+.stage-svg{position:absolute;top:0;left:0;width:100%;pointer-events:none;z-index:5;overflow:visible;}
+.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.exp-cell{padding:18px;position:relative;z-index:2;}
+.exp-cell.empty{min-height:180px;z-index:1;}
+.exp-card{border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--surface);box-shadow:0 2px 12px rgba(0,48,135,0.05);opacity:0;transform:scale(0.95) translateY(10px);transition:opacity 0.6s cubic-bezier(.22,1,.36,1),transform 0.6s cubic-bezier(.22,1,.36,1),box-shadow 0.3s;}
+.exp-card.visible{opacity:1;transform:none;}
+.exp-card:hover{box-shadow:0 14px 40px rgba(0,48,135,0.12);}
+.card-banner{position:relative;height:155px;overflow:hidden;cursor:default;}
+.banner-bg{position:absolute;inset:0;background:linear-gradient(135deg,var(--blue) 0%,#1a5fa8 45%,var(--orange) 100%);transition:transform 0.5s cubic-bezier(.22,1,.36,1);}
+.card-banner:hover .banner-bg{transform:scale(1.05);}
+.banner-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.4s,transform 0.5s;}
+.banner-photo.on{opacity:1;}
+.card-banner:hover .banner-photo{transform:scale(1.05);}
+.banner-scrim{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,20,70,0.93) 0%,rgba(0,20,70,0.35) 55%,rgba(0,0,0,0.05) 100%);opacity:0.6;transition:opacity 0.35s;}
+.card-banner:hover .banner-scrim{opacity:1;}
+.banner-info{position:absolute;inset:0;padding:.9rem 1rem;display:flex;flex-direction:column;justify-content:flex-end;opacity:0;transform:translateY(8px);transition:opacity 0.35s,transform 0.35s;}
+.card-banner:hover .banner-info{opacity:1;transform:none;}
+.bi-title{font-family:'DM Serif Display',serif;font-size:1rem;color:#fff;font-weight:400;margin-bottom:5px;line-height:1.2;}
+.bi-chips{display:flex;gap:4px;flex-wrap:wrap;}
+.bic{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:500;background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.2);}
+.bic.o{background:rgba(250,70,22,0.3);border-color:rgba(250,70,22,0.4);}
+.banner-logo{position:absolute;top:9px;left:9px;width:38px;height:38px;border-radius:7px;overflow:hidden;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.15);}
+.banner-logo img{width:100%;height:100%;object-fit:contain;padding:3px;}
+.lw{background:#fff;}.ld{background:#111;}.lg{background:#f5f5f5;}
+.banner-date{position:absolute;top:9px;right:9px;font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(0,0,0,0.42);color:rgba(255,255,255,0.88);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.12);}
+.banner-upload{position:absolute;bottom:7px;right:7px;opacity:0;transition:opacity 0.2s;z-index:5;}
+.card-banner:hover .banner-upload{opacity:1;}
+.ubtn{font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(0,0,0,0.4);color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.card-body{padding:1.2rem 1.3rem;}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:.75rem;margin-bottom:.6rem;}
+.card-role{font-size:14px;font-weight:600;letter-spacing:-0.01em;}
+.card-org{font-size:11.5px;color:var(--muted);margin-top:1px;}
+.cbadge{font-size:10px;padding:2px 9px;border-radius:4px;white-space:nowrap;flex-shrink:0;}
+.bc{background:var(--blue-l);color:var(--blue);}
+.bo{background:var(--orange-l);color:var(--orange);}
+.bm{background:#faf5e4;color:#9a7200;}
+.bs{background:#e1f5ee;color:#0f6e56;}
+.card-desc{font-size:13px;color:#555;line-height:1.6;margin-bottom:.9rem;}
+.xbtn{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:500;color:var(--blue);background:none;border:none;cursor:pointer;padding:0;font-family:'DM Sans',sans-serif;transition:color 0.15s;}
+.xbtn:hover{color:var(--orange);}
+.xi{font-size:13px;transition:transform 0.3s cubic-bezier(.22,1,.36,1);}
+.exp-card.open .xi{transform:rotate(180deg);}
+.xpanel{display:grid;grid-template-rows:0fr;transition:grid-template-rows 0.4s cubic-bezier(.22,1,.36,1);}
+.exp-card.open .xpanel{grid-template-rows:1fr;}
+.xpanel-i{overflow:hidden;}
+.xbody{padding-top:1rem;border-top:1px solid var(--border);margin-top:1rem;display:flex;flex-direction:column;gap:.9rem;}
+.bl{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.bl li{display:flex;gap:8px;font-size:12.5px;color:#555;line-height:1.5;}
+.bl li::before{content:"—";color:var(--muted);flex-shrink:0;}
+.hls{display:flex;flex-wrap:wrap;gap:4px;}
+.hb{font-size:11px;padding:2px 9px;background:var(--blue-l);color:var(--blue);border-radius:20px;font-weight:500;}
+.ho{font-size:11px;padding:2px 9px;background:var(--orange-l);color:var(--orange);border-radius:20px;font-weight:500;}
+.pl{font-size:10px;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);}
+.prow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:4px;}
+.ps{aspect-ratio:4/3;border-radius:7px;border:1.5px dashed rgba(0,48,135,0.2);background:var(--blue-l);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;transition:all 0.2s;overflow:hidden;position:relative;}
+.ps:hover{border-color:var(--blue);background:#dce8f7;}
+.ps input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.ps img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:6px;}
+.ps img.h{display:none;}
+.ps.hp .psi,.ps.hp .psl{display:none;}
+.psi{font-size:13px;color:var(--blue);pointer-events:none;}
+.psl{font-size:10px;color:var(--blue);pointer-events:none;}
+
+/* LEADERSHIP */
+.lead-list{display:flex;flex-direction:column;gap:1.5px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.lead-row{background:var(--surface);cursor:pointer;}
+.lead-banner{width:100%;height:80px;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--blue) 0%,#1a5fa8 40%,var(--orange) 100%);}
+.lb-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:none;}
+.lb-img.on{display:block;}
+.lb-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.15);}
+.lb-edit{position:absolute;bottom:7px;right:9px;display:flex;gap:5px;opacity:0;transition:opacity 0.2s;z-index:2;}
+.lead-row:hover .lb-edit{opacity:1;}
+.lead-header{display:flex;align-items:flex-start;gap:12px;padding:1.2rem 1.5rem;transition:background 0.18s;}
+.lead-row:hover .lead-header{background:#fafaf8;}
+.lead-accent{width:4px;height:36px;border-radius:2px;flex-shrink:0;margin-top:3px;transition:height 0.3s;}
+.lead-row:hover .lead-accent{height:52px;}
+.la-blue{background:var(--blue);}
+.la-orange{background:var(--orange);}
+.lead-meta{flex:1;}
+.lead-org{font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:3px;}
+.lead-role{font-size:15px;font-weight:500;line-height:1.25;}
+.lead-date{font-size:12px;color:var(--muted);margin-top:2px;}
+.lead-chev{font-size:13px;color:var(--muted);transition:transform 0.3s cubic-bezier(.22,1,.36,1);margin-top:4px;}
+.lead-row.open .lead-chev{transform:rotate(180deg);}
+.lead-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows 0.4s cubic-bezier(.22,1,.36,1);}
+.lead-row.open .lead-panel{grid-template-rows:1fr;border-top:1px solid var(--border);}
+.lead-panel-i{overflow:hidden;}
+.lead-body{padding:1.4rem 1.5rem;display:flex;flex-direction:column;gap:.9rem;}
+.lead-desc{font-size:14px;color:#444;line-height:1.65;}
+.lead-bul{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.lead-bul li{display:flex;gap:9px;font-size:13px;color:#555;line-height:1.5;}
+.lead-bul li::before{content:"—";color:var(--muted);flex-shrink:0;}
+
+/* CONTENT */
+.content-outer{background:var(--blue);border-radius:18px;overflow:hidden;}
+.content-inner{padding:2.5rem 2.5rem 2rem;}
+.content-title{font-family:'DM Serif Display',serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:400;line-height:0.95;letter-spacing:-0.03em;color:#fff;margin-bottom:1.75rem;}
+.content-title span{color:var(--orange);}
+.tabs{display:flex;border-bottom:1px solid rgba(255,255,255,0.12);margin-bottom:1.75rem;}
+.tab{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);padding:.6rem 0;margin-right:2rem;cursor:pointer;position:relative;font-weight:500;border:none;background:none;font-family:'DM Sans',sans-serif;transition:color 0.2s;}
+.tab::after{content:'';position:absolute;bottom:-1px;left:0;width:0;height:2px;background:var(--orange);transition:width 0.3s cubic-bezier(.22,1,.36,1);}
+.tab.active{color:#fff;}
+.tab.active::after{width:100%;}
+.tab-panel{display:none;animation:fadeUp 0.35s cubic-bezier(.22,1,.36,1);}
+.tab-panel.active{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.vid-card{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:9/16;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);transition:transform 0.25s cubic-bezier(.22,1,.36,1),border-color 0.2s;text-decoration:none;display:block;}
+.vid-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,0.25);}
+.vid-card:hover .play-btn{background:var(--orange);border-color:var(--orange);}
+.vid-card:hover .vid-scrim{opacity:.9;}
+.vid-thumb{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0;}
+.vid-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:absolute;inset:0;}
+.vp-icon{font-size:2rem;opacity:0.3;}
+.vp-label{font-size:10px;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:0.08em;}
+.vid-scrim{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,20,70,0.92) 30%,rgba(0,0,0,0.05) 100%);opacity:.72;transition:opacity 0.3s;}
+.play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;transition:background 0.2s,border-color 0.2s;}
+.play-btn svg{margin-left:3px;}
+.vid-tag{position:absolute;top:9px;left:9px;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,0.15);color:#fff;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.2);}
+.tag-soon{background:var(--orange)!important;border-color:var(--orange)!important;}
+.vid-views{position:absolute;top:9px;right:9px;font-size:11px;color:rgba(255,255,255,0.75);}
+.vid-bottom{position:absolute;bottom:0;left:0;right:0;padding:.9rem;}
+.vid-title{font-size:12px;font-weight:500;line-height:1.35;margin-bottom:6px;color:#fff;}
+.vid-meta{display:flex;justify-content:space-between;align-items:center;}
+.vid-platform{display:flex;align-items:center;gap:4px;font-size:10px;letter-spacing:0.06em;color:rgba(255,255,255,0.45);text-transform:uppercase;}
+.pdot{width:5px;height:5px;border-radius:50%;background:var(--orange);}
+.vid-link{font-size:10px;color:rgba(255,255,255,0.45);text-transform:uppercase;text-decoration:none;letter-spacing:0.06em;}
+.vid-card:hover .vid-link{color:#fff;}
+.content-cta{border-top:1px solid rgba(255,255,255,0.1);margin-top:1.75rem;padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.cta-l strong{color:#fff;font-size:15px;display:block;margin-bottom:2px;}
+.cta-l p{font-size:13px;color:rgba(255,255,255,0.5);}
+.cta-btns{display:flex;gap:8px;}
+.btn-cw{background:#fff;color:var(--blue);font-weight:600;font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 18px;border-radius:7px;text-decoration:none;display:inline-flex;align-items:center;transition:transform 0.15s,background 0.15s;}
+.btn-cw:hover{background:#f0f4ff;transform:translateY(-1px);}
+.btn-cow{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.25);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 18px;border-radius:7px;text-decoration:none;display:inline-flex;align-items:center;transition:background 0.15s,transform 0.15s;}
+.btn-cow:hover{background:rgba(255,255,255,0.08);transform:translateY(-1px);}
+
+/* SKILLS */
+.skills-section{display:flex;flex-direction:column;gap:2.5rem;}
+.skill-cat h3{font-family:'DM Serif Display',serif;font-size:1.3rem;font-weight:400;margin-bottom:1rem;letter-spacing:-0.01em;}
+.skill-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.skill-chip{font-size:13px;padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;transition:all 0.18s;font-family:'DM Sans',sans-serif;font-weight:500;}
+.skill-chip:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-l);}
+.skill-chip.active{border-color:var(--blue);color:var(--blue);background:var(--blue-l);}
+.skill-chip.oc:hover,.skill-chip.oc.active{border-color:var(--orange);color:var(--orange);background:var(--orange-l);}
+.skill-panel{display:none;margin-top:1rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.skill-panel.open{display:block;animation:fadeUp 0.3s cubic-bezier(.22,1,.36,1);}
+.sp-header{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.sp-name{font-weight:500;font-size:14px;}
+.sp-close{font-size:18px;color:var(--muted);cursor:pointer;background:none;border:none;padding:0 4px;}
+.sp-close:hover{color:var(--text);}
+.sp-list{padding:1rem 1.25rem;display:flex;flex-direction:column;gap:.6rem;}
+.sp-item{display:flex;align-items:center;gap:10px;font-size:13px;padding:8px 12px;border-radius:8px;background:var(--bg);transition:background 0.15s;}
+.sp-item:hover{background:var(--blue-l);}
+.sp-icon{font-size:16px;flex-shrink:0;}
+.sp-role{font-weight:500;font-size:13px;}
+.sp-org{font-size:12px;color:var(--muted);}
+.interest-list{display:flex;flex-direction:column;gap:1.5px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.int-row{background:var(--surface);}
+.int-header{display:flex;align-items:center;gap:14px;padding:1.2rem 1.5rem;cursor:pointer;transition:background 0.15s;}
+.int-row:hover .int-header{background:#fafaf8;}
+.int-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.int-meta{flex:1;}
+.int-name{font-size:15px;font-weight:500;}
+.int-sub{font-size:13px;color:var(--muted);}
+.int-chev{font-size:13px;color:var(--muted);transition:transform 0.3s cubic-bezier(.22,1,.36,1);}
+.int-row.open .int-chev{transform:rotate(180deg);}
+.int-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows 0.4s cubic-bezier(.22,1,.36,1);}
+.int-row.open .int-panel{grid-template-rows:1fr;border-top:1px solid var(--border);}
+.int-panel-i{overflow:hidden;}
+.int-body{padding:1.5rem;display:flex;flex-direction:column;gap:1.1rem;}
+.int-desc{font-size:14px;color:var(--muted);line-height:1.6;}
+.int-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.int-slot{aspect-ratio:1;border-radius:10px;border:1.5px dashed rgba(0,48,135,0.2);background:var(--blue-l);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all 0.2s;overflow:hidden;position:relative;}
+.int-slot:hover{border-color:var(--blue);background:#dce8f7;transform:scale(1.02);}
+.int-slot input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.int-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px;}
+.int-slot img.h{display:none;}
+.int-slot.hp .isi,.int-slot.hp .isl{display:none;}
+.isi{font-size:16px;color:var(--blue);pointer-events:none;}
+.isl{font-size:12px;color:var(--blue);pointer-events:none;}
+.int-links-wrap p{font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:.5rem;}
+.int-link-row{display:flex;gap:7px;}
+.int-link-input{flex:1;padding:8px 12px;font-family:'DM Sans',sans-serif;font-size:13px;border:1px solid var(--border);border-radius:7px;outline:none;transition:border-color 0.2s;}
+.int-link-input:focus{border-color:var(--blue);}
+.int-link-add{padding:8px 14px;font-family:'DM Sans',sans-serif;font-size:13px;border:none;border-radius:7px;background:var(--blue);color:#fff;cursor:pointer;font-weight:500;}
+.int-links-display{display:flex;flex-direction:column;gap:5px;margin-top:.5rem;}
+.int-link-item{display:flex;align-items:center;gap:8px;font-size:13px;padding:6px 10px;background:var(--bg);border-radius:7px;}
+.int-link-item a{color:var(--blue);text-decoration:none;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.int-link-item a:hover{text-decoration:underline;}
+.int-link-rm{font-size:16px;color:var(--muted);cursor:pointer;background:none;border:none;}
+.int-link-rm:hover{color:#c00;}
+
+/* CONTACT */
+.contact-split{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
+.contact-h{font-family:'DM Serif Display',serif;font-size:2rem;font-weight:400;letter-spacing:-0.02em;margin-bottom:.75rem;}
+.contact-p{color:var(--muted);font-size:15px;margin-bottom:2rem;}
+.contact-links{display:flex;flex-direction:column;gap:.9rem;}
+.contact-link{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text);text-decoration:none;transition:color 0.15s,transform 0.2s;}
+.contact-link:hover{color:var(--blue);transform:translateX(4px);}
+.c-icon{width:32px;height:32px;border:1px solid var(--border);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0;background:var(--surface);transition:background 0.15s,border-color 0.15s;}
+.contact-link:hover .c-icon{background:var(--blue-l);border-color:var(--blue-m);}
+form{display:flex;flex-direction:column;gap:12px;}
+input,textarea{width:100%;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;resize:none;transition:border-color 0.2s,transform 0.2s;}
+input:focus,textarea:focus{border-color:var(--blue);transform:translateY(-1px);}
+input::placeholder,textarea::placeholder{color:var(--muted);}
+footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:space-between;font-size:13px;color:rgba(255,255,255,0.5);align-items:center;margin-top:5rem;}
+.footer-logo img{height:28px;filter:brightness(0) invert(1);opacity:0.8;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><img src="assets/logo-mb.png" alt="MB Logo"></div>
+  <ul class="nav-links">
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#leadership">Leadership</a></li>
+    <li><a href="#content">Content</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <div class="hero-slides">
+    <div class="hero-slide active" style="background-image:url('assets/hero-1.jpg');"></div>
+    <div class="hero-slide" style="background-image:url('assets/hero-2.jpg');"></div>
+    <div class="hero-slide" style="background-image:url('assets/hero-3.jpg');"></div>
+    <div class="hero-slide" style="background-image:url('assets/hero-4.jpg');"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="etag blue">UF Warrington · Class of 2027</span>
+      <span class="etag orange">GPA 3.74</span>
+    </div>
+    <h1>
+      <span class="h1-line"><span class="h1-inner">Sports, events,</span></span>
+      <span class="h1-line"><span class="h1-inner">and <em>building things</em></span></span>
+      <span class="h1-line"><span class="h1-inner">that move people.</span></span>
+    </h1>
+    <p class="hero-sub">I'm Matthew — a business student at the University of Florida with hands-on experience in event management, sports operations, NIL marketing, and community leadership.</p>
+    <div class="hero-actions">
+      <a href="#experience" class="btn btn-white">See my experience</a>
+      <a href="#content" class="btn btn-orange">My content</a>
+      <a href="#contact" class="btn btn-outline">Get in touch</a>
+    </div>
+  </div>
+  <div class="slide-dots">
+    <div class="dot active" onclick="goTo(0)"></div>
+    <div class="dot" onclick="goTo(1)"></div>
+    <div class="dot" onclick="goTo(2)"></div>
+    <div class="dot" onclick="goTo(3)"></div>
+  </div>
+  <div class="hero-bar" id="hero-bar"></div>
+</div>
+
+<!-- EXPERIENCE -->
+<div class="section reveal" id="experience">
+  <div class="sec-header"><span class="sec-pill">Work experience</span><div class="sec-line"></div></div>
+  <div class="stage" id="exp-stage">
+    <svg class="stage-svg" id="road-svg" style="height:100px;"></svg>
+    <div class="exp-grid" id="exp-grid">
+
+      <div class="exp-cell" id="ec-0">
+        <div class="exp-card" id="card-0">
+          <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo" id="bp-0"><div class="banner-scrim"></div><div class="banner-logo lg"><img src="assets/logo-woodfield.png"></div><div class="banner-date">Dec 2021 – Nov 2024</div><div class="banner-info"><div class="bi-title">Member Services Attendant</div><div class="bi-chips"><span class="bic">5,000+ residents</span><span class="bic o">20 courts</span></div></div><div class="banner-upload"><label class="ubtn">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-0')"></label></div></div>
+          <div class="card-body"><div class="card-top"><div><div class="card-role">Member Services Attendant</div><div class="card-org">Woodfield Country Club · Boca Raton, FL</div></div><span class="cbadge bs">Service</span></div><p class="card-desc">Three years of high-touch member service at a premier private club — managing people, logistics, and expectations in a fast-paced environment.</p><button class="xbtn" onclick="tx('card-0',this)"><span>See details</span><span class="xi">▾</span></button><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Oversaw daily operations for 5,000+ residents, coordinating 20 social courts for tennis and pickleball.</li><li>Managed member inquiries, transactions, reservations, and lesson bookings for 10 tennis professionals.</li></ul><div class="hls"><span class="hb">5,000+ residents</span><span class="hb">20 courts</span><span class="ho">10 professionals</span></div><div><div class="pl">Photos</div><div class="prow"><div class="ps"><span class="psi">+</span><span class="psl">Add</span><input type="file" accept="image/*" onchange="lp(this)"><img class="h"></div><div class="ps"><span class="psi">+</span><span class="psl">Add</span><input type="file" accept="image/*" onchange="lp(this)"><img class="h"></div><div class="ps"><span class="psi">+</span><span class="psl">Add</span><input type="file" accept="image/*" onchange="lp(this)"><img class="h"></div></div></div></div></div></div></div>
+        </div>
+      </div>
+      <div class="exp-cell empty" id="ec-e0"></div>
+
+      <div class="exp-cell empty" id="ec-e1"></div>
+      <div class="exp-cell" id="ec-1">
+        <div class="exp-card" id="card-1">
+          <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo" id="bp-1"><div class="banner-scrim"></div><div class="banner-logo lw"><img src="assets/logo-uf.png"></div><div class="banner-date">Jan 2024 – Dec 2025</div><div class="banner-info"><div class="bi-title">Student Manager</div><div class="bi-chips"><span class="bic o">130+ athletes</span><span class="bic">The Swamp</span></div></div><div class="banner-upload"><label class="ubtn">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-1')"></label></div></div>
+          <div class="card-body"><div class="card-top"><div><div class="card-role">Student Manager</div><div class="card-org">University of Florida Football · Gainesville, FL</div></div><span class="cbadge bo">Operations</span></div><p class="card-desc">Two years inside one of college football's most demanding programs — managing equipment and logistics for 130+ athletes from morning practices to game days at The Swamp.</p><button class="xbtn" onclick="tx('card-1',this)"><span>See details</span><span class="xi">▾</span></button><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Managed daily equipment operations including game-day setup, a 10,000+ item inventory, and travel logistics.</li><li>Operated the practice game clock and collaborated with all 10 position groups.</li></ul><div class="hls"><span class="ho">130+ athletes</span><span class="ho">10,000+ inventory</span><span class="hb">10 position groups</span></div><div><div class="pl">Photos</div><div class="prow"><div class="ps"><span class="psi">+</span><span class="psl">Add</span><input type="file" accept="image/*" onchange="lp(this)"><img class="h"></div><div class="ps"><span class="psi">+</span><span class="psl">Add</span><input type="file" accept="image/*" onchange="lp(this)"><img class="h"></div><div class="ps"><span class="psi">+</span><span class="psl">Add</span><input type="file" accept="image/*" onchange="lp(this)"><img class="h"></div></div></div></div></div></div></div>
+        </div>
+      </div>
+
+      <div class="exp-cell" id="ec-2">
+        <div class="exp-card" id="card-2">
+          <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo" id="bp-2"><div class="banner-scrim"></div><div class="banner-logo lw"><img src="assets/logo-elevate.png"></div><div class="banner-date">Apr 2025 – Jul 2025</div><div class="banner-info"><div class="bi-title">NIL Marketing Intern</div><div class="bi-chips"><span class="bic">5 athletes</span><span class="bic o">NIL deals</span></div></div><div class="banner-upload"><label class="ubtn">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-2')"></label></div></div>
+          <div class="card-body"><div class="card-top"><div><div class="card-role">NIL Marketing Intern</div><div class="card-org">Elevate Sports Management · Miami, FL</div></div><span class="cbadge bm">Marketing</span></div><p class="card-desc">Dove into the fast-moving NIL space — building real partnerships with national brands while protecting athletes' long-term image and career trajectory.</p><button class="xbtn" onclick="tx('card-2',this)"><span>See details</span><span class="xi">▾</span></button><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Developed branding strategies for 5 athletes, managing social media and NIL partnerships with national brands.</li><li>Negotiated and managed sponsorship agreements ensuring alignment with athletes' long-term career goals.</li></ul><div class="hls"><span class="hb">5 athletes</span><span class="hb">National brands</span><span class="ho">NIL agreements</span></div><div><div class="pl">Photos</div><div class="prow"><div class="ps"><span class="psi">+</span><span class="psl">Add</span><input type="file" accept="image/*" onchange="lp(this)"><img class="h"></div><div class="ps"><span class="psi">+</span><span class="psl">Add</span><input type="file" accept="image/*" onchange="lp(this)"><img class="h"></div><div class="ps"><span class="psi">+</span><span class="psl">Add</span><input type="file" accept="image/*" onchange="lp(this)"><img class="h"></div></div></div></div></div></div></div>
+        </div>
+      </div>
+      <div class="exp-cell empty" id="ec-e2"></div>
+
+      <div class="exp-cell empty" id="ec-e3"></div>
+      <div class="exp-cell" id="ec-3">
+        <div class="exp-card" id="card-3">
+          <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo" id="bp-3"><div class="banner-scrim"></div><div class="banner-logo ld"><img src="assets/logo-lifetime.png"></div><div class="banner-date">May 2025 – Aug 2025</div><div class="banner-info"><div class="bi-title">Facility Management Associate</div><div class="bi-chips"><span class="bic o">100k sq ft</span><span class="bic">1,500+ members</span></div></div><div class="banner-upload"><label class="ubtn">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-3')"></label></div></div>
+          <div class="card-body"><div class="card-top"><div><div class="card-role">Facility Management Associate</div><div class="card-org">Lifetime Fitness · Boca Raton, FL</div></div><span class="cbadge bo">Operations</span></div><p class="card-desc">Kept a flagship 100,000 sq. ft. facility running day-in, day-out — learning operational consistency and the importance of member experience at scale.</p><button class="xbtn" onclick="tx('card-3',this)"><span>See details</span><span class="xi">▾</span></button><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Collaborated with a 15-person team on opening/closing procedures for 1,500+ daily members.</li><li>Ensured equipment functionality, maintained amenities, and addressed member inquiries.</li></ul><div class="hls"><span class="ho">100,000 sq. ft.</span><span class="ho">1,500+ members</span><span class="hb">15-person team</span></div><div><div class="pl">Photos</div><div class="prow"><div class="ps"><span class="psi">+</span><span class="psl">Add</span><input type="file" accept="image/*" onchange="lp(this)"><img class="h"></div><div class="ps"><span class="psi">+</span><span class="psl">Add</span><input type="file" accept="image/*" onchange="lp(this)"><img class="h"></div><div class="ps"><span class="psi">+</span><span class="psl">Add</span><input type="file" accept="image/*" onchange="lp(this)"><img class="h"></div></div></div></div></div></div></div>
+        </div>
+      </div>
+
+      <div class="exp-cell" id="ec-4">
+        <div class="exp-card" id="card-4">
+          <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo" id="bp-4"><div class="banner-scrim"></div><div class="banner-logo lw"><img src="assets/logo-gsc.png"></div><div class="banner-date">Jan 2026 – Present</div><div class="banner-info"><div class="bi-title">Event Management Intern</div><div class="bi-chips"><span class="bic">5,000+ athletes</span><span class="bic o">90+ countries</span></div></div><div class="banner-upload"><label class="ubtn">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-4')"></label></div></div>
+          <div class="card-body"><div class="card-top"><div><div class="card-role">Event Management Intern</div><div class="card-org">Gainesville Sports Commission · Gainesville, FL</div></div><span class="cbadge bc">Current</span></div><p class="card-desc">Working at the intersection of sports, tourism, and event operations — coordinating vendor relationships and on-site execution for thousands from 90+ countries.</p><button class="xbtn" onclick="tx('card-4',this)"><span>See details</span><span class="xi">▾</span></button><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Orchestrate marketing and event operations for 5,000+ athletes from 90+ countries across local, regional, and national sporting events.</li><li>Plan itineraries, coordinate vendors, and execute on-site events to enhance the participant experience.</li><li>Work alongside commission staff and external partners on logistics and communications.</li></ul><div class="hls"><span class="hb">5,000+ athletes</span><span class="hb">90+ countries</span><span class="ho">Vendor coordination</span><span class="ho">Destination marketing</span></div><div><div class="pl">Photos</div><div class="prow"><div class="ps"><span class="psi">+</span><span class="psl">Add</span><input type="file" accept="image/*" onchange="lp(this)"><img class="h"></div><div class="ps"><span class="psi">+</span><span class="psl">Add</span><input type="file" accept="image/*" onchange="lp(this)"><img class="h"></div><div class="ps"><span class="psi">+</span><span class="psl">Add</span><input type="file" accept="image/*" onchange="lp(this)"><img class="h"></div></div></div></div></div></div></div>
+        </div>
+      </div>
+      <div class="exp-cell empty" id="ec-e4"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- LEADERSHIP -->
+<div class="section reveal" id="leadership">
+  <div class="sec-header"><span class="sec-pill">Leadership & development</span><div class="sec-line"></div></div>
+  <div class="lead-list">
+    <div class="lead-row" onclick="tl(this)"><div class="lead-banner"><img class="lb-img" id="lb-0"><div class="lb-overlay"></div><div class="lb-edit"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lbanner(this,'lb-0')"></label></div></div><div class="lead-header"><div class="lead-accent la-blue"></div><div class="lead-meta"><div class="lead-org">UF Big Event</div><div class="lead-role">Assistant Director of Internal Affairs</div><div class="lead-date">Oct 2025 – Present</div></div><span class="lead-chev">▾</span></div><div class="lead-panel"><div class="lead-panel-i"><div class="lead-body"><p class="lead-desc">Partners with local organizations and Student Government to streamline site assignments and manage check-in operations for the largest single-day community service event at UF.</p><ul class="lead-bul"><li>Coordinates logistics and communications for 1,400+ volunteers completing community projects across Gainesville.</li><li>Partners with SG leaders and local organizations to manage site assignments efficiently.</li></ul></div></div></div></div>
+    <div class="lead-row" onclick="tl(this)"><div class="lead-banner"><img class="lb-img" id="lb-1"><div class="lb-overlay"></div><div class="lb-edit"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lbanner(this,'lb-1')"></label></div></div><div class="lead-header"><div class="lead-accent la-orange"></div><div class="lead-meta"><div class="lead-org">Gator Sports Management Organization</div><div class="lead-role">Assistant Director of Membership & Events</div><div class="lead-date">Sep 2025 – Present</div></div><span class="lead-chev">▾</span></div><div class="lead-panel"><div class="lead-panel-i"><div class="lead-body"><p class="lead-desc">Leads initiatives connecting students with sports industry professionals through networking events, panels, and collaborations.</p><ul class="lead-bul"><li>Manages onboarding of 50+ new members each cycle, engaging students early to support integration.</li><li>Organizes panels and networking events that connect students with real sports industry professionals.</li></ul></div></div></div></div>
+    <div class="lead-row" onclick="tl(this)"><div class="lead-banner"><img class="lb-img" id="lb-2"><div class="lb-overlay"></div><div class="lb-edit"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lbanner(this,'lb-2')"></label></div></div><div class="lead-header"><div class="lead-accent la-blue"></div><div class="lead-meta"><div class="lead-org">Mu Sigma Lambda</div><div class="lead-role">Co-Founder & Membership Director</div><div class="lead-date">Sep 2024 – Present</div></div><span class="lead-chev">▾</span></div><div class="lead-panel"><div class="lead-panel-i"><div class="lead-body"><p class="lead-desc">Co-founded the first national co-ed fraternity for sports industry professionals, building a 110-person chapter from scratch.</p><ul class="lead-bul"><li>Directs sales, membership, and event strategy including the annual Sales Summit.</li><li>Engages alumni to lead workshops and secures high-profile industry speakers for member development.</li></ul></div></div></div></div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="section reveal" id="content">
+  <div class="sec-header"><span class="sec-pill">Content creation</span><div class="sec-line"></div></div>
+  <div class="content-outer">
+    <div class="content-inner">
+      <h2 class="content-title">Con<span>tent</span></h2>
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('lifestyle',this)">Lifestyle</button>
+        <button class="tab" onclick="switchTab('75hard',this)">75 Hard</button>
+        <button class="tab" onclick="switchTab('sports',this)">Sports Internship</button>
+      </div>
+      <div id="panel-lifestyle" class="tab-panel active">
+        <a class="vid-card" href="https://www.tiktok.com/@mattyb2111/video/7642125249395445005" target="_blank"><img class="vid-thumb" src="assets/vid-lifestyle.png" style="object-position:17% center;"><div class="vid-scrim"></div><span class="vid-tag">Live</span><span class="vid-views">▷ 670</span><div class="play-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg></div><div class="vid-bottom"><div class="vid-title">Serendipity Ice Cream Parlor — High Springs, FL</div><div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>TikTok</span><span class="vid-link">View ↗</span></div></div></a>
+        <a class="vid-card" href="https://www.tiktok.com/@mattyb2111/video/7641735866255297805" target="_blank"><img class="vid-thumb" src="assets/vid-lifestyle.png" style="object-position:50% center;"><div class="vid-scrim"></div><span class="vid-tag">Live</span><span class="vid-views">▷ 463</span><div class="play-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg></div><div class="vid-bottom"><div class="vid-title">Ichetucknee Springs Tubing — Fort White, FL</div><div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>TikTok</span><span class="vid-link">View ↗</span></div></div></a>
+        <a class="vid-card" href="https://www.tiktok.com/@mattyb2111/video/7641219426901085453" target="_blank"><img class="vid-thumb" src="assets/vid-horse.png"><div class="vid-scrim"></div><span class="vid-tag">Live</span><span class="vid-views">▷ 692</span><div class="play-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg></div><div class="vid-bottom"><div class="vid-title">Retired Horse Farm — Alachua County, FL</div><div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>TikTok</span><span class="vid-link">View ↗</span></div></div></a>
+      </div>
+      <div id="panel-75hard" class="tab-panel">
+        <a class="vid-card" href="https://www.tiktok.com/@mattyb2111" target="_blank"><div class="vid-placeholder"><span class="vp-icon">🔥</span><span class="vp-label">Add thumbnail</span></div><div class="vid-scrim"></div><span class="vid-tag">Live</span><div class="play-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg></div><div class="vid-bottom"><div class="vid-title">Why I started 75 Hard</div><div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>TikTok</span><span class="vid-link">View ↗</span></div></div></a>
+        <a class="vid-card" href="https://www.tiktok.com/@mattyb2111" target="_blank"><div class="vid-placeholder"><span class="vp-icon">🔥</span><span class="vp-label">Add thumbnail</span></div><div class="vid-scrim"></div><span class="vid-tag">Live</span><div class="play-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg></div><div class="vid-bottom"><div class="vid-title">Day 1 — the rules, the diet, the plan</div><div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>TikTok</span><span class="vid-link">View ↗</span></div></div></a>
+        <a class="vid-card" href="https://www.tiktok.com/@mattyb2111" target="_blank"><div class="vid-placeholder"><span class="vp-icon">🔥</span><span class="vp-label">Add thumbnail</span></div><div class="vid-scrim"></div><span class="vid-tag">Live</span><div class="play-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg></div><div class="vid-bottom"><div class="vid-title">Progress update — what's changed</div><div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>TikTok</span><span class="vid-link">View ↗</span></div></div></a>
+      </div>
+      <div id="panel-sports" class="tab-panel">
+        <div class="vid-card"><div class="vid-placeholder"><span class="vp-icon">🏟️</span><span class="vp-label">Coming soon</span></div><div class="vid-scrim"></div><span class="vid-tag tag-soon">Coming soon</span><div class="play-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg></div><div class="vid-bottom"><div class="vid-title">How I landed my first sports internship</div><div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>TikTok</span><span class="vid-link" style="opacity:.35">Soon</span></div></div></div>
+        <div class="vid-card"><div class="vid-placeholder"><span class="vp-icon">🏟️</span><span class="vp-label">Coming soon</span></div><div class="vid-scrim"></div><span class="vid-tag tag-soon">Coming soon</span><div class="play-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg></div><div class="vid-bottom"><div class="vid-title">What they don't tell you about NIL internships</div><div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>TikTok</span><span class="vid-link" style="opacity:.35">Soon</span></div></div></div>
+        <div class="vid-card"><div class="vid-placeholder"><span class="vp-icon">🏟️</span><span class="vp-label">Coming soon</span></div><div class="vid-scrim"></div><span class="vid-tag tag-soon">Coming soon</span><div class="play-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg></div><div class="vid-bottom"><div class="vid-title">Breaking into sports business as a student</div><div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>TikTok</span><span class="vid-link" style="opacity:.35">Soon</span></div></div></div>
+      </div>
+      <div class="content-cta">
+        <div class="cta-l"><strong>Follow along @mattyb2111</strong><p>Open to brand partnerships, NIL deals, and collaborations in sports & business.</p></div>
+        <div class="cta-btns"><a href="https://www.tiktok.com/@mattyb2111" target="_blank" class="btn-cw">TikTok ↗</a><a href="#contact" class="btn-cow">Get in touch</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SKILLS -->
+<div class="section reveal" id="skills">
+  <div class="sec-header"><span class="sec-pill">Skills & interests</span><div class="sec-line"></div></div>
+  <div class="skills-section">
+    <div class="skill-cat">
+      <h3>Software</h3>
+      <div class="skill-chips">
+        <button class="skill-chip" onclick="tskill(this,'sp-word')">Microsoft Word</button>
+        <button class="skill-chip" onclick="tskill(this,'sp-excel')">Excel</button>
+        <button class="skill-chip" onclick="tskill(this,'sp-ppt')">PowerPoint</button>
+        <button class="skill-chip" onclick="tskill(this,'sp-python')">Python</button>
+        <button class="skill-chip" onclick="tskill(this,'sp-canva')">Canva</button>
+      </div>
+      <div class="skill-panel" id="sp-word"><div class="sp-header"><span class="sp-name">Microsoft Word — used in:</span><button class="sp-close" onclick="cskill('sp-word')">×</button></div><div class="sp-list"><div class="sp-item"><span class="sp-icon">🏟️</span><div><div class="sp-role">Event Management Intern</div><div class="sp-org">Gainesville Sports Commission — itinerary & communications drafting</div></div></div><div class="sp-item"><span class="sp-icon">🏈</span><div><div class="sp-role">Student Manager</div><div class="sp-org">UF Football — travel logistics documentation</div></div></div><div class="sp-item"><span class="sp-icon">🎓</span><div><div class="sp-role">Mu Sigma Lambda</div><div class="sp-org">Co-Founder — chapter documents & event planning</div></div></div></div></div>
+      <div class="skill-panel" id="sp-excel"><div class="sp-header"><span class="sp-name">Excel — used in:</span><button class="sp-close" onclick="cskill('sp-excel')">×</button></div><div class="sp-list"><div class="sp-item"><span class="sp-icon">🏟️</span><div><div class="sp-role">Event Management Intern</div><div class="sp-org">Gainesville Sports Commission — athlete & vendor tracking</div></div></div><div class="sp-item"><span class="sp-icon">🏈</span><div><div class="sp-role">Student Manager</div><div class="sp-org">UF Football — 10,000+ item inventory management</div></div></div><div class="sp-item"><span class="sp-icon">💪</span><div><div class="sp-role">Facility Management Associate</div><div class="sp-org">Lifetime Fitness — operational scheduling & reporting</div></div></div></div></div>
+      <div class="skill-panel" id="sp-ppt"><div class="sp-header"><span class="sp-name">PowerPoint — used in:</span><button class="sp-close" onclick="cskill('sp-ppt')">×</button></div><div class="sp-list"><div class="sp-item"><span class="sp-icon">📣</span><div><div class="sp-role">NIL Marketing Intern</div><div class="sp-org">Elevate Sports Management — brand strategy presentations</div></div></div><div class="sp-item"><span class="sp-icon">🎓</span><div><div class="sp-role">Mu Sigma Lambda</div><div class="sp-org">Co-Founder — Sales Summit & speaker event decks</div></div></div></div></div>
+      <div class="skill-panel" id="sp-python"><div class="sp-header"><span class="sp-name">Python — used in:</span><button class="sp-close" onclick="cskill('sp-python')">×</button></div><div class="sp-list"><div class="sp-item"><span class="sp-icon">📊</span><div><div class="sp-role">Academic & personal projects</div><div class="sp-org">UF Coursework — data analysis and sports statistics</div></div></div></div></div>
+      <div class="skill-panel" id="sp-canva"><div class="sp-header"><span class="sp-name">Canva — used in:</span><button class="sp-close" onclick="cskill('sp-canva')">×</button></div><div class="sp-list"><div class="sp-item"><span class="sp-icon">📣</span><div><div class="sp-role">NIL Marketing Intern</div><div class="sp-org">Elevate — athlete social media graphics & branding assets</div></div></div><div class="sp-item"><span class="sp-icon">🏟️</span><div><div class="sp-role">Event Management Intern</div><div class="sp-org">Gainesville Sports Commission — event marketing materials</div></div></div><div class="sp-item"><span class="sp-icon">🎓</span><div><div class="sp-role">GSMO & Mu Sigma Lambda</div><div class="sp-org">Leadership — promotional content & membership materials</div></div></div></div></div>
+    </div>
+    <div class="skill-cat">
+      <h3>Professional</h3>
+      <div class="skill-chips">
+        <button class="skill-chip oc" onclick="tskill(this,'sp-event')">Event management</button>
+        <button class="skill-chip oc" onclick="tskill(this,'sp-nil')">NIL & sponsorship</button>
+        <button class="skill-chip oc" onclick="tskill(this,'sp-ops')">Sports operations</button>
+        <button class="skill-chip oc" onclick="tskill(this,'sp-client')">Client relations</button>
+        <button class="skill-chip oc" onclick="tskill(this,'sp-vendor')">Vendor coordination</button>
+      </div>
+      <div class="skill-panel" id="sp-event"><div class="sp-header"><span class="sp-name">Event management — used in:</span><button class="sp-close" onclick="cskill('sp-event')">×</button></div><div class="sp-list"><div class="sp-item"><span class="sp-icon">🏟️</span><div><div class="sp-role">Event Management Intern</div><div class="sp-org">Gainesville Sports Commission — full event lifecycle, 5,000+ athletes</div></div></div><div class="sp-item"><span class="sp-icon">🎾</span><div><div class="sp-role">Member Services Attendant</div><div class="sp-org">Woodfield Country Club — court scheduling & event coordination</div></div></div><div class="sp-item"><span class="sp-icon">🏅</span><div><div class="sp-role">Assistant Director</div><div class="sp-org">UF Big Event — 1,400+ volunteer event logistics</div></div></div></div></div>
+      <div class="skill-panel" id="sp-nil"><div class="sp-header"><span class="sp-name">NIL & sponsorship — used in:</span><button class="sp-close" onclick="cskill('sp-nil')">×</button></div><div class="sp-list"><div class="sp-item"><span class="sp-icon">📣</span><div><div class="sp-role">NIL Marketing Intern</div><div class="sp-org">Elevate Sports Management — negotiated & managed NIL deals for 5 athletes</div></div></div></div></div>
+      <div class="skill-panel" id="sp-ops"><div class="sp-header"><span class="sp-name">Sports operations — used in:</span><button class="sp-close" onclick="cskill('sp-ops')">×</button></div><div class="sp-list"><div class="sp-item"><span class="sp-icon">🏈</span><div><div class="sp-role">Student Manager</div><div class="sp-org">UF Football — daily ops for D1 program, 130+ athletes</div></div></div><div class="sp-item"><span class="sp-icon">🏟️</span><div><div class="sp-role">Event Management Intern</div><div class="sp-org">Gainesville Sports Commission — multi-sport event operations</div></div></div></div></div>
+      <div class="skill-panel" id="sp-client"><div class="sp-header"><span class="sp-name">Client relations — used in:</span><button class="sp-close" onclick="cskill('sp-client')">×</button></div><div class="sp-list"><div class="sp-item"><span class="sp-icon">🎾</span><div><div class="sp-role">Member Services Attendant</div><div class="sp-org">Woodfield Country Club — daily service for 5,000+ residents</div></div></div><div class="sp-item"><span class="sp-icon">📣</span><div><div class="sp-role">NIL Marketing Intern</div><div class="sp-org">Elevate — corporate partner communication</div></div></div></div></div>
+      <div class="skill-panel" id="sp-vendor"><div class="sp-header"><span class="sp-name">Vendor coordination — used in:</span><button class="sp-close" onclick="cskill('sp-vendor')">×</button></div><div class="sp-list"><div class="sp-item"><span class="sp-icon">🏟️</span><div><div class="sp-role">Event Management Intern</div><div class="sp-org">Gainesville Sports Commission — multi-vendor coordination</div></div></div><div class="sp-item"><span class="sp-icon">💪</span><div><div class="sp-role">Facility Management Associate</div><div class="sp-org">Lifetime Fitness — vendor & maintenance coordination</div></div></div></div></div>
+    </div>
+    <div class="skill-cat">
+      <h3>Interests</h3>
+      <div class="interest-list">
+        <div class="int-row"><div class="int-header" onclick="ti(this.closest('.int-row'))"><div class="int-icon" style="background:#f0eeff;">🎨</div><div class="int-meta"><div class="int-name">Art</div><div class="int-sub">Recreational & digital art</div></div><span class="int-chev">▾</span></div><div class="int-panel"><div class="int-panel-i"><div class="int-body"><p class="int-desc">I create both recreational and digital art as a creative outlet alongside my work in sports and business.</p><div class="int-gallery"><div class="int-slot"><span class="isi">+</span><span class="isl">Add artwork</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div><div class="int-slot"><span class="isi">+</span><span class="isl">Add artwork</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div><div class="int-slot"><span class="isi">+</span><span class="isl">Add artwork</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div></div><div class="int-links-wrap"><p>Links</p><div class="int-link-row"><input class="int-link-input" placeholder="Portfolio, Instagram, etc." id="li-art"><button class="int-link-add" onclick="addLink('art')">Add</button></div><div class="int-links-display" id="ld-art"></div></div></div></div></div></div>
+        <div class="int-row"><div class="int-header" onclick="ti(this.closest('.int-row'))"><div class="int-icon" style="background:#fff0ec;">👟</div><div class="int-meta"><div class="int-name">Sneakers</div><div class="int-sub">Sneaker culture & collection</div></div><span class="int-chev">▾</span></div><div class="int-panel"><div class="int-panel-i"><div class="int-body"><p class="int-desc">Sneakers are a passion — from collecting to following drops, colorways, and the culture around footwear.</p><div class="int-gallery"><div class="int-slot"><span class="isi">+</span><span class="isl">Add photo</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div><div class="int-slot"><span class="isi">+</span><span class="isl">Add photo</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div><div class="int-slot"><span class="isi">+</span><span class="isl">Add photo</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div></div><div class="int-links-wrap"><p>Links</p><div class="int-link-row"><input class="int-link-input" placeholder="StockX, GOAT, Instagram, etc." id="li-sneakers"><button class="int-link-add" onclick="addLink('sneakers')">Add</button></div><div class="int-links-display" id="ld-sneakers"></div></div></div></div></div></div>
+        <div class="int-row"><div class="int-header" onclick="ti(this.closest('.int-row'))"><div class="int-icon" style="background:#e8eef7;">🎳</div><div class="int-meta"><div class="int-name">Bowling</div><div class="int-sub">High school varsity captain</div></div><span class="int-chev">▾</span></div><div class="int-panel"><div class="int-panel-i"><div class="int-body"><p class="int-desc">Competed as varsity bowling captain in high school — bowling taught me focus, consistency, and how to perform under pressure.</p><div class="int-gallery"><div class="int-slot"><span class="isi">+</span><span class="isl">Add photo</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div><div class="int-slot"><span class="isi">+</span><span class="isl">Add photo</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div><div class="int-slot"><span class="isi">+</span><span class="isl">Add photo</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div></div><div class="int-links-wrap"><p>Links</p><div class="int-link-row"><input class="int-link-input" placeholder="Videos, scores, team page, etc." id="li-bowling"><button class="int-link-add" onclick="addLink('bowling')">Add</button></div><div class="int-links-display" id="ld-bowling"></div></div></div></div></div></div>
+        <div class="int-row"><div class="int-header" onclick="ti(this.closest('.int-row'))"><div class="int-icon" style="background:#e8eef7;">📊</div><div class="int-meta"><div class="int-name">Sports Statistics</div><div class="int-sub">Analytics & data in sports</div></div><span class="int-chev">▾</span></div><div class="int-panel"><div class="int-panel-i"><div class="int-body"><p class="int-desc">Fascinated by the intersection of data and sports — from player analytics to performance metrics and how numbers shape modern sports decisions.</p><div class="int-gallery"><div class="int-slot"><span class="isi">+</span><span class="isl">Add image</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div><div class="int-slot"><span class="isi">+</span><span class="isl">Add image</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div><div class="int-slot"><span class="isi">+</span><span class="isl">Add image</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div></div><div class="int-links-wrap"><p>Links</p><div class="int-link-row"><input class="int-link-input" placeholder="Projects, articles, tools, etc." id="li-sports"><button class="int-link-add" onclick="addLink('sports')">Add</button></div><div class="int-links-display" id="ld-sports"></div></div></div></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="section reveal" id="contact">
+  <div class="sec-header"><span class="sec-pill">Contact</span><div class="sec-line"></div></div>
+  <div class="contact-split">
+    <div>
+      <h2 class="contact-h">Let's connect.</h2>
+      <p class="contact-p">Open to internships, collaborations, and conversations about sports, events, and business. Based in Gainesville, FL.</p>
+      <div class="contact-links">
+        <a href="https://www.linkedin.com/in/matthew-buchman" class="contact-link" target="_blank"><span class="c-icon">in</span>linkedin.com/in/matthew-buchman</a>
+        <a href="mailto:djmbbuchman@icloud.com" class="contact-link"><span class="c-icon">@</span>djmbbuchman@icloud.com</a>
+        <a href="tel:5615040672" class="contact-link"><span class="c-icon">☎</span>(561) 504-0672</a>
+        <a href="https://www.tiktok.com/@mattyb2111" class="contact-link" target="_blank"><span class="c-icon" style="font-size:11px">tt</span>@mattyb2111</a>
+      </div>
+    </div>
+    <form>
+      <input type="text" placeholder="Your name">
+      <input type="email" placeholder="Your email">
+      <textarea rows="5" placeholder="Your message"></textarea>
+      <button type="button" class="btn btn-primary" style="align-self:flex-start">Send message</button>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo"><img src="assets/logo-mb.png" alt="MB"></div>
+  <span>Matthew Buchman · University of Florida · 2026</span>
+</footer>
+
+<script>
+/* HERO */
+let cur=0,heroTimer;
+const slides=document.querySelectorAll('.hero-slide'),dots=document.querySelectorAll('.dot'),bar=document.getElementById('hero-bar');
+function goTo(n){slides[cur].classList.remove('active');dots[cur].classList.remove('active');cur=n;slides[cur].classList.add('active');dots[cur].classList.add('active');bar.style.animation='none';bar.offsetHeight;bar.style.animation='barGrow 5s linear';clearInterval(heroTimer);heroTimer=setInterval(()=>goTo((cur+1)%4),5000);}
+heroTimer=setInterval(()=>goTo((cur+1)%4),5000);
+
+/* REVEAL */
+const revObs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
+
+/* EXPERIENCE */
+function tx(id,btn){const c=document.getElementById(id),o=c.classList.toggle('open');btn.querySelector('span:first-child').textContent=o?'Hide details':'See details';setTimeout(buildRoad,80);}
+function lp(input){if(!input.files||!input.files[0])return;const s=input.closest('.ps'),img=s.querySelector('img'),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.remove('h');s.classList.add('hp');};r.readAsDataURL(input.files[0]);}
+function lb(input,id){if(!input.files||!input.files[0])return;const img=document.getElementById(id),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.add('on');};r.readAsDataURL(input.files[0]);}
+function lbanner(input,id){if(!input.files||!input.files[0])return;const img=document.getElementById(id),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.add('on');};r.readAsDataURL(input.files[0]);}
+function lip(input){if(!input.files||!input.files[0])return;const s=input.closest('.int-slot'),img=s.querySelector('img'),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.remove('h');s.classList.add('hp');};r.readAsDataURL(input.files[0]);}
+
+/* LEADERSHIP */
+function tl(row){row.classList.toggle('open');}
+
+/* CONTENT TABS */
+function switchTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('panel-'+id).classList.add('active');}
+
+/* SKILLS */
+function tskill(btn,pid){const on=btn.classList.contains('active');document.querySelectorAll('.skill-chip').forEach(c=>c.classList.remove('active'));document.querySelectorAll('.skill-panel').forEach(p=>p.classList.remove('open'));if(!on){btn.classList.add('active');document.getElementById(pid).classList.add('open');}}
+function cskill(id){document.getElementById(id).classList.remove('open');document.querySelectorAll('.skill-chip').forEach(c=>c.classList.remove('active'));}
+
+/* INTERESTS */
+function ti(row){row.classList.toggle('open');}
+function addLink(key){const inp=document.getElementById('li-'+key),val=inp.value.trim();if(!val)return;const c=document.getElementById('ld-'+key),item=document.createElement('div');item.className='int-link-item';item.innerHTML=`<a href="${val}" target="_blank">${val}</a><button class="int-link-rm" onclick="this.closest('.int-link-item').remove()">×</button>`;c.appendChild(item);inp.value='';}
+
+/* GATOR ROAD */
+function getR(id){
+  const s=document.getElementById('exp-stage').getBoundingClientRect();
+  const e=document.getElementById(id).getBoundingClientRect();
+  return{t:e.top-s.top,l:e.left-s.left,r:e.right-s.left,b:e.bottom-s.top,cx:(e.left+e.right)/2-s.left,cy:(e.top+e.bottom)/2-s.top};
+}
+function buildRoad(){
+  const stage=document.getElementById('exp-stage'),svg=document.getElementById('road-svg');
+  const W=stage.offsetWidth,H=stage.offsetHeight;
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.style.height=H+'px';
+  const c0=getR('ec-0'),e0=getR('ec-e0'),e1=getR('ec-e1'),c1=getR('ec-1');
+  const c2=getR('ec-2'),e2=getR('ec-e2'),e3=getR('ec-e3'),c3=getR('ec-3');
+  const c4=getR('ec-4');
+  const p0={x:c0.r,y:c0.b},p1={x:c1.l,y:c1.t},p2={x:c1.l,y:c1.b};
+  const p3={x:c2.r,y:c2.t},p4={x:c2.r,y:c2.b},p5={x:c3.l,y:c3.t};
+  const p6={x:c3.l,y:c3.b},p7={x:c4.r,y:c4.t};
+  function loopR(px,py,ex,ey,ex2,ey2,r){return `C ${px+r*2} ${py}, ${ex+r} ${ey-r*1.5}, ${ex} ${ey-r} C ${ex-r} ${ey-r*1.5}, ${ex-r*1.5} ${ey}, ${ex-r} ${ey+r*.5} C ${ex} ${ey+r*1.2}, ${ex+r*1.2} ${ey+r*.5}, ${ex+r*.8} ${ey} C ${ex+r*1.5} ${ey-r}, ${ex2+r} ${ey2+r*2}, ${ex2} ${ey2}`;}
+  function loopL(px,py,ex,ey,ex2,ey2,r){return `C ${px-r*2} ${py}, ${ex-r} ${ey-r*1.5}, ${ex} ${ey-r} C ${ex+r} ${ey-r*1.5}, ${ex+r*1.5} ${ey}, ${ex+r} ${ey+r*.5} C ${ex} ${ey+r*1.2}, ${ex-r*1.2} ${ey+r*.5}, ${ex-r*.8} ${ey} C ${ex-r*1.5} ${ey-r}, ${ex2-r} ${ey2+r*2}, ${ex2} ${ey2}`;}
+  const r0=Math.min(e0.r-e0.cx,e0.cy-e0.t)*.38,r1=Math.min(e1.cx-e1.l,e1.b-e1.cy)*.38;
+  const r2=Math.min(e2.r-e2.cx,e2.cy-e2.t)*.38,r3=Math.min(e3.cx-e3.l,e3.b-e3.cy)*.38;
+  const d=`M ${p0.x} ${p0.y} ${loopR(p0.x,p0.y,e0.cx,e0.cy,p1.x,p1.y,r0)} L ${p2.x} ${p2.y} ${loopL(p2.x,p2.y,e1.cx,e1.cy,p3.x,p3.y,r1)} L ${p4.x} ${p4.y} ${loopR(p4.x,p4.y,e2.cx,e2.cy,p5.x,p5.y,r2)} L ${p6.x} ${p6.y} ${loopL(p6.x,p6.y,e3.cx,e3.cy,p7.x,p7.y,r3)}`;
+  const gs=54;
+  svg.innerHTML=`<defs><linearGradient id="rg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#003087"/><stop offset="100%" stop-color="#FA4616"/></linearGradient></defs>
+  <path d="${d}" fill="none" stroke="#c8d5e8" stroke-width="3.5" stroke-dasharray="12 8" stroke-linecap="round"/>
+  <path id="lv" d="${d}" fill="none" stroke="url(#rg)" stroke-width="4" stroke-linecap="round" stroke-dasharray="0 99999"/>
+  <circle id="sd0" cx="${p0.x}" cy="${p0.y}" r="8" fill="#fff" stroke="#003087" stroke-width="2.5"/>
+  <circle id="sd1" cx="${p1.x}" cy="${p1.y}" r="8" fill="#fff" stroke="#003087" stroke-width="2.5"/>
+  <circle id="sd2" cx="${p3.x}" cy="${p3.y}" r="8" fill="#fff" stroke="#003087" stroke-width="2.5"/>
+  <circle id="sd3" cx="${p5.x}" cy="${p5.y}" r="8" fill="#fff" stroke="#003087" stroke-width="2.5"/>
+  <circle id="sd4" cx="${p7.x}" cy="${p7.y}" r="8" fill="#fff" stroke="#003087" stroke-width="2.5"/>
+  <g id="gator-g"><circle r="${gs/2+3}" fill="#003087" opacity="0.12"/><circle r="${gs/2+1}" fill="white" stroke="#003087" stroke-width="2"/><image href="assets/gator.png" x="${-gs/2}" y="${-gs/2}" width="${gs}" height="${gs}" preserveAspectRatio="xMidYMid meet"/></g>`;
+  animGator();
+}
+function animGator(){
+  const lv=document.getElementById('lv');if(!lv)return;
+  const tl=lv.getTotalLength(),stage=document.getElementById('exp-stage');
+  function upd(){
+    const sr=stage.getBoundingClientRect(),vh=window.innerHeight;
+    const prog=Math.max(0,Math.min(1,(vh*.55-sr.top)/(sr.height*.88)));
+    const drawn=prog*tl;
+    lv.setAttribute('stroke-dasharray',`${drawn} ${tl}`);
+    const pt=lv.getPointAtLength(drawn),ptP=lv.getPointAtLength(Math.max(0,drawn-8));
+    const angle=Math.atan2(pt.y-ptP.y,pt.x-ptP.x)*180/Math.PI;
+    const g=document.getElementById('gator-g');
+    if(g)g.setAttribute('transform',`translate(${pt.x},${pt.y}) rotate(${angle})`);
+    ['sd0','sd1','sd2','sd3','sd4'].forEach((id,i)=>{const d=document.getElementById(id);if(d&&prog>i/5){d.setAttribute('fill','#FA4616');d.setAttribute('stroke','#FA4616');d.setAttribute('r','9');}});
+    document.querySelectorAll('.exp-card').forEach(c=>{if(c.getBoundingClientRect().top<vh*.9)c.classList.add('visible');});
+  }
+  window.removeEventListener('scroll',window._gs);window._gs=upd;
+  window.addEventListener('scroll',upd,{passive:true});upd();
+}
+window.addEventListener('resize',()=>buildRoad());
+setTimeout(()=>{buildRoad();document.getElementById('card-0').classList.add('visible');},300);
+</script>
+</body>
+</html>
