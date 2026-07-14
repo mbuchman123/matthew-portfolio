@@ -78,16 +78,11 @@ h1 em{font-style:italic;color:rgba(255,255,255,0.6);}
 
 /* EXPERIENCE GRID */
 .stage{position:relative;padding:3rem 0;}
-.stage-svg{position:absolute;top:0;left:50%;transform:translateX(-50%);width:80%;height:100%;pointer-events:none;z-index:1;overflow:visible;}
+.stage-svg{position:absolute;top:0;left:50%;transform:translateX(-50%);width:96%;height:100%;pointer-events:none;z-index:1;overflow:visible;}
 .exp-grid{display:flex;flex-direction:column;gap:4rem;position:relative;z-index:2;max-width:900px;margin:0 auto;}
-.exp-row{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;margin:2rem 0;}
-.exp-row.reverse{direction:rtl;}
-.exp-row.reverse > *{direction:ltr;}
-.exp-image{width:100%;aspect-ratio:4/3;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,var(--blue) 0%,#1a5fa8 45%,var(--orange) 100%);opacity:0;transform:scale(0.85);transition:opacity 0.6s cubic-bezier(.22,1,.36,1),transform 0.6s cubic-bezier(.22,1,.36,1);position:relative;}
-.exp-row.visible .exp-image{opacity:1;transform:scale(1);}
-.exp-image img{width:100%;height:100%;object-fit:cover;display:block;}
-.exp-image-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-size:14px;font-style:italic;}
-.exp-card{border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--surface);box-shadow:0 2px 12px rgba(0,48,135,0.05);opacity:0;transform:translateY(10px);transition:opacity 0.6s cubic-bezier(.22,1,.36,1),transform 0.6s cubic-bezier(.22,1,.36,1),box-shadow 0.3s;}
+.exp-row{display:flex;margin:2rem 0;justify-content:flex-end;}
+.exp-row.reverse{justify-content:flex-start;}
+.exp-card{width:54%;max-width:480px;border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--surface);box-shadow:0 2px 12px rgba(0,48,135,0.05);opacity:0;transform:translateY(10px);transition:opacity 0.6s cubic-bezier(.22,1,.36,1),transform 0.6s cubic-bezier(.22,1,.36,1),box-shadow 0.3s;}
 .exp-row.visible .exp-card{opacity:1;transform:none;}
 .exp-card:hover{box-shadow:0 14px 40px rgba(0,48,135,0.12);}
 .card-banner{position:relative;height:155px;overflow:hidden;cursor:default;}
@@ -349,7 +344,6 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
 
       <!-- Row 1: Image Left, Card Right -->
       <div class="exp-row" id="row-0">
-        <div class="exp-image"><img src="assets/Woodfield.webp" alt="Woodfield"></div>
         <div class="exp-card" id="card-0">
           <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo" id="bp-0"><div class="banner-scrim"></div><div class="banner-logo lg"><img src="assets/Woodfield.webp"></div><div class="banner-date">Dec 2021 – Nov 2024</div><div class="banner-info"><div class="bi-title">Member Services Attendant</div><div class="bi-chips"><span class="bic">5,000+ residents</span><span class="bic o">20 courts</span></div></div><div class="banner-upload"><label class="ubtn">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-0')"></label></div></div>
           <div class="card-body"><div class="card-top"><div><div class="card-role">Member Services Attendant</div><div class="card-org">Woodfield Country Club · Boca Raton, FL</div></div><span class="cbadge bs">Service</span></div><p class="card-desc">Three years of high-touch member service at a premier private club — managing people, logistics, and expectations in a fast-paced environment.</p><button class="xbtn" onclick="tx('card-0',this)"><span>See details</span><span class="xi">▾</span></button><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Oversaw daily operations for 5,000+ residents, coordinating 20 social courts for tennis and pickleball.</li><li>Managed member inquiries, transactions, reservations, and lesson bookings for 10 tennis professionals.</li></ul><div class="hls"><span class="hb">5,000+ residents</span><span class="hb">20 courts</span><span class="ho">10 professionals</span></div></div></div></div></div>
@@ -362,12 +356,10 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
           <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo" id="bp-1"><div class="banner-scrim"></div><div class="banner-logo lw"><img src="assets/GHead.webp"></div><div class="banner-date">Jan 2024 – Dec 2025</div><div class="banner-info"><div class="bi-title">Student Manager</div><div class="bi-chips"><span class="bic o">130+ athletes</span><span class="bic">The Swamp</span></div></div><div class="banner-upload"><label class="ubtn">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-1')"></label></div></div>
           <div class="card-body"><div class="card-top"><div><div class="card-role">Student Manager</div><div class="card-org">University of Florida Football · Gainesville, FL</div></div><span class="cbadge bo">Operations</span></div><p class="card-desc">Two years inside one of college football's most demanding programs — managing equipment and logistics for 130+ athletes from morning practices to game days at The Swamp.</p><button class="xbtn" onclick="tx('card-1',this)"><span>See details</span><span class="xi">▾</span></button><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Managed daily equipment operations including game-day setup, a 10,000+ item inventory, and travel logistics.</li><li>Operated the practice game clock and collaborated with all 10 position groups.</li></ul><div class="hls"><span class="ho">130+ athletes</span><span class="ho">10,000+ inventory</span><span class="hb">10 position groups</span></div></div></div></div></div>
         </div>
-        <div class="exp-image"><img src="assets/GHead.webp" alt="UF Football"></div>
       </div>
 
       <!-- Row 3: Image Left, Card Right -->
       <div class="exp-row" id="row-2">
-        <div class="exp-image"><img src="assets/Elevate Sports.webp" alt="Elevate Sports"></div>
         <div class="exp-card" id="card-2">
           <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo" id="bp-2"><div class="banner-scrim"></div><div class="banner-logo lw"><img src="assets/Elevate Sports.webp"></div><div class="banner-date">Apr 2025 – Jul 2025</div><div class="banner-info"><div class="bi-title">NIL Marketing Intern</div><div class="bi-chips"><span class="bic">5 athletes</span><span class="bic o">NIL deals</span></div></div><div class="banner-upload"><label class="ubtn">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-2')"></label></div></div>
           <div class="card-body"><div class="card-top"><div><div class="card-role">NIL Marketing Intern</div><div class="card-org">Elevate Sports Management · Miami, FL</div></div><span class="cbadge bm">Marketing</span></div><p class="card-desc">Dove into the fast-moving NIL space — building real partnerships with national brands while protecting athletes' long-term image and career trajectory.</p><button class="xbtn" onclick="tx('card-2',this)"><span>See details</span><span class="xi">▾</span></button><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Developed branding strategies for 5 athletes, managing social media and NIL partnerships with national brands.</li><li>Negotiated and managed sponsorship agreements ensuring alignment with athletes' long-term career goals.</li></ul><div class="hls"><span class="hb">5 athletes</span><span class="hb">National brands</span><span class="ho">NIL agreements</span></div></div></div></div></div>
@@ -380,12 +372,10 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
           <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo" id="bp-3"><div class="banner-scrim"></div><div class="banner-logo ld"><img src="assets/Lifetime.webp"></div><div class="banner-date">May 2025 – Aug 2025</div><div class="banner-info"><div class="bi-title">Facility Management Associate</div><div class="bi-chips"><span class="bic o">100k sq ft</span><span class="bic">1,500+ members</span></div></div><div class="banner-upload"><label class="ubtn">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-3')"></label></div></div>
           <div class="card-body"><div class="card-top"><div><div class="card-role">Facility Management Associate</div><div class="card-org">Lifetime Fitness · Boca Raton, FL</div></div><span class="cbadge bo">Operations</span></div><p class="card-desc">Kept a flagship 100,000 sq. ft. facility running day-in, day-out — learning operational consistency and the importance of member experience at scale.</p><button class="xbtn" onclick="tx('card-3',this)"><span>See details</span><span class="xi">▾</span></button><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Collaborated with a 15-person team on opening/closing procedures for 1,500+ daily members.</li><li>Ensured equipment functionality, maintained amenities, and addressed member inquiries.</li></ul><div class="hls"><span class="ho">100,000 sq. ft.</span><span class="ho">1,500+ members</span><span class="hb">15-person team</span></div></div></div></div></div>
         </div>
-        <div class="exp-image"><img src="assets/Lifetime.webp" alt="Lifetime Fitness"></div>
       </div>
 
       <!-- Row 5: Image Left, Card Right -->
       <div class="exp-row" id="row-4">
-        <div class="exp-image"><img src="assets/GSC.webp" alt="Gainesville Sports Commission"></div>
         <div class="exp-card" id="card-4">
           <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo" id="bp-4"><div class="banner-scrim"></div><div class="banner-logo lw"><img src="assets/GSC.webp"></div><div class="banner-date">Jan 2026 – Present</div><div class="banner-info"><div class="bi-title">Event Management Intern</div><div class="bi-chips"><span class="bic">5,000+ athletes</span><span class="bic o">90+ countries</span></div></div><div class="banner-upload"><label class="ubtn">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-4')"></label></div></div>
           <div class="card-body"><div class="card-top"><div><div class="card-role">Event Management Intern</div><div class="card-org">Gainesville Sports Commission · Gainesville, FL</div></div><span class="cbadge bc">Current</span></div><p class="card-desc">Working at the intersection of sports, tourism, and event operations — coordinating vendor relationships and on-site execution for thousands from 90+ countries.</p><button class="xbtn" onclick="tx('card-4',this)"><span>See details</span><span class="xi">▾</span></button><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Orchestrate marketing and event operations for 5,000+ athletes from 90+ countries across local, regional, and national sporting events.</li><li>Plan itineraries, coordinate vendors, and execute on-site events to enhance the participant experience.</li></ul><div class="hls"><span class="hb">5,000+ athletes</span><span class="hb">90+ countries</span><span class="ho">Vendor coordination</span></div></div></div></div></div>
@@ -399,12 +389,10 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
             <p style="font-size:14px;">Coming soon...</p>
           </div>
         </div>
-        <div class="exp-image"><div class="exp-image-placeholder">Your next move</div></div>
       </div>
 
-      <!-- Row 7: Image Left, Card Right - Empty for future -->
+      <!-- Row 7: Card Right - Empty for future -->
       <div class="exp-row" id="row-6">
-        <div class="exp-image"><div class="exp-image-placeholder">Your next move</div></div>
         <div class="exp-card" id="card-6" style="opacity:0.5;pointer-events:none;">
           <div class="card-body" style="padding:3rem 1.3rem;text-align:center;color:var(--muted);">
             <p style="font-size:14px;">Coming soon...</p>
@@ -592,7 +580,7 @@ function buildRoad(){
     }else{
       const prev=rowPositions[i-1];
       const midY=(prev.y+pos.y)/2;
-      const waveAmp=60;
+      const waveAmp=130;
       const isEven=i%2===0;
       const controlX=isEven?centerX+waveAmp:centerX-waveAmp;
       totalPath+=` Q ${controlX} ${midY}, ${centerX} ${pos.y}`;
@@ -603,7 +591,7 @@ function buildRoad(){
   svg.innerHTML=`<defs><linearGradient id="rg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#003087"/><stop offset="100%" stop-color="#FA4616"/></linearGradient></defs>
   <path d="${totalPath}" fill="none" stroke="#c8d5e8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
   <path id="lv" d="${totalPath}" fill="none" stroke="url(#rg)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="0 99999"/>
-  <g id="gator-g"><circle r="${gs/2+3}" fill="#003087" opacity="0.12"/><circle r="${gs/2+1}" fill="white" stroke="#003087" stroke-width="2"/><image href="assets/logo.webp" x="${-gs/2}" y="${-gs/2}" width="${gs}" height="${gs}" preserveAspectRatio="xMidYMid meet"/></g>`;
+  <g id="gator-g"><circle r="${gs/2+3}" fill="#003087" opacity="0.12"/><circle r="${gs/2+1}" fill="white" stroke="#003087" stroke-width="2"/><image href="assets/GHead.webp" x="${-gs/2}" y="${-gs/2}" width="${gs}" height="${gs}" preserveAspectRatio="xMidYMid meet"/></g>`;
   animGator();
 }
 
