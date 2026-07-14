@@ -141,35 +141,45 @@ h1 em{font-style:italic;color:rgba(255,255,255,0.6);}
 .psi{font-size:13px;color:var(--blue);pointer-events:none;}
 .psl{font-size:10px;color:var(--blue);pointer-events:none;}
 
-/* LEADERSHIP */
-.lead-list{display:flex;flex-direction:column;gap:1.5px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
-.lead-row{background:var(--surface);cursor:pointer;}
-.lead-banner{width:100%;height:80px;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--blue) 0%,#1a5fa8 40%,var(--orange) 100%);}
-.lb-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:none;}
-.lb-img.on{display:block;}
-.lb-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.15);}
-.lb-edit{position:absolute;bottom:7px;right:9px;display:flex;gap:5px;opacity:0;transition:opacity 0.2s;z-index:2;}
-.lead-row:hover .lb-edit{opacity:1;}
-.lead-header{display:flex;align-items:flex-start;gap:12px;padding:1.2rem 1.5rem;transition:background 0.18s;}
-.lead-row:hover .lead-header{background:#fafaf8;}
-.lead-accent{width:4px;height:36px;border-radius:2px;flex-shrink:0;margin-top:3px;transition:height 0.3s;}
-.lead-row:hover .lead-accent{height:52px;}
-.la-blue{background:var(--blue);}
-.la-orange{background:var(--orange);}
-.lead-meta{flex:1;}
-.lead-org{font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:3px;}
-.lead-role{font-size:15px;font-weight:500;line-height:1.25;}
-.lead-date{font-size:12px;color:var(--muted);margin-top:2px;}
-.lead-chev{font-size:13px;color:var(--muted);transition:transform 0.3s cubic-bezier(.22,1,.36,1);margin-top:4px;}
-.lead-row.open .lead-chev{transform:rotate(180deg);}
-.lead-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows 0.4s cubic-bezier(.22,1,.36,1);}
-.lead-row.open .lead-panel{grid-template-rows:1fr;border-top:1px solid var(--border);}
-.lead-panel-i{overflow:hidden;}
-.lead-body{padding:1.4rem 1.5rem;display:flex;flex-direction:column;gap:.9rem;}
-.lead-desc{font-size:14px;color:#444;line-height:1.65;}
-.lead-bul{list-style:none;display:flex;flex-direction:column;gap:7px;}
-.lead-bul li{display:flex;gap:9px;font-size:13px;color:#555;line-height:1.5;}
-.lead-bul li::before{content:"—";color:var(--muted);flex-shrink:0;}
+/* LEADERSHIP — TRADING CARDS */
+.tc-grid{display:flex;flex-wrap:wrap;gap:1.75rem;justify-content:center;}
+.trading-card{width:208px;height:296px;perspective:1400px;}
+.trading-card:not(.disabled){cursor:pointer;}
+.tc-inner{position:relative;width:100%;height:100%;transition:transform 0.65s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d;}
+.trading-card.flipped .tc-inner{transform:rotateY(180deg);}
+.tc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:12px;overflow:hidden;box-shadow:0 6px 22px rgba(0,48,135,0.14);border:3px solid var(--blue);background:var(--surface);display:flex;flex-direction:column;}
+.tc-back{transform:rotateY(180deg);border-color:var(--orange);}
+.tc-photo{position:relative;flex:1;overflow:hidden;background:linear-gradient(135deg,var(--blue) 0%,#1a5fa8 45%,var(--orange) 100%);}
+.tc-photo img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0;opacity:0;transition:opacity .3s;}
+.tc-photo img.on{opacity:1;}
+.tc-number{position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.55);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.05em;backdrop-filter:blur(4px);z-index:2;}
+.tc-star{position:absolute;top:7px;right:9px;font-size:17px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4));z-index:2;}
+.tc-edit{position:absolute;bottom:6px;right:6px;opacity:0;transition:opacity .2s;z-index:3;}
+.trading-card:hover .tc-edit{opacity:1;}
+.tc-stripe{height:4px;background:linear-gradient(90deg,var(--orange),var(--blue));flex-shrink:0;}
+.tc-nameplate{background:var(--blue);padding:.65rem .8rem .55rem;text-align:center;flex-shrink:0;}
+.tc-role{color:#fff;font-family:'DM Serif Display',serif;font-size:13.5px;line-height:1.2;margin-bottom:3px;}
+.tc-org{color:rgba(255,255,255,.65);font-size:10px;text-transform:uppercase;letter-spacing:.05em;}
+.tc-flip-hint{text-align:center;font-size:8.5px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.07em;margin-top:4px;}
+.tc-back-inner{padding:.8rem .85rem;display:flex;flex-direction:column;gap:.5rem;height:100%;}
+.tc-back-head{display:flex;align-items:center;gap:6px;padding-bottom:.4rem;border-bottom:2px solid var(--orange-l);}
+.tc-back-head .tc-role{color:var(--blue);font-size:12.5px;margin:0;}
+.tc-back-org{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+.tc-stats{display:flex;flex-direction:column;gap:2px;}
+.tc-stat-row{display:flex;justify-content:space-between;align-items:baseline;font-size:10px;padding:2px 0;border-bottom:1px dashed var(--border);}
+.tc-stat-label{color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-size:8.5px;}
+.tc-stat-val{font-weight:700;color:var(--blue);font-size:10.5px;}
+.tc-sec-label{font-size:8.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--orange);font-weight:700;}
+.tc-resp{list-style:none;display:flex;flex-direction:column;gap:2px;}
+.tc-resp li{font-size:9.5px;color:#444;line-height:1.35;padding-left:9px;position:relative;}
+.tc-resp li::before{content:"•";position:absolute;left:0;color:var(--orange);}
+.tc-win{background:var(--orange-l);border-radius:6px;padding:.4rem .5rem;font-size:9.5px;color:#8a3113;line-height:1.35;}
+.tc-win b{color:var(--orange);}
+.tc-skills{display:flex;flex-wrap:wrap;gap:3px;}
+.tc-skill{font-size:8.5px;padding:2px 7px;background:var(--blue-l);color:var(--blue);border-radius:20px;font-weight:600;}
+.trading-card.disabled .tc-face{opacity:.55;}
+.trading-card.disabled .tc-photo{display:flex;align-items:center;justify-content:center;}
+.tc-placeholder{color:rgba(255,255,255,0.5);font-size:12px;font-style:italic;text-align:center;padding:0 1rem;}
 
 /* CONTENT */
 .content-outer{background:var(--blue);border-radius:18px;overflow:hidden;}
@@ -407,10 +417,88 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
 <!-- LEADERSHIP -->
 <div class="section reveal" id="leadership">
   <div class="sec-header"><span class="sec-pill">Leadership & development</span><div class="sec-line"></div></div>
-  <div class="lead-list">
-    <div class="lead-row" onclick="tl(this)"><div class="lead-banner"><img class="lb-img" id="lb-0"><div class="lb-overlay"></div><div class="lb-edit"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lbanner(this,'lb-0')"></label></div></div><div class="lead-header"><div class="lead-accent la-blue"></div><div class="lead-meta"><div class="lead-org">UF Big Event</div><div class="lead-role">Assistant Director of Internal Affairs</div><div class="lead-date">Oct 2025 – Present</div></div><span class="lead-chev">▾</span></div><div class="lead-panel"><div class="lead-panel-i"><div class="lead-body"><p class="lead-desc">Partners with local organizations and Student Government to streamline site assignments and manage check-in operations for the largest single-day community service event at UF.</p><ul class="lead-bul"><li>Coordinates logistics and communications for 1,400+ volunteers completing community projects across Gainesville.</li><li>Partners with SG leaders and local organizations to manage site assignments efficiently.</li></ul></div></div></div></div>
-    <div class="lead-row" onclick="tl(this)"><div class="lead-banner"><img class="lb-img" id="lb-1"><div class="lb-overlay"></div><div class="lb-edit"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lbanner(this,'lb-1')"></label></div></div><div class="lead-header"><div class="lead-accent la-orange"></div><div class="lead-meta"><div class="lead-org">Gator Sports Management Organization</div><div class="lead-role">Assistant Director of Membership & Events</div><div class="lead-date">Sep 2025 – Present</div></div><span class="lead-chev">▾</span></div><div class="lead-panel"><div class="lead-panel-i"><div class="lead-body"><p class="lead-desc">Leads initiatives connecting students with sports industry professionals through networking events, panels, and collaborations.</p><ul class="lead-bul"><li>Manages onboarding of 50+ new members each cycle, engaging students early to support integration.</li><li>Organizes panels and networking events that connect students with real sports industry professionals.</li></ul></div></div></div></div>
-    <div class="lead-row" onclick="tl(this)"><div class="lead-banner"><img class="lb-img" id="lb-2"><div class="lb-overlay"></div><div class="lb-edit"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lbanner(this,'lb-2')"></label></div></div><div class="lead-header"><div class="lead-accent la-blue"></div><div class="lead-meta"><div class="lead-org">Mu Sigma Lambda</div><div class="lead-role">Co-Founder & Membership Director</div><div class="lead-date">Sep 2024 – Present</div></div><span class="lead-chev">▾</span></div><div class="lead-panel"><div class="lead-panel-i"><div class="lead-body"><p class="lead-desc">Co-founded the first national co-ed fraternity for sports industry professionals, building a 110-person chapter from scratch.</p><ul class="lead-bul"><li>Directs sales, membership, and event strategy including the annual Sales Summit.</li><li>Engages alumni to lead workshops and secures high-profile industry speakers for member development.</li></ul></div></div></div></div>
+  <div class="tc-grid">
+
+    <div class="trading-card" id="tcard-0" onclick="tflip(this)">
+      <div class="tc-inner">
+        <div class="tc-face tc-front">
+          <div class="tc-photo"><img class="on" id="lb-0" src="assets/Woodfield.webp"><div class="tc-number">NO. 01</div><div class="tc-star">🎓</div><div class="tc-edit"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lb-0')"></label></div></div>
+          <div class="tc-stripe"></div>
+          <div class="tc-nameplate"><div class="tc-role">Asst. Director, Internal Affairs</div><div class="tc-org">UF Big Event</div><div class="tc-flip-hint">Tap to flip ↻</div></div>
+        </div>
+        <div class="tc-face tc-back">
+          <div class="tc-back-inner">
+            <div class="tc-back-head"><span style="font-size:14px;">🎓</span><div><div class="tc-role">Internal Affairs</div><div class="tc-back-org">UF Big Event</div></div></div>
+            <div class="tc-stats"><div class="tc-stat-row"><span class="tc-stat-label">Volunteers led</span><span class="tc-stat-val">1,400+</span></div><div class="tc-stat-row"><span class="tc-stat-label">Season</span><span class="tc-stat-val">Oct '25–Present</span></div></div>
+            <div class="tc-sec-label">Responsibilities</div>
+            <ul class="tc-resp"><li>Streamline site assignments with SG</li><li>Manage day-of check-in operations</li><li>Coordinate logistics across Gainesville</li></ul>
+            <div class="tc-win"><b>Biggest win:</b> Helped run UF's largest single-day service event, coordinating 1,400+ volunteers across dozens of sites.</div>
+            <div class="tc-skills"><span class="tc-skill">Logistics</span><span class="tc-skill">Volunteer Mgmt</span><span class="tc-skill">Comms</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trading-card" id="tcard-1" onclick="tflip(this)">
+      <div class="tc-inner">
+        <div class="tc-face tc-front">
+          <div class="tc-photo"><img class="on" id="lb-1" src="assets/GHead.webp"><div class="tc-number">NO. 02</div><div class="tc-star">🏆</div><div class="tc-edit"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lb-1')"></label></div></div>
+          <div class="tc-stripe"></div>
+          <div class="tc-nameplate"><div class="tc-role">Asst. Director, Membership & Events</div><div class="tc-org">Gator Sports Mgmt Org</div><div class="tc-flip-hint">Tap to flip ↻</div></div>
+        </div>
+        <div class="tc-face tc-back">
+          <div class="tc-back-inner">
+            <div class="tc-back-head"><span style="font-size:14px;">🏆</span><div><div class="tc-role">Membership & Events</div><div class="tc-back-org">GSMO</div></div></div>
+            <div class="tc-stats"><div class="tc-stat-row"><span class="tc-stat-label">New members/cycle</span><span class="tc-stat-val">50+</span></div><div class="tc-stat-row"><span class="tc-stat-label">Season</span><span class="tc-stat-val">Sep '25–Present</span></div></div>
+            <div class="tc-sec-label">Responsibilities</div>
+            <ul class="tc-resp"><li>Lead onboarding each new cycle</li><li>Organize networking events & panels</li><li>Connect students with industry pros</li></ul>
+            <div class="tc-win"><b>Biggest win:</b> Built a pipeline of panels and events linking members directly to sports-industry professionals.</div>
+            <div class="tc-skills"><span class="tc-skill">Event Planning</span><span class="tc-skill">Membership Ops</span><span class="tc-skill">Networking</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trading-card" id="tcard-2" onclick="tflip(this)">
+      <div class="tc-inner">
+        <div class="tc-face tc-front">
+          <div class="tc-photo"><img class="on" id="lb-2" src="assets/Elevate Sports.webp"><div class="tc-number">NO. 03</div><div class="tc-star">⚡</div><div class="tc-edit"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lb-2')"></label></div></div>
+          <div class="tc-stripe"></div>
+          <div class="tc-nameplate"><div class="tc-role">Co-Founder & Membership Director</div><div class="tc-org">Mu Sigma Lambda</div><div class="tc-flip-hint">Tap to flip ↻</div></div>
+        </div>
+        <div class="tc-face tc-back">
+          <div class="tc-back-inner">
+            <div class="tc-back-head"><span style="font-size:14px;">⚡</span><div><div class="tc-role">Co-Founder</div><div class="tc-back-org">Mu Sigma Lambda</div></div></div>
+            <div class="tc-stats"><div class="tc-stat-row"><span class="tc-stat-label">Chapter size</span><span class="tc-stat-val">110+</span></div><div class="tc-stat-row"><span class="tc-stat-label">Season</span><span class="tc-stat-val">Sep '24–Present</span></div></div>
+            <div class="tc-sec-label">Responsibilities</div>
+            <ul class="tc-resp"><li>Direct sales, membership & event strategy</li><li>Run the annual Sales Summit</li><li>Engage alumni for workshops & speakers</li></ul>
+            <div class="tc-win"><b>Biggest win:</b> Co-founded the first national co-ed sports-industry fraternity chapter, growing it to 110+ members from scratch.</div>
+            <div class="tc-skills"><span class="tc-skill">Team Building</span><span class="tc-skill">Sales Strategy</span><span class="tc-skill">Alumni Relations</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trading-card disabled" id="tcard-3">
+      <div class="tc-inner">
+        <div class="tc-face tc-front">
+          <div class="tc-photo"><div class="tc-number">NO. 04</div><div class="tc-star">🔒</div><div class="tc-placeholder">Future role</div></div>
+          <div class="tc-stripe"></div>
+          <div class="tc-nameplate"><div class="tc-role">Coming soon</div><div class="tc-org">&nbsp;</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trading-card disabled" id="tcard-4">
+      <div class="tc-inner">
+        <div class="tc-face tc-front">
+          <div class="tc-photo"><div class="tc-number">NO. 05</div><div class="tc-star">🔒</div><div class="tc-placeholder">Future role</div></div>
+          <div class="tc-stripe"></div>
+          <div class="tc-nameplate"><div class="tc-role">Coming soon</div><div class="tc-org">&nbsp;</div></div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -537,11 +625,10 @@ document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
 function tx(id,btn){const c=document.getElementById(id),o=c.classList.toggle('open');btn.querySelector('span:first-child').textContent=o?'Hide details':'See details';setTimeout(buildRoad,80);}
 function lp(input){if(!input.files||!input.files[0])return;const s=input.closest('.ps'),img=s.querySelector('img'),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.remove('h');s.classList.add('hp');};r.readAsDataURL(input.files[0]);}
 function lb(input,id){if(!input.files||!input.files[0])return;const img=document.getElementById(id),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.add('on');};r.readAsDataURL(input.files[0]);}
-function lbanner(input,id){if(!input.files||!input.files[0])return;const img=document.getElementById(id),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.add('on');};r.readAsDataURL(input.files[0]);}
 function lip(input){if(!input.files||!input.files[0])return;const s=input.closest('.int-slot'),img=s.querySelector('img'),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.remove('h');s.classList.add('hp');};r.readAsDataURL(input.files[0]);}
 
 /* LEADERSHIP */
-function tl(row){row.classList.toggle('open');}
+function tflip(card){card.classList.toggle('flipped');}
 
 /* CONTENT TABS */
 function switchTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('panel-'+id).classList.add('active');}
