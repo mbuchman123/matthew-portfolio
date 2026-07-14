@@ -9,7 +9,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --blue:#003087;--blue-l:#e8eef7;--blue-m:#b5c9e8;
+  --blue:#003087;--blue-l:#e8eef7;--blue-m:#b5c9e8;--blue-bright:#6fa4ff;
   --orange:#FA4616;--orange-l:#fff0ec;
   --text:#111;--muted:#6b6b6b;--bg:#f9f9f7;--surface:#fff;
   --border:rgba(0,0,0,0.07);--border-h:rgba(0,0,0,0.15);
@@ -21,11 +21,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 
 /* NAV */
 nav{background:var(--blue);padding:0 5vw;display:flex;justify-content:space-between;align-items:center;height:62px;position:sticky;top:0;z-index:200;}
-.nav-logo img{height:38px;filter:brightness(0) invert(1);}
+.nav-logo img{height:46px;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.35));}
 .nav-links{display:flex;gap:1.75rem;list-style:none;}
-.nav-links a{font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;transition:color 0.2s;position:relative;}
-.nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--orange);transition:width 0.25s;}
-.nav-links a:hover{color:#fff;}
+.nav-links a{font-size:13px;font-weight:600;color:var(--blue-bright);text-decoration:none;transition:opacity 0.2s;position:relative;opacity:0.9;}
+.nav-links li:nth-child(even) a{color:var(--orange);}
+.nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:currentColor;transition:width 0.25s;}
+.nav-links a:hover{opacity:1;}
 .nav-links a:hover::after{width:100%;}
 
 /* HERO */
@@ -304,7 +305,7 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo"><img src="assets/logo.webp" alt="MB Logo"></div>
+  <div class="nav-logo"><img src="assets/mb-logo-navy.png" alt="MB Logo"></div>
   <ul class="nav-links">
     <li><a href="#experience">Experience</a></li>
     <li><a href="#leadership">Leadership</a></li>
