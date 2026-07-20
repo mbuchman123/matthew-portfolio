@@ -19,31 +19,32 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s cubic-bezier(.22,1,.36,1),transform 0.6s cubic-bezier(.22,1,.36,1);}
 .reveal.visible{opacity:1;transform:none;}
 
-/* NAV */
-nav{background:var(--blue);padding:0 5vw;display:flex;justify-content:space-between;align-items:center;height:62px;position:sticky;top:0;z-index:200;}
-.nav-logo img{height:46px;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.35));}
-.nav-links{display:flex;gap:1.75rem;list-style:none;}
-.nav-links a{font-size:13px;font-weight:600;color:var(--blue-bright);text-decoration:none;transition:opacity 0.2s;position:relative;opacity:0.9;}
-.nav-links li:nth-child(even) a{color:var(--orange);}
-.nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:currentColor;transition:width 0.25s;}
-.nav-links a:hover{opacity:1;}
-.nav-links a:hover::after{width:100%;}
-
 /* HERO */
-.hero{position:relative;min-height:94vh;overflow:hidden;background:linear-gradient(180deg,#faf7f1,#f3efe7);}
+.hero{position:relative;min-height:100vh;overflow:hidden;background:linear-gradient(180deg,#faf7f1,#f3efe7);}
 .hero-haze{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
-.hero-haze::before{content:'';position:absolute;top:-15%;left:-10%;width:60%;height:75%;background:radial-gradient(circle,rgba(250,70,22,0.38),transparent 70%);filter:blur(70px);}
-.hero-haze::after{content:'';position:absolute;bottom:-20%;right:-10%;width:65%;height:80%;background:radial-gradient(circle,rgba(0,48,135,0.34),transparent 70%);filter:blur(70px);}
-.hero-welcome{position:absolute;top:11%;left:56%;transform:translateX(-50%);z-index:1;font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(3.4rem,6.6vw,5.6rem);color:#16213e;white-space:nowrap;pointer-events:none;animation:heroWelcomeUp 0.9s 0.15s cubic-bezier(.22,1,.36,1) both;}
+.hero-haze::before{content:'';position:absolute;top:-18%;left:-12%;width:65%;height:80%;background:radial-gradient(circle,rgba(250,70,22,0.6),transparent 68%);filter:blur(55px);}
+.hero-haze::after{content:'';position:absolute;bottom:-22%;right:-12%;width:70%;height:85%;background:radial-gradient(circle,rgba(0,48,135,0.55),transparent 68%);filter:blur(55px);}
+
+/* HERO NAV (overlaid, no separate bar) */
+.hero-nav{position:absolute;top:0;left:0;right:0;z-index:10;padding:1.75rem 5vw 0;display:flex;justify-content:space-between;align-items:center;}
+.hero-nav .nav-logo img{height:42px;}
+.hero-nav .nav-links{display:flex;gap:1.75rem;list-style:none;align-items:center;}
+.hero-nav .nav-links a{font-size:13px;font-weight:600;color:#16213e;text-decoration:none;opacity:0.78;transition:opacity 0.2s;}
+.hero-nav .nav-links li:nth-child(even) a{color:var(--orange);}
+.hero-nav .nav-links a:hover{opacity:1;}
+.nav-contact-btn{background:#16213e;color:#fff;font-size:13px;font-weight:600;padding:10px 22px;border-radius:30px;text-decoration:none;transition:background 0.2s,transform 0.2s;}
+.nav-contact-btn:hover{background:var(--orange);transform:translateY(-1px);}
+
+.hero-welcome{position:absolute;top:9%;left:53.8%;transform:translateX(-50%);z-index:1;font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(3.6rem,7vw,6rem);color:#16213e;white-space:nowrap;pointer-events:none;animation:heroWelcomeUp 0.9s 0.15s cubic-bezier(.22,1,.36,1) both;}
 @keyframes heroWelcomeUp{from{opacity:0;transform:translate(-50%,16px)}to{opacity:1;transform:translate(-50%,0)}}
-.hero-portrait{position:absolute;bottom:0;left:58%;transform:translateX(-50%);height:90%;z-index:2;pointer-events:none;animation:portraitUp 1s 0.1s cubic-bezier(.22,1,.36,1) both;}
+.hero-portrait{position:absolute;bottom:0;left:56%;transform:translateX(-50%);height:88%;z-index:2;pointer-events:none;animation:portraitUp 1s 0.1s cubic-bezier(.22,1,.36,1) both;}
 .hero-portrait img{height:100%;width:auto;display:block;}
 @keyframes portraitUp{from{opacity:0;transform:translate(-50%,30px)}to{opacity:1;transform:translate(-50%,0)}}
-.hero-bottom{position:absolute;left:0;right:0;bottom:0;z-index:3;display:flex;justify-content:space-between;align-items:flex-end;padding:0 5vw 3.5rem;pointer-events:none;}
+.hero-bottom{position:absolute;left:0;right:0;bottom:0;z-index:3;display:flex;justify-content:space-between;align-items:flex-end;padding:0 5vw 3rem;pointer-events:none;}
 .hero-name{font-family:'DM Sans',sans-serif;font-weight:800;line-height:0.95;color:#16213e;letter-spacing:-0.02em;animation:fadeUp 0.7s 0.5s cubic-bezier(.22,1,.36,1) both;}
 .hero-name .hn-sm{display:block;font-weight:600;font-size:1.1rem;letter-spacing:0.08em;margin-bottom:0.3em;color:#3a3a3a;}
 .hero-name .hn-lg{display:block;font-size:clamp(2.4rem,5.5vw,3.8rem);}
-.hero-role{text-align:right;max-width:280px;animation:fadeUp 0.7s 0.62s cubic-bezier(.22,1,.36,1) both;}
+.hero-role{text-align:right;max-width:250px;animation:fadeUp 0.7s 0.62s cubic-bezier(.22,1,.36,1) both;}
 .hero-role-desc{font-size:13px;color:#555;line-height:1.55;margin-bottom:0.9rem;}
 .hero-role-tag{font-family:'DM Sans',sans-serif;font-weight:800;font-size:clamp(1.2rem,2.4vw,1.6rem);line-height:1.15;color:#16213e;letter-spacing:-0.01em;}
 
@@ -297,21 +298,19 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo"><img src="assets/mb-logo-navy.png" alt="MB Logo"></div>
-  <ul class="nav-links">
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="#leadership">Leadership</a></li>
-    <li><a href="#content">Content</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
-
 <!-- HERO -->
 <div class="hero" id="hero">
   <div class="hero-haze"></div>
+  <div class="hero-nav">
+    <div class="nav-logo"><img src="assets/mb-logo.png" alt="MB Logo"></div>
+    <ul class="nav-links">
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#leadership">Leadership</a></li>
+      <li><a href="#content">Content</a></li>
+      <li><a href="#skills">Skills</a></li>
+    </ul>
+    <a href="#contact" class="nav-contact-btn">Contact</a>
+  </div>
   <div class="hero-welcome">Welcome</div>
   <div class="hero-portrait"><img src="assets/matthew-portrait.png" alt="Matthew Buchman"></div>
   <div class="hero-bottom">
