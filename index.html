@@ -21,9 +21,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 
 /* HERO */
 .hero{position:relative;min-height:100vh;overflow:hidden;background:linear-gradient(180deg,#faf7f1,#f3efe7);}
+/* Full-coverage haze variant — remove class="full-haze" from .hero to revert to the plain cream background above */
+.hero.full-haze{background:linear-gradient(135deg,#ffd9c2 0%,#fbe9de 32%,#e9edf4 62%,#c9d8ef 100%);}
 .hero-haze{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
 .hero-haze::before{content:'';position:absolute;top:-22%;left:-18%;width:78%;height:92%;background:radial-gradient(circle,rgba(250,70,22,0.75),transparent 70%);filter:blur(50px);}
 .hero-haze::after{content:'';position:absolute;bottom:-26%;right:-18%;width:82%;height:96%;background:radial-gradient(circle,rgba(0,48,135,0.7),transparent 70%);filter:blur(50px);}
+.hero.full-haze .hero-haze::before{width:100%;height:110%;top:-25%;left:-25%;}
+.hero.full-haze .hero-haze::after{width:105%;height:115%;bottom:-30%;right:-25%;}
 
 /* HERO NAV (overlaid, no separate bar) */
 .hero-nav{position:absolute;top:0;left:0;right:0;z-index:10;padding:1.75rem 5vw 0;display:flex;justify-content:space-between;align-items:center;}
@@ -35,17 +39,20 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 .nav-contact-btn{background:#16213e;color:#fff;font-size:13px;font-weight:600;padding:10px 22px;border-radius:30px;text-decoration:none;transition:background 0.2s,transform 0.2s;}
 .nav-contact-btn:hover{background:var(--orange);transform:translateY(-1px);}
 
-.hero-welcome{position:absolute;top:8%;left:53.8%;transform:translateX(-50%);z-index:1;font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(5rem,10.5vw,9.5rem);color:#16213e;white-space:nowrap;pointer-events:none;animation:heroWelcomeUp 0.9s 0.15s cubic-bezier(.22,1,.36,1) both;}
-@keyframes heroWelcomeUp{from{opacity:0;transform:translate(-50%,16px)}to{opacity:1;transform:translate(-50%,0)}}
+.hero-title-l,.hero-title-r{position:absolute;top:9%;z-index:1;font-family:'DM Serif Display',serif;font-style:italic;font-size:clamp(2.6rem,5.4vw,4.6rem);color:#16213e;white-space:nowrap;pointer-events:none;animation:heroWelcomeUp 0.9s 0.15s cubic-bezier(.22,1,.36,1) both;}
+.hero-title-l{left:5vw;}
+.hero-title-r{left:78%;}
+@keyframes heroWelcomeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .hero-portrait{position:absolute;bottom:0;left:56%;transform:translateX(-50%);height:88%;z-index:2;pointer-events:none;animation:portraitUp 1s 0.1s cubic-bezier(.22,1,.36,1) both;}
 .hero-portrait img{height:100%;width:auto;display:block;}
 @keyframes portraitUp{from{opacity:0;transform:translate(-50%,30px)}to{opacity:1;transform:translate(-50%,0)}}
 .hero-name{position:absolute;left:0;bottom:2.5rem;padding-left:5vw;z-index:3;font-family:'DM Sans',sans-serif;font-weight:800;line-height:0.95;color:#16213e;letter-spacing:-0.02em;animation:fadeUp 0.7s 0.5s cubic-bezier(.22,1,.36,1) both;pointer-events:none;}
 .hero-name .hn-sm{display:block;font-weight:600;font-size:1.1rem;letter-spacing:0.08em;margin-bottom:0.3em;color:#3a3a3a;}
 .hero-name .hn-lg{display:block;font-size:clamp(3.4rem,9.5vw,8rem);}
-.hero-role{position:absolute;right:5vw;top:50%;transform:translateY(-50%);z-index:3;text-align:right;max-width:250px;animation:heroRoleIn 0.7s 0.62s cubic-bezier(.22,1,.36,1) both;pointer-events:none;}
+.hero-role-desc-wrap{position:absolute;right:5vw;top:50%;transform:translateY(-50%);z-index:3;text-align:right;max-width:250px;animation:heroRoleIn 0.7s 0.62s cubic-bezier(.22,1,.36,1) both;pointer-events:none;}
 @keyframes heroRoleIn{from{opacity:0;transform:translateY(calc(-50% + 16px))}to{opacity:1;transform:translateY(-50%)}}
-.hero-role-desc{font-size:13px;color:#555;line-height:1.55;margin-bottom:0.9rem;}
+.hero-role-desc{font-size:13px;color:#555;line-height:1.55;}
+.hero-role-tag-wrap{position:absolute;right:5vw;bottom:2.5rem;z-index:3;text-align:right;animation:fadeUp 0.7s 0.62s cubic-bezier(.22,1,.36,1) both;pointer-events:none;}
 .hero-role-tag{font-family:'DM Sans',sans-serif;font-weight:800;font-size:clamp(1.2rem,2.4vw,1.6rem);line-height:1.15;color:#16213e;letter-spacing:-0.01em;}
 
 /* BUTTONS */
@@ -299,7 +306,7 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
 <body>
 
 <!-- HERO -->
-<div class="hero" id="hero">
+<div class="hero full-haze" id="hero">
   <div class="hero-haze"></div>
   <div class="hero-nav">
     <div class="nav-logo"><img src="assets/mb-logo.png" alt="MB Logo"></div>
@@ -311,11 +318,14 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
     </ul>
     <a href="#contact" class="nav-contact-btn">Contact</a>
   </div>
-  <div class="hero-welcome">Welcome</div>
+  <div class="hero-title-l">Personal</div>
+  <div class="hero-title-r">Portfolio</div>
   <div class="hero-portrait"><img src="assets/matthew-portrait.png" alt="Matthew Buchman"></div>
   <div class="hero-name"><span class="hn-sm">I AM</span><span class="hn-lg">MATTHEW</span></div>
-  <div class="hero-role">
+  <div class="hero-role-desc-wrap">
     <p class="hero-role-desc">Learning, leading, and creating opportunities at the intersection of sports and business.</p>
+  </div>
+  <div class="hero-role-tag-wrap">
     <div class="hero-role-tag">ASPIRING SPORTS<br>PROFESSIONAL</div>
   </div>
 </div>
