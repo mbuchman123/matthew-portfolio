@@ -87,10 +87,21 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .sec-line{flex:1;height:1px;background:var(--border);}
 
 /* EXPERIENCE CAROUSEL */
-#experience{max-width:1100px;padding-top:1.5rem;}
+#experience{max-width:1260px;padding-top:1.5rem;}
 #experience .sec-header{margin-bottom:1rem;}
 .carousel-wrap{position:relative;padding:0 0 .5rem;}
-.carousel-stage{position:relative;height:560px;perspective:1700px;pointer-events:none;}
+.carousel-row{display:flex;align-items:flex-start;gap:1.5rem;}
+.exp-toggle-list{width:172px;flex-shrink:0;height:560px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;padding-right:4px;}
+.exp-toggle-list::-webkit-scrollbar{width:4px;}
+.exp-toggle-list::-webkit-scrollbar-thumb{background:var(--border-h);border-radius:3px;}
+.exp-toggle-item{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:10px;border:1px solid transparent;background:none;cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;width:100%;transition:background 0.2s,border-color 0.2s;}
+.exp-toggle-item:hover{background:var(--blue-l);}
+.exp-toggle-item.active{background:var(--blue-l);border-color:var(--blue-m);}
+.eti-logo{width:28px;height:28px;border-radius:7px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--border);font-size:13px;}
+.eti-logo img{width:100%;height:100%;object-fit:contain;padding:3px;}
+.eti-name{font-size:11.5px;font-weight:600;color:var(--text);line-height:1.25;}
+.exp-toggle-item.active .eti-name{color:var(--blue);}
+.carousel-stage{position:relative;height:560px;perspective:1700px;pointer-events:none;flex:1;min-width:0;}
 .carousel-track{position:relative;width:100%;height:100%;transform-style:preserve-3d;}
 .exp-card{position:absolute;top:38%;left:50%;width:340px;transform:translate(-50%,-50%);border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--surface);box-shadow:0 10px 34px rgba(0,48,135,0.14);transition:transform 0.55s cubic-bezier(.22,1,.36,1),opacity 0.55s cubic-bezier(.22,1,.36,1),box-shadow 0.3s;cursor:pointer;}
 .exp-card.active{cursor:default;box-shadow:0 20px 50px rgba(0,48,135,0.24);}
@@ -346,7 +357,17 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
 <div class="section reveal" id="experience">
   <div class="sec-header"><span class="sec-pill">Work experience</span><div class="sec-line"></div></div>
   <div class="carousel-wrap">
-    <div class="carousel-stage" id="exp-stage">
+    <div class="carousel-row">
+      <div class="exp-toggle-list" id="exp-toggle-list">
+        <button class="exp-toggle-item" onclick="goToCard(0)"><span class="eti-logo"><img src="assets/Woodfield.webp"></span><span class="eti-name">Member Services Attendant</span></button>
+        <button class="exp-toggle-item" onclick="goToCard(1)"><span class="eti-logo"><img src="assets/GHead.webp"></span><span class="eti-name">Student Manager</span></button>
+        <button class="exp-toggle-item" onclick="goToCard(2)"><span class="eti-logo"><img src="assets/Elevate Sports.webp"></span><span class="eti-name">NIL Marketing Intern</span></button>
+        <button class="exp-toggle-item" onclick="goToCard(3)"><span class="eti-logo"><img src="assets/Lifetime.webp"></span><span class="eti-name">Facility Management Associate</span></button>
+        <button class="exp-toggle-item" onclick="goToCard(4)"><span class="eti-logo"><img src="assets/GSC.webp"></span><span class="eti-name">Event Management Intern</span></button>
+        <button class="exp-toggle-item" onclick="goToCard(5)"><span class="eti-logo">🐊</span><span class="eti-name">Gator Guest Services</span></button>
+        <button class="exp-toggle-item" onclick="goToCard(6)"><span class="eti-logo">⚽</span><span class="eti-name">FIFA World Cup Volunteer</span></button>
+      </div>
+      <div class="carousel-stage" id="exp-stage">
       <div class="carousel-track" id="exp-track">
 
         <div class="exp-card" id="card-0" onclick="goToCard(0)">
@@ -384,6 +405,7 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
           <div class="card-body"><div class="card-top"><div><div class="card-role">FIFA World Cup Volunteer 2026</div><div class="card-org">FIFA World Cup 2026 · United States</div></div><span class="cbadge bc">Upcoming</span></div><p class="card-desc">More details on this role coming soon.</p><button class="xbtn" onclick="event.stopPropagation();tx('card-6',this)"><span>See details</span><span class="xi">▾</span></button><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Details and photos coming soon.</li></ul></div></div></div></div>
         </div>
 
+      </div>
       </div>
     </div>
     <div class="carousel-nav">
@@ -644,6 +666,7 @@ function layoutCarousel(){
     card.classList.toggle('active',diff===0);
   });
   document.querySelectorAll('#exp-dots .cdot').forEach((d,i)=>d.classList.toggle('active',i===expIdx));
+  document.querySelectorAll('#exp-toggle-list .exp-toggle-item').forEach((item,i)=>item.classList.toggle('active',i===expIdx));
 }
 function goToCard(i){expIdx=((i%EXP_COUNT)+EXP_COUNT)%EXP_COUNT;layoutCarousel();}
 function carPrev(){goToCard(expIdx-1);}
