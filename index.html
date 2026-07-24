@@ -167,23 +167,22 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .lead-timeline{position:relative;display:flex;justify-content:space-between;align-items:center;height:280px;margin:1rem 0 2.25rem;padding:0 .5rem;}
 .lead-timeline::before{content:'';position:absolute;top:50%;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--orange));transform:translateY(-50%);z-index:0;}
 .lt-item{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:6px;width:128px;cursor:pointer;}
-.lt-item.locked{cursor:default;}
 .lt-item.lt-top{transform:translateY(-72px);}
 .lt-item.lt-bottom{transform:translateY(72px);}
+.lt-item.active{z-index:10;}
 .lt-stub{width:2px;height:22px;background:var(--border-h);}
 .lt-date{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;}
 .lt-photo{position:relative;width:92px;height:92px;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,var(--blue) 0%,#1a5fa8 45%,var(--orange) 100%);display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 6px 18px rgba(0,48,135,0.18);border:3px solid #fff;transition:transform 0.25s,box-shadow 0.25s;}
 .lt-item:hover .lt-photo{transform:scale(1.05);}
-.lt-item.active .lt-photo{box-shadow:0 0 0 3px var(--blue),0 10px 24px rgba(0,48,135,0.28);}
-.lt-item.locked .lt-photo{opacity:.5;}
+.lt-item.active .lt-photo{box-shadow:0 0 0 3px var(--blue),0 10px 24px rgba(0,48,135,0.28);overflow:visible;}
 .lt-photo img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0;transition:opacity .3s;}
 .lt-photo img.on{opacity:1;}
 .lt-upload{position:absolute;bottom:3px;right:3px;opacity:0;transition:opacity .2s;z-index:3;}
 .lt-item:hover .lt-upload{opacity:1;}
-.lt-detail{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.75rem 2rem;box-shadow:0 4px 20px rgba(0,48,135,0.06);max-width:520px;margin:0 auto;text-align:center;}
-.lt-detail .card-top{margin-bottom:0;}
-.lt-detail .bl{text-align:left;margin-top:.8rem;}
-.lt-detail-locked{color:var(--muted);font-size:13px;padding:.5rem 0;}
+.lt-expand{position:absolute;top:50%;left:50%;width:270px;transform:translate(-50%,-50%) scale(.1);opacity:0;background:var(--surface);border-radius:14px;box-shadow:0 24px 55px rgba(0,48,135,0.3);padding:1.1rem 1.3rem;z-index:5;pointer-events:none;transition:transform .4s cubic-bezier(.22,1,.36,1),opacity .3s;text-align:center;overflow:hidden;}
+.lt-item.active .lt-expand{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:auto;overflow:visible;}
+.lt-expand .card-top{margin-bottom:0;}
+.lt-expand .bl{text-align:left;margin-top:.7rem;}
 
 /* CONTENT */
 .content-outer{background:var(--blue);border-radius:18px;overflow:hidden;}
@@ -406,44 +405,56 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
   <div class="sec-header"><span class="sec-pill">Leadership & development</span><div class="sec-line"></div></div>
 
   <div class="lead-timeline" id="lead-timeline">
-    <div class="lt-item lt-top" onclick="ltSelect(0)">
-      <div class="lt-photo"><img class="on" id="lt-img-0" src="assets/Elevate Sports.webp"><span>⚡</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-0')"></label></div></div>
+    <div class="lt-item lt-top" onclick="ltToggle(this)">
+      <div class="lt-photo"><img class="on" id="lt-img-0" src="assets/Elevate Sports.webp"><span>⚡</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-0')"></label></div>
+        <div class="lt-expand"><div class="card-top"><div><div class="card-role">Co-Founder & Membership Director</div><div class="card-org">Mu Sigma Lambda</div></div></div><div class="card-divider"></div><p class="card-desc">Co-founded the first national co-ed fraternity for sports industry professionals, building a 110-person chapter from scratch.</p><ul class="bl"><li>Directs sales, membership, and event strategy including the annual Sales Summit.</li><li>Engages alumni to lead workshops and secures high-profile industry speakers for member development.</li></ul></div>
+      </div>
       <div class="lt-date">Sep 2024</div>
       <div class="lt-stub"></div>
     </div>
-    <div class="lt-item lt-bottom" onclick="ltSelect(1)">
+    <div class="lt-item lt-bottom" onclick="ltToggle(this)">
       <div class="lt-stub"></div>
       <div class="lt-date">Sep 2025</div>
-      <div class="lt-photo"><img class="on" id="lt-img-1" src="assets/GHead.webp"><span>🏆</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-1')"></label></div></div>
+      <div class="lt-photo"><img class="on" id="lt-img-1" src="assets/GHead.webp"><span>🏆</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-1')"></label></div>
+        <div class="lt-expand"><div class="card-top"><div><div class="card-role">Assistant Director of Membership & Events</div><div class="card-org">Gator Sports Management Organization</div></div></div><div class="card-divider"></div><p class="card-desc">Leads initiatives connecting students with sports industry professionals through networking events, panels, and collaborations.</p><ul class="bl"><li>Manages onboarding of 50+ new members each cycle, engaging students early to support integration.</li><li>Organizes panels and networking events that connect students with real sports industry professionals.</li></ul></div>
+      </div>
     </div>
-    <div class="lt-item lt-top" onclick="ltSelect(2)">
-      <div class="lt-photo"><img class="on" id="lt-img-2" src="assets/Woodfield.webp"><span>🎓</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-2')"></label></div></div>
+    <div class="lt-item lt-top" onclick="ltToggle(this)">
+      <div class="lt-photo"><img class="on" id="lt-img-2" src="assets/Woodfield.webp"><span>🎓</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-2')"></label></div>
+        <div class="lt-expand"><div class="card-top"><div><div class="card-role">Assistant Director of Internal Affairs</div><div class="card-org">UF Big Event</div></div></div><div class="card-divider"></div><p class="card-desc">Partners with local organizations and Student Government to streamline site assignments and manage check-in operations for the largest single-day community service event at UF.</p><ul class="bl"><li>Coordinates logistics and communications for 1,400+ volunteers completing community projects across Gainesville.</li><li>Partners with SG leaders and local organizations to manage site assignments efficiently.</li></ul></div>
+      </div>
       <div class="lt-date">Oct 2025</div>
       <div class="lt-stub"></div>
     </div>
-    <div class="lt-item lt-bottom" onclick="ltSelect(3)">
+    <div class="lt-item lt-bottom" onclick="ltToggle(this)">
       <div class="lt-stub"></div>
       <div class="lt-date">TBD</div>
-      <div class="lt-photo"><img id="lt-img-3"><span>💹</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-3')"></label></div></div>
+      <div class="lt-photo"><img id="lt-img-3"><span>💹</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-3')"></label></div>
+        <div class="lt-expand"><div class="card-top"><div><div class="card-role">Member</div><div class="card-org">Exploring Financial Economics (EFE)</div></div></div><div class="card-divider"></div><p class="card-desc">More details on this role coming soon.</p><ul class="bl"><li>Details coming soon.</li></ul></div>
+      </div>
     </div>
-    <div class="lt-item lt-top" onclick="ltSelect(4)">
-      <div class="lt-photo"><img id="lt-img-4"><span>🧭</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-4')"></label></div></div>
+    <div class="lt-item lt-top" onclick="ltToggle(this)">
+      <div class="lt-photo"><img id="lt-img-4"><span>🧭</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-4')"></label></div>
+        <div class="lt-expand"><div class="card-top"><div><div class="card-role">Member</div><div class="card-org">Florida Leadership Academy (FLA)</div></div></div><div class="card-divider"></div><p class="card-desc">More details on this role coming soon.</p><ul class="bl"><li>Details coming soon.</li></ul></div>
+      </div>
       <div class="lt-date">TBD</div>
       <div class="lt-stub"></div>
     </div>
-    <div class="lt-item lt-bottom" onclick="ltSelect(5)">
+    <div class="lt-item lt-bottom" onclick="ltToggle(this)">
       <div class="lt-stub"></div>
       <div class="lt-date">TBD</div>
-      <div class="lt-photo"><img id="lt-img-5"><span>🏅</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-5')"></label></div></div>
+      <div class="lt-photo"><img id="lt-img-5"><span>🏅</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-5')"></label></div>
+        <div class="lt-expand"><div class="card-top"><div><div class="card-role">Volunteer</div><div class="card-org">Special Olympics</div></div></div><div class="card-divider"></div><p class="card-desc">More details on this role coming soon.</p><ul class="bl"><li>Details coming soon.</li></ul></div>
+      </div>
     </div>
-    <div class="lt-item lt-top" onclick="ltSelect(6)">
-      <div class="lt-photo"><img id="lt-img-6"><span>📊</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-6')"></label></div></div>
+    <div class="lt-item lt-top" onclick="ltToggle(this)">
+      <div class="lt-photo"><img id="lt-img-6"><span>📊</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-6')"></label></div>
+        <div class="lt-expand"><div class="card-top"><div><div class="card-role">Member</div><div class="card-org">UF Sports Analytics</div></div></div><div class="card-divider"></div><p class="card-desc">More details on this role coming soon.</p><ul class="bl"><li>Details coming soon.</li></ul></div>
+      </div>
       <div class="lt-date">TBD</div>
       <div class="lt-stub"></div>
     </div>
   </div>
-
-  <div class="lt-detail" id="lt-detail"></div>
 </div>
 
 <!-- CONTENT -->
@@ -566,37 +577,11 @@ function lb(input,id){if(!input.files||!input.files[0])return;const img=document
 function lip(input){if(!input.files||!input.files[0])return;const s=input.closest('.int-slot'),img=s.querySelector('img'),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.remove('h');s.classList.add('hp');};r.readAsDataURL(input.files[0]);}
 
 /* LEADERSHIP TIMELINE */
-const LEAD_DATA=[
-  {role:'Co-Founder & Membership Director',org:'Mu Sigma Lambda',date:'Sep 2024 – Present',
-   desc:"Co-founded the first national co-ed fraternity for sports industry professionals, building a 110-person chapter from scratch.",
-   bullets:['Directs sales, membership, and event strategy including the annual Sales Summit.','Engages alumni to lead workshops and secures high-profile industry speakers for member development.']},
-  {role:'Assistant Director of Membership & Events',org:'Gator Sports Management Organization',date:'Sep 2025 – Present',
-   desc:"Leads initiatives connecting students with sports industry professionals through networking events, panels, and collaborations.",
-   bullets:['Manages onboarding of 50+ new members each cycle, engaging students early to support integration.','Organizes panels and networking events that connect students with real sports industry professionals.']},
-  {role:'Assistant Director of Internal Affairs',org:'UF Big Event',date:'Oct 2025 – Present',
-   desc:"Partners with local organizations and Student Government to streamline site assignments and manage check-in operations for the largest single-day community service event at UF.",
-   bullets:['Coordinates logistics and communications for 1,400+ volunteers completing community projects across Gainesville.','Partners with SG leaders and local organizations to manage site assignments efficiently.']},
-  {role:'Member',org:'Exploring Financial Economics (EFE)',date:'TBD',
-   desc:"More details on this role coming soon.",
-   bullets:['Details coming soon.']},
-  {role:'Member',org:'Florida Leadership Academy (FLA)',date:'TBD',
-   desc:"More details on this role coming soon.",
-   bullets:['Details coming soon.']},
-  {role:'Volunteer',org:'Special Olympics',date:'TBD',
-   desc:"More details on this role coming soon.",
-   bullets:['Details coming soon.']},
-  {role:'Member',org:'UF Sports Analytics',date:'TBD',
-   desc:"More details on this role coming soon.",
-   bullets:['Details coming soon.']}
-];
-function ltSelect(i){
-  const d=LEAD_DATA[i];
-  document.querySelectorAll('#lead-timeline .lt-item').forEach((el,idx)=>el.classList.toggle('active',idx===i));
-  const panel=document.getElementById('lt-detail');
-  if(d.locked){panel.innerHTML='<div class="lt-detail-locked">🔒 Future role — details coming soon.</div>';return;}
-  panel.innerHTML=`<div class="card-top"><div><div class="card-role">${d.role}</div><div class="card-org">${d.org}</div></div></div><div class="card-divider"></div><p class="card-desc">${d.desc}</p><ul class="bl">${d.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>`;
+function ltToggle(item){
+  const wasActive=item.classList.contains('active');
+  document.querySelectorAll('#lead-timeline .lt-item').forEach(el=>el.classList.remove('active'));
+  if(!wasActive)item.classList.add('active');
 }
-ltSelect(0);
 
 /* CONTENT TABS */
 function switchTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('panel-'+id).classList.add('active');}
