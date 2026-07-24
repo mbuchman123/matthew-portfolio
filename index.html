@@ -421,14 +421,24 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
       <div class="lt-date">Oct 2025</div>
       <div class="lt-stub"></div>
     </div>
-    <div class="lt-item lt-bottom locked" onclick="ltSelect(3)">
+    <div class="lt-item lt-bottom" onclick="ltSelect(3)">
       <div class="lt-stub"></div>
-      <div class="lt-date">Future</div>
-      <div class="lt-photo"><span>🔒</span></div>
+      <div class="lt-date">TBD</div>
+      <div class="lt-photo"><img id="lt-img-3"><span>💹</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-3')"></label></div></div>
     </div>
-    <div class="lt-item lt-top locked" onclick="ltSelect(4)">
-      <div class="lt-photo"><span>🔒</span></div>
-      <div class="lt-date">Future</div>
+    <div class="lt-item lt-top" onclick="ltSelect(4)">
+      <div class="lt-photo"><img id="lt-img-4"><span>🧭</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-4')"></label></div></div>
+      <div class="lt-date">TBD</div>
+      <div class="lt-stub"></div>
+    </div>
+    <div class="lt-item lt-bottom" onclick="ltSelect(5)">
+      <div class="lt-stub"></div>
+      <div class="lt-date">TBD</div>
+      <div class="lt-photo"><img id="lt-img-5"><span>🏅</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-5')"></label></div></div>
+    </div>
+    <div class="lt-item lt-top" onclick="ltSelect(6)">
+      <div class="lt-photo"><img id="lt-img-6"><span>📊</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-6')"></label></div></div>
+      <div class="lt-date">TBD</div>
       <div class="lt-stub"></div>
     </div>
   </div>
@@ -566,8 +576,18 @@ const LEAD_DATA=[
   {role:'Assistant Director of Internal Affairs',org:'UF Big Event',date:'Oct 2025 – Present',
    desc:"Partners with local organizations and Student Government to streamline site assignments and manage check-in operations for the largest single-day community service event at UF.",
    bullets:['Coordinates logistics and communications for 1,400+ volunteers completing community projects across Gainesville.','Partners with SG leaders and local organizations to manage site assignments efficiently.']},
-  {locked:true},
-  {locked:true}
+  {role:'Member',org:'Exploring Financial Economics (EFE)',date:'TBD',
+   desc:"More details on this role coming soon.",
+   bullets:['Details coming soon.']},
+  {role:'Member',org:'Florida Leadership Academy (FLA)',date:'TBD',
+   desc:"More details on this role coming soon.",
+   bullets:['Details coming soon.']},
+  {role:'Volunteer',org:'Special Olympics',date:'TBD',
+   desc:"More details on this role coming soon.",
+   bullets:['Details coming soon.']},
+  {role:'Member',org:'UF Sports Analytics',date:'TBD',
+   desc:"More details on this role coming soon.",
+   bullets:['Details coming soon.']}
 ];
 function ltSelect(i){
   const d=LEAD_DATA[i];
