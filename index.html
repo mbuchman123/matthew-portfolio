@@ -253,6 +253,15 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .btn-cow{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.25);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 18px;border-radius:7px;text-decoration:none;display:inline-flex;align-items:center;transition:background 0.15s,transform 0.15s;}
 .btn-cow:hover{background:rgba(255,255,255,0.08);transform:translateY(-1px);}
 
+/* CONTENT — click-to-embed video modal (new component; existing card styles above are untouched) */
+.video-modal{position:fixed;inset:0;z-index:1000;background:rgba(0,10,30,0.75);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:2rem;}
+.video-modal.open{display:flex;}
+.video-modal-inner{position:relative;background:#000;border-radius:14px;overflow:hidden;max-width:420px;width:100%;aspect-ratio:9/16;box-shadow:0 30px 80px rgba(0,0,0,0.5);}
+.video-modal-frame{width:100%;height:100%;}
+.video-modal-frame iframe{width:100%;height:100%;border:0;display:block;}
+.video-modal-close{position:absolute;top:10px;right:10px;z-index:2;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.15);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.25);color:#fff;font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s,border-color 0.2s;}
+.video-modal-close:hover{background:var(--orange);border-color:var(--orange);}
+
 /* SKILLS */
 .skills-section{display:flex;flex-direction:column;gap:1.75rem;}
 .skill-cat h3{font-family:'DM Serif Display',serif;font-size:1.3rem;font-weight:400;margin-bottom:1rem;letter-spacing:-0.01em;}
@@ -494,25 +503,20 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
         <button class="tab" onclick="switchTab('75hard',this)">75 Hard</button>
         <button class="tab" onclick="switchTab('sports',this)">Sports Internship</button>
       </div>
-      <div id="panel-lifestyle" class="tab-panel active">
-        <a class="vid-card" href="https://www.tiktok.com/@mattyb2111/video/7642125249395445005" target="_blank"><img class="vid-thumb" src="assets/vid-lifestyle.png" style="object-position:17% center;"><div class="vid-scrim"></div><span class="vid-tag">Live</span><span class="vid-views">▷ 670</span><div class="play-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg></div><div class="vid-bottom"><div class="vid-title">Serendipity Ice Cream Parlor — High Springs, FL</div><div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>TikTok</span><span class="vid-link">View ↗</span></div></div></a>
-        <a class="vid-card" href="https://www.tiktok.com/@mattyb2111/video/7641735866255297805" target="_blank"><img class="vid-thumb" src="assets/vid-lifestyle.png" style="object-position:50% center;"><div class="vid-scrim"></div><span class="vid-tag">Live</span><span class="vid-views">▷ 463</span><div class="play-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg></div><div class="vid-bottom"><div class="vid-title">Ichetucknee Springs Tubing — Fort White, FL</div><div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>TikTok</span><span class="vid-link">View ↗</span></div></div></a>
-        <a class="vid-card" href="https://www.tiktok.com/@mattyb2111/video/7641219426901085453" target="_blank"><img class="vid-thumb" src="assets/vid-horse.png"><div class="vid-scrim"></div><span class="vid-tag">Live</span><span class="vid-views">▷ 692</span><div class="play-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg></div><div class="vid-bottom"><div class="vid-title">Retired Horse Farm — Alachua County, FL</div><div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>TikTok</span><span class="vid-link">View ↗</span></div></div></a>
-      </div>
-      <div id="panel-75hard" class="tab-panel">
-        <a class="vid-card" href="https://www.tiktok.com/@mattyb2111" target="_blank"><div class="vid-placeholder"><span class="vp-icon">🔥</span><span class="vp-label">Add thumbnail</span></div><div class="vid-scrim"></div><span class="vid-tag">Live</span><div class="play-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg></div><div class="vid-bottom"><div class="vid-title">Why I started 75 Hard</div><div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>TikTok</span><span class="vid-link">View ↗</span></div></div></a>
-        <a class="vid-card" href="https://www.tiktok.com/@mattyb2111" target="_blank"><div class="vid-placeholder"><span class="vp-icon">🔥</span><span class="vp-label">Add thumbnail</span></div><div class="vid-scrim"></div><span class="vid-tag">Live</span><div class="play-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg></div><div class="vid-bottom"><div class="vid-title">Day 1 — the rules, the diet, the plan</div><div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>TikTok</span><span class="vid-link">View ↗</span></div></div></a>
-        <a class="vid-card" href="https://www.tiktok.com/@mattyb2111" target="_blank"><div class="vid-placeholder"><span class="vp-icon">🔥</span><span class="vp-label">Add thumbnail</span></div><div class="vid-scrim"></div><span class="vid-tag">Live</span><div class="play-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg></div><div class="vid-bottom"><div class="vid-title">Progress update — what's changed</div><div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>TikTok</span><span class="vid-link">View ↗</span></div></div></a>
-      </div>
-      <div id="panel-sports" class="tab-panel">
-        <div class="vid-card"><div class="vid-placeholder"><span class="vp-icon">🏟️</span><span class="vp-label">Coming soon</span></div><div class="vid-scrim"></div><span class="vid-tag tag-soon">Coming soon</span><div class="play-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg></div><div class="vid-bottom"><div class="vid-title">How I landed my first sports internship</div><div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>TikTok</span><span class="vid-link" style="opacity:.35">Soon</span></div></div></div>
-        <div class="vid-card"><div class="vid-placeholder"><span class="vp-icon">🏟️</span><span class="vp-label">Coming soon</span></div><div class="vid-scrim"></div><span class="vid-tag tag-soon">Coming soon</span><div class="play-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg></div><div class="vid-bottom"><div class="vid-title">What they don't tell you about NIL internships</div><div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>TikTok</span><span class="vid-link" style="opacity:.35">Soon</span></div></div></div>
-        <div class="vid-card"><div class="vid-placeholder"><span class="vp-icon">🏟️</span><span class="vp-label">Coming soon</span></div><div class="vid-scrim"></div><span class="vid-tag tag-soon">Coming soon</span><div class="play-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg></div><div class="vid-bottom"><div class="vid-title">Breaking into sports business as a student</div><div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>TikTok</span><span class="vid-link" style="opacity:.35">Soon</span></div></div></div>
-      </div>
+      <!-- Panels are populated by renderVideoTabs() in the script below, from the VIDEOS array in videos.js -->
+      <div id="panel-lifestyle" class="tab-panel active"></div>
+      <div id="panel-75hard" class="tab-panel"></div>
+      <div id="panel-sports" class="tab-panel"></div>
       <div class="content-cta">
         <div class="cta-l"><strong>Follow along @mattyb2111</strong><p>Open to brand partnerships, NIL deals, and collaborations in sports & business.</p></div>
         <div class="cta-btns"><a href="https://www.tiktok.com/@mattyb2111" target="_blank" class="btn-cw">TikTok ↗</a><a href="#contact" class="btn-cow">Get in touch</a></div>
       </div>
+    </div>
+  </div>
+  <div class="video-modal" id="video-modal" onclick="if(event.target===this)closeVideoModal()">
+    <div class="video-modal-inner">
+      <button class="video-modal-close" onclick="closeVideoModal()" aria-label="Close">×</button>
+      <div class="video-modal-frame" id="video-modal-frame"></div>
     </div>
   </div>
 </div>
@@ -591,7 +595,56 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
   <span>Matthew Buchman · University of Florida · 2026</span>
 </footer>
 
+<script src="videos.js"></script>
 <script>
+/* CONTENT — render video cards from VIDEOS (videos.js), then wire the click-to-embed modal.
+   Runs before the reveal/stagger setup below so .vid-card elements exist in time to be staggered. */
+const PLATFORM_LABEL={tiktok:'TikTok',instagram:'Instagram'};
+const PLAY_SVG='<svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg>';
+
+function renderVideoCard(v,idx){
+  const platformLabel=PLATFORM_LABEL[v.platform]||v.platform;
+  const metaHTML=`<div class="vid-meta"><span class="vid-platform"><span class="pdot"></span>${platformLabel}</span>`;
+  if(v.status==='soon'){
+    return `<div class="vid-card"><div class="vid-placeholder"><span class="vp-icon">${v.icon||''}</span><span class="vp-label">Coming soon</span></div><div class="vid-scrim"></div><span class="vid-tag tag-soon">Coming soon</span><div class="play-btn">${PLAY_SVG}</div><div class="vid-bottom"><div class="vid-title">${v.caption}</div>${metaHTML}<span class="vid-link" style="opacity:.35">Soon</span></div></div></div>`;
+  }
+  if(v.status==='placeholder'){
+    return `<a class="vid-card" href="${v.url}" target="_blank"><div class="vid-placeholder"><span class="vp-icon">${v.icon||''}</span><span class="vp-label">Add thumbnail</span></div><div class="vid-scrim"></div><span class="vid-tag">Live</span><div class="play-btn">${PLAY_SVG}</div><div class="vid-bottom"><div class="vid-title">${v.caption}</div>${metaHTML}<span class="vid-link">View ↗</span></div></div></a>`;
+  }
+  const posStyle=v.thumbnailPosition?` style="object-position:${v.thumbnailPosition};"`:'';
+  const viewsHTML=v.views!=null?`<span class="vid-views">▷ ${v.views}</span>`:'';
+  return `<a class="vid-card" href="${v.url}" onclick="return openVideoModal(event,${idx})"><img class="vid-thumb" src="${v.thumbnail}"${posStyle}><div class="vid-scrim"></div><span class="vid-tag">Live</span>${viewsHTML}<div class="play-btn">${PLAY_SVG}</div><div class="vid-bottom"><div class="vid-title">${v.caption}</div>${metaHTML}<span class="vid-link">View ↗</span></div></div></a>`;
+}
+
+function renderVideoTabs(){
+  const tabs=['lifestyle','75hard','sports'];
+  tabs.forEach(tab=>{
+    const entries=VIDEOS.map((v,idx)=>({v,idx})).filter(x=>x.v.tab===tab);
+    const allDated=entries.length>0&&entries.every(x=>x.v.date);
+    if(allDated)entries.sort((a,b)=>new Date(b.v.date)-new Date(a.v.date));
+    const panel=document.getElementById('panel-'+tab);
+    if(panel)panel.innerHTML=entries.map(x=>renderVideoCard(x.v,x.idx)).join('');
+  });
+}
+renderVideoTabs();
+
+function openVideoModal(e,idx){
+  e.preventDefault();
+  const v=VIDEOS[idx];
+  if(!v||!v.id)return false;
+  const src=v.platform==='tiktok'
+    ?`https://www.tiktok.com/embed/v2/${v.id}`
+    :`${v.url.replace(/\/$/,'')}/embed`;
+  document.getElementById('video-modal-frame').innerHTML=`<iframe src="${src}" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>`;
+  document.getElementById('video-modal').classList.add('open');
+  return false;
+}
+function closeVideoModal(){
+  document.getElementById('video-modal').classList.remove('open');
+  document.getElementById('video-modal-frame').innerHTML='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeVideoModal();});
+
 /* REVEAL */
 const revObs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.08});
 document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
