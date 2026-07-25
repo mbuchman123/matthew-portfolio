@@ -19,6 +19,28 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s cubic-bezier(.22,1,.36,1),transform 0.6s cubic-bezier(.22,1,.36,1);}
 .reveal.visible{opacity:1;transform:none;}
 
+/* GRANULAR STAGGERED REVEAL — individual cards/photos/chips cascade in (rather than the whole
+   section popping as one block) as their parent .reveal section scrolls into view. --rd is set
+   per-item in JS (staggered per group).
+   Two groups: items with no hover-transform of their own get a translateY+opacity reveal; items
+   that already have a permanent (.lt-item's top/bottom offset) or hover-triggered (.vid-card,
+   .contact-link) transform are opacity-only, since .reveal.visible's higher specificity would
+   otherwise permanently clobber that transform once revealed. */
+@media (prefers-reduced-motion:no-preference){
+  .reveal .exp-toggle-item,.reveal .skill-chip,.reveal .int-row{
+    opacity:0;transform:translateY(16px);
+    transition:opacity 0.55s cubic-bezier(.22,1,.36,1),transform 0.55s cubic-bezier(.22,1,.36,1);
+    transition-delay:var(--rd,0s);
+  }
+  .reveal.visible .exp-toggle-item,.reveal.visible .skill-chip,.reveal.visible .int-row{
+    opacity:1;transform:none;
+  }
+  .reveal .lt-item,.reveal .vid-card,.reveal .contact-link{
+    opacity:0;transition:opacity 0.55s cubic-bezier(.22,1,.36,1);transition-delay:var(--rd,0s);
+  }
+  .reveal.visible .lt-item,.reveal.visible .vid-card,.reveal.visible .contact-link{opacity:1;}
+}
+
 /* SITE HAZE — fixed backdrop, present behind every section for the whole length of the page.
    Remove the <div class="site-haze"> element to revert to the plain --bg background. */
 .site-haze{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden;
@@ -101,18 +123,31 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .eti-logo img{width:100%;height:100%;object-fit:contain;padding:3px;}
 .eti-name{font-size:11.5px;font-weight:600;color:var(--text);line-height:1.25;}
 .exp-toggle-item.active .eti-name{color:var(--blue);}
-.carousel-stage{position:relative;height:480px;perspective:1700px;pointer-events:none;flex:1;min-width:0;}
-.carousel-track{position:relative;width:100%;height:100%;transform-style:preserve-3d;}
-.exp-card{position:absolute;top:50%;left:50%;width:340px;transform:translate(-50%,-50%);border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--surface);box-shadow:0 10px 34px rgba(0,48,135,0.14);transition:transform 0.55s cubic-bezier(.22,1,.36,1),opacity 0.55s cubic-bezier(.22,1,.36,1),box-shadow 0.3s,width 0.5s cubic-bezier(.22,1,.36,1);cursor:pointer;}
+.carousel-stage{position:relative;height:480px;perspective:1700px;pointer-events:none;flex:1;min-width:0;touch-action:pan-y;}
+.carousel-track{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform 0.4s cubic-bezier(.22,1,.36,1);}
+.carousel-track.dragging{transition:none;}
+.exp-card{position:absolute;top:50%;left:50%;width:340px;transform:translate(-50%,-50%);border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--surface);box-shadow:0 10px 34px rgba(0,48,135,0.14);transition:transform 0.55s cubic-bezier(.22,1,.36,1),opacity 0.55s cubic-bezier(.22,1,.36,1),box-shadow 0.3s,width 0.5s cubic-bezier(.22,1,.36,1),filter 0.4s;cursor:pointer;touch-action:pan-y;will-change:transform;user-select:none;}
 .exp-card.open{width:646px;}
 .exp-card.active{cursor:default;box-shadow:0 20px 50px rgba(0,48,135,0.24);}
+.exp-card.tilting{transition:transform 0.1s ease-out,opacity 0.55s cubic-bezier(.22,1,.36,1),box-shadow 0.3s,width 0.5s cubic-bezier(.22,1,.36,1),filter 0.4s;}
 .exp-card:not(.active) .xbtn,.exp-card:not(.active) .banner-upload{pointer-events:none;}
+.card-shine{position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;transition:opacity 0.3s;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(250,70,22,0.32) 0%,rgba(250,70,22,0.08) 35%,transparent 60%);}
+.exp-card.tilting .card-shine{opacity:1;}
 .carousel-nav{display:flex;align-items:center;justify-content:center;gap:1.5rem;margin-top:2px;}
 .cnav-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border-h);background:var(--surface);color:var(--blue);font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s,transform 0.15s,border-color 0.15s;}
 .cnav-btn:hover{background:var(--blue-l);border-color:var(--blue-m);transform:scale(1.07);}
 .carousel-dots{display:flex;gap:7px;}
-.cdot{width:7px;height:7px;border-radius:50%;background:var(--border-h);cursor:pointer;transition:background 0.2s,width 0.2s;border:none;padding:0;}
-.cdot.active{background:var(--blue);width:20px;border-radius:4px;}
+.cdot{position:relative;width:20px;height:6px;border-radius:3px;background:var(--border-h);cursor:pointer;border:none;padding:0;overflow:hidden;transition:background 0.2s;}
+.cdot-fill{position:absolute;top:0;left:0;height:100%;width:0;background:var(--blue);border-radius:3px;}
+.cdot.active{background:var(--border-h);}
+@media (prefers-reduced-motion:no-preference){
+  .cdot.active .cdot-fill{animation:dotFill 4s linear forwards;}
+}
+@media (prefers-reduced-motion:reduce){
+  .cdot.active .cdot-fill{width:100%;}
+}
+.carousel-dots.paused .cdot.active .cdot-fill{animation-play-state:paused;}
+@keyframes dotFill{from{width:0}to{width:100%}}
 .card-banner{position:relative;height:155px;overflow:hidden;cursor:default;}
 .banner-bg{position:absolute;inset:0;background:linear-gradient(135deg,var(--blue) 0%,#1a5fa8 45%,var(--orange) 100%);transition:transform 0.5s cubic-bezier(.22,1,.36,1);}
 .card-banner:hover .banner-bg{transform:scale(1.05);}
@@ -574,8 +609,22 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
 const revObs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.08});
 document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
 
+function staggerGroups(containerSelector,itemSelector,step=0.06,max=0.6){
+  document.querySelectorAll(containerSelector).forEach(container=>{
+    container.querySelectorAll(itemSelector).forEach((el,i)=>{
+      el.style.setProperty('--rd',Math.min(i*step,max)+'s');
+    });
+  });
+}
+staggerGroups('#exp-toggle-list','.exp-toggle-item');
+staggerGroups('#lead-timeline','.lt-item');
+staggerGroups('.tab-panel','.vid-card');
+staggerGroups('.skill-chips','.skill-chip');
+staggerGroups('.interest-list','.int-row');
+staggerGroups('.contact-links','.contact-link');
+
 /* EXPERIENCE */
-function tx(id,btn){const c=document.getElementById(id),o=c.classList.toggle('open');btn.querySelector('span:first-child').textContent=o?'Hide details':'See details';}
+function tx(id,btn){const c=document.getElementById(id),o=c.classList.toggle('open');btn.querySelector('span:first-child').textContent=o?'Hide details':'See details';c.classList.remove('tilting');if(c.dataset.base)c.style.transform=c.dataset.base;}
 function lp(input){if(!input.files||!input.files[0])return;const s=input.closest('.ps'),img=s.querySelector('img'),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.remove('h');s.classList.add('hp');};r.readAsDataURL(input.files[0]);}
 function lb(input,id){if(!input.files||!input.files[0])return;const img=document.getElementById(id),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.add('on');};r.readAsDataURL(input.files[0]);}
 function lip(input){if(!input.files||!input.files[0])return;const s=input.closest('.int-slot'),img=s.querySelector('img'),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.remove('h');s.classList.add('hp');};r.readAsDataURL(input.files[0]);}
@@ -613,6 +662,8 @@ function addLink(key){const inp=document.getElementById('li-'+key),val=inp.value
 /* EXPERIENCE CAROUSEL */
 let expIdx=0;
 const EXP_COUNT=document.querySelectorAll('#exp-track .exp-card').length;
+const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 function layoutCarousel(){
   const cards=document.querySelectorAll('#exp-track .exp-card');
   const n=cards.length;
@@ -624,10 +675,13 @@ function layoutCarousel(){
     const tx=diff*230,tz=-abs*170,rot=diff*-34;
     const scale=Math.max(0.6,1-abs*0.15);
     const opacity=abs>3?0:Math.max(0,1-abs*0.3);
-    card.style.transform=`translate(-50%,-50%) translateX(${tx}px) translateZ(${tz}px) rotateY(${rot}deg) scale(${scale})`;
+    const base=`translate(-50%,-50%) translateX(${tx}px) translateZ(${tz}px) rotateY(${rot}deg) scale(${scale})`;
+    card.dataset.base=base;
+    card.style.transform=base;
     card.style.opacity=opacity;
     card.style.zIndex=100-abs;
     card.style.pointerEvents=abs>3?'none':'auto';
+    card.style.filter=abs===0?'none':`blur(${Math.min(abs*1.4,6).toFixed(1)}px) saturate(${Math.max(1-abs*0.22,0.35).toFixed(2)})`;
     const isActive=diff===0;
     if(!isActive&&card.classList.contains('open')){
       card.classList.remove('open');
@@ -635,11 +689,17 @@ function layoutCarousel(){
       if(label)label.textContent='See details';
     }
     card.classList.toggle('active',isActive);
+    if(!isActive)card.classList.remove('tilting');
   });
-  document.querySelectorAll('#exp-dots .cdot').forEach((d,i)=>d.classList.toggle('active',i===expIdx));
   document.querySelectorAll('#exp-toggle-list .exp-toggle-item').forEach((item,i)=>item.classList.toggle('active',i===expIdx));
+  restartDotFill();
 }
-function goToCard(i){expIdx=((i%EXP_COUNT)+EXP_COUNT)%EXP_COUNT;layoutCarousel();}
+
+function goToCard(i,manual=true){
+  expIdx=((i%EXP_COUNT)+EXP_COUNT)%EXP_COUNT;
+  layoutCarousel();
+  if(manual){pauseAutoAdvance();scheduleResume();}
+}
 function carPrev(){goToCard(expIdx-1);}
 function carNext(){goToCard(expIdx+1);}
 
@@ -652,14 +712,112 @@ document.addEventListener('keydown',e=>{
   }
 });
 
-let dragX=null;
-const expStage=document.getElementById('exp-stage');
-expStage.addEventListener('pointerdown',e=>{dragX=e.clientX;});
-document.addEventListener('pointerup',e=>{
-  if(dragX===null)return;
-  const dx=e.clientX-dragX;dragX=null;
-  if(dx>60)carPrev();else if(dx<-60)carNext();
+/* Instagram-story style auto-advancing progress dots */
+const expDots=document.getElementById('exp-dots');
+document.querySelectorAll('#exp-dots .cdot').forEach(d=>{
+  const fill=document.createElement('span');
+  fill.className='cdot-fill';
+  d.appendChild(fill);
 });
+let resumeTimer=null,dotsHovering=false,dotsDragging=false;
+function restartDotFill(){
+  const dots=document.querySelectorAll('#exp-dots .cdot');
+  dots.forEach((d,i)=>{
+    d.classList.toggle('active',i===expIdx);
+    if(i===expIdx){
+      const fill=d.querySelector('.cdot-fill');
+      fill.style.animation='none';
+      void fill.offsetWidth;
+      fill.style.animation='';
+    }
+  });
+}
+function pauseAutoAdvance(){expDots.classList.add('paused');}
+function scheduleResume(){
+  clearTimeout(resumeTimer);
+  resumeTimer=setTimeout(()=>{
+    if(!dotsHovering&&!dotsDragging)expDots.classList.remove('paused');
+  },2500);
+}
+expDots.addEventListener('animationend',e=>{
+  if(e.target.classList.contains('cdot-fill')&&e.animationName==='dotFill'){
+    goToCard(expIdx+1,false);
+  }
+});
+const carouselWrap=document.querySelector('.carousel-wrap');
+carouselWrap.addEventListener('mouseenter',()=>{dotsHovering=true;pauseAutoAdvance();clearTimeout(resumeTimer);});
+carouselWrap.addEventListener('mouseleave',()=>{dotsHovering=false;scheduleResume();});
+
+/* Mouse-tilt + shine on the active card */
+document.querySelectorAll('#exp-track .exp-card').forEach(card=>{
+  const shine=document.createElement('div');
+  shine.className='card-shine';
+  card.appendChild(shine);
+  card.addEventListener('mousemove',e=>{
+    if(reduceMotion||!card.classList.contains('active')||card.classList.contains('open'))return;
+    const r=card.getBoundingClientRect();
+    const px=(e.clientX-r.left)/r.width;
+    const py=(e.clientY-r.top)/r.height;
+    const rx=((0.5-py)*28).toFixed(2);
+    const ry=((px-0.5)*28).toFixed(2);
+    card.classList.add('tilting');
+    card.style.transform=`${card.dataset.base} rotateX(${rx}deg) rotateY(${ry}deg)`;
+    card.style.setProperty('--mx',(px*100).toFixed(1)+'%');
+    card.style.setProperty('--my',(py*100).toFixed(1)+'%');
+  });
+  card.addEventListener('mouseleave',()=>{
+    card.classList.remove('tilting');
+    card.style.transform=card.dataset.base;
+  });
+});
+
+/* Photo parallax on hover */
+document.querySelectorAll('.card-banner').forEach(banner=>{
+  const photo=banner.querySelector('.banner-photo');
+  if(!photo)return;
+  banner.addEventListener('mousemove',e=>{
+    if(reduceMotion)return;
+    const r=banner.getBoundingClientRect();
+    const px=(e.clientX-r.left)/r.width-0.5;
+    const py=(e.clientY-r.top)/r.height-0.5;
+    photo.style.transform=`translate(${(-px*8).toFixed(2)}%,${(-py*8).toFixed(2)}%) scale(1.05)`;
+  });
+  banner.addEventListener('mouseleave',()=>{photo.style.transform='';});
+});
+
+/* Drag-to-swipe (pointer events cover mouse + touch) */
+const expTrack=document.getElementById('exp-track');
+const expStage=document.getElementById('exp-stage');
+let dragActive=false,dragStartX=0,dragStartTime=0,dragMoved=false,suppressNextClick=false;
+
+expStage.addEventListener('pointerdown',e=>{
+  dragActive=true;dragMoved=false;
+  dragStartX=e.clientX;dragStartTime=performance.now();
+  expTrack.classList.add('dragging');
+  dotsDragging=true;pauseAutoAdvance();clearTimeout(resumeTimer);
+});
+document.addEventListener('pointermove',e=>{
+  if(!dragActive)return;
+  const dx=e.clientX-dragStartX;
+  if(Math.abs(dx)>4)dragMoved=true;
+  if(!reduceMotion)expTrack.style.transform=`translateX(${dx}px)`;
+});
+document.addEventListener('pointerup',e=>{
+  if(!dragActive)return;
+  dragActive=false;
+  expTrack.classList.remove('dragging');
+  expTrack.style.transform='translateX(0)';
+  const dx=e.clientX-dragStartX;
+  const dt=Math.max(performance.now()-dragStartTime,1);
+  const velocity=dx/dt;
+  if(dx>60||velocity>0.5)carPrev();
+  else if(dx<-60||velocity<-0.5)carNext();
+  dotsDragging=false;scheduleResume();
+  if(dragMoved)suppressNextClick=true;
+});
+expStage.addEventListener('click',e=>{
+  if(suppressNextClick){e.stopPropagation();e.preventDefault();suppressNextClick=false;}
+},true);
 
 layoutCarousel();
 </script>
