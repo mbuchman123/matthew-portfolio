@@ -148,7 +148,8 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .xpanel{flex:none;display:grid;grid-template-columns:0fr;transition:grid-template-columns 0.5s cubic-bezier(.22,1,.36,1);}
 .exp-card.open .xpanel{grid-template-columns:1fr;}
 .xpanel-i{overflow:hidden;min-width:0;}
-.xbody{width:290px;padding-left:1.2rem;border-left:1px solid var(--border);display:flex;flex-direction:column;gap:.9rem;}
+.xbody{width:290px;padding-left:1.2rem;border-left:1px solid var(--border);display:flex;flex-direction:column;gap:.9rem;height:0;overflow:hidden;}
+.exp-card.open .xbody{height:auto;overflow:visible;}
 .bl{list-style:none;display:flex;flex-direction:column;gap:6px;}
 .bl li{display:flex;gap:8px;font-size:12.5px;color:#555;line-height:1.5;}
 .bl li::before{content:"•";color:var(--muted);flex-shrink:0;}
@@ -409,7 +410,7 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
 
   <div class="lead-timeline" id="lead-timeline">
     <div class="lt-item lt-top" onclick="ltToggle(this)">
-      <div class="lt-photo"><img class="on" id="lt-img-0" src="assets/Elevate Sports.webp"><span>⚡</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-0')"></label></div>
+      <div class="lt-photo"><img class="on" id="lt-img-0" src="assets/L&amp;D MSL.webp"><span>⚡</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-0')"></label></div>
         <div class="lt-expand"><div class="card-top"><div><div class="card-role">Co-Founder & Membership Director</div><div class="card-org">Mu Sigma Lambda</div></div></div><div class="card-divider"></div><p class="card-desc">Co-founded the first national co-ed fraternity for sports industry professionals, building a 110-person chapter from scratch.</p><ul class="bl"><li>Directs sales, membership, and event strategy including the annual Sales Summit.</li><li>Engages alumni to lead workshops and secures high-profile industry speakers for member development.</li></ul></div>
       </div>
       <div class="lt-date">Sep 2024</div>
@@ -418,12 +419,12 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
     <div class="lt-item lt-bottom" onclick="ltToggle(this)">
       <div class="lt-stub"></div>
       <div class="lt-date">Sep 2025</div>
-      <div class="lt-photo"><img class="on" id="lt-img-1" src="assets/GHead.webp"><span>🏆</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-1')"></label></div>
+      <div class="lt-photo"><img class="on" id="lt-img-1" src="assets/L&amp;D GMSO.jfif"><span>🏆</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-1')"></label></div>
         <div class="lt-expand"><div class="card-top"><div><div class="card-role">Assistant Director of Membership & Events</div><div class="card-org">Gator Sports Management Organization</div></div></div><div class="card-divider"></div><p class="card-desc">Leads initiatives connecting students with sports industry professionals through networking events, panels, and collaborations.</p><ul class="bl"><li>Manages onboarding of 50+ new members each cycle, engaging students early to support integration.</li><li>Organizes panels and networking events that connect students with real sports industry professionals.</li></ul></div>
       </div>
     </div>
     <div class="lt-item lt-top" onclick="ltToggle(this)">
-      <div class="lt-photo"><img class="on" id="lt-img-2" src="assets/Woodfield.webp"><span>🎓</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-2')"></label></div>
+      <div class="lt-photo"><img class="on" id="lt-img-2" src="assets/L&amp;D BIGEVENT.jpg"><span>🎓</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-2')"></label></div>
         <div class="lt-expand"><div class="card-top"><div><div class="card-role">Assistant Director of Internal Affairs</div><div class="card-org">UF Big Event</div></div></div><div class="card-divider"></div><p class="card-desc">Partners with local organizations and Student Government to streamline site assignments and manage check-in operations for the largest single-day community service event at UF.</p><ul class="bl"><li>Coordinates logistics and communications for 1,400+ volunteers completing community projects across Gainesville.</li><li>Partners with SG leaders and local organizations to manage site assignments efficiently.</li></ul></div>
       </div>
       <div class="lt-date">Oct 2025</div>
@@ -432,12 +433,12 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
     <div class="lt-item lt-bottom" onclick="ltToggle(this)">
       <div class="lt-stub"></div>
       <div class="lt-date">TBD</div>
-      <div class="lt-photo"><img id="lt-img-3"><span>💹</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-3')"></label></div>
+      <div class="lt-photo"><img class="on" id="lt-img-3" src="assets/L&amp;D Warrington.jpg"><span>💹</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-3')"></label></div>
         <div class="lt-expand"><div class="card-top"><div><div class="card-role">Member</div><div class="card-org">Exploring Financial Economics (EFE)</div></div></div><div class="card-divider"></div><p class="card-desc">More details on this role coming soon.</p><ul class="bl"><li>Details coming soon.</li></ul></div>
       </div>
     </div>
     <div class="lt-item lt-top" onclick="ltToggle(this)">
-      <div class="lt-photo"><img id="lt-img-4"><span>🧭</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-4')"></label></div>
+      <div class="lt-photo"><img class="on" id="lt-img-4" src="assets/L&amp;D FLA.jfif"><span>🧭</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-4')"></label></div>
         <div class="lt-expand"><div class="card-top"><div><div class="card-role">Member</div><div class="card-org">Florida Leadership Academy (FLA)</div></div></div><div class="card-divider"></div><p class="card-desc">More details on this role coming soon.</p><ul class="bl"><li>Details coming soon.</li></ul></div>
       </div>
       <div class="lt-date">TBD</div>
@@ -446,12 +447,12 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
     <div class="lt-item lt-bottom" onclick="ltToggle(this)">
       <div class="lt-stub"></div>
       <div class="lt-date">TBD</div>
-      <div class="lt-photo"><img id="lt-img-5"><span>🏅</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-5')"></label></div>
+      <div class="lt-photo"><img class="on" id="lt-img-5" src="assets/L&amp;D Special Olympics.jpg"><span>🏅</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-5')"></label></div>
         <div class="lt-expand"><div class="card-top"><div><div class="card-role">Volunteer</div><div class="card-org">Special Olympics</div></div></div><div class="card-divider"></div><p class="card-desc">More details on this role coming soon.</p><ul class="bl"><li>Details coming soon.</li></ul></div>
       </div>
     </div>
     <div class="lt-item lt-top" onclick="ltToggle(this)">
-      <div class="lt-photo"><img id="lt-img-6"><span>📊</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-6')"></label></div>
+      <div class="lt-photo"><img class="on" id="lt-img-6" src="assets/L&amp;D Sports Analytics.jpg"><span>📊</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-6')"></label></div>
         <div class="lt-expand"><div class="card-top"><div><div class="card-role">Member</div><div class="card-org">UF Sports Analytics</div></div></div><div class="card-divider"></div><p class="card-desc">More details on this role coming soon.</p><ul class="bl"><li>Details coming soon.</li></ul></div>
       </div>
       <div class="lt-date">TBD</div>
