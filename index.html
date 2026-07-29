@@ -23,22 +23,22 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
    section popping as one block) as their parent .reveal section scrolls into view. --rd is set
    per-item in JS (staggered per group).
    Two groups: items with no hover-transform of their own get a translateY+opacity reveal; items
-   that already have a permanent (.lt-item's top/bottom offset) or hover-triggered (.vid-card,
-   .contact-link) transform are opacity-only, since .reveal.visible's higher specificity would
-   otherwise permanently clobber that transform once revealed. */
+   with a hover-triggered transform of their own (.vid-card, .contact-link) are opacity-only,
+   since .reveal.visible's higher specificity would otherwise permanently clobber that transform
+   once revealed. */
 @media (prefers-reduced-motion:no-preference){
-  .reveal .exp-toggle-item,.reveal .skill-chip,.reveal .int-row{
+  .reveal .exp-toggle-item,.reveal .skill-chip{
     opacity:0;transform:translateY(16px);
     transition:opacity 0.55s cubic-bezier(.22,1,.36,1),transform 0.55s cubic-bezier(.22,1,.36,1);
     transition-delay:var(--rd,0s);
   }
-  .reveal.visible .exp-toggle-item,.reveal.visible .skill-chip,.reveal.visible .int-row{
+  .reveal.visible .exp-toggle-item,.reveal.visible .skill-chip{
     opacity:1;transform:none;
   }
-  .reveal .lt-item,.reveal .vid-card,.reveal .contact-link{
+  .reveal .vid-card,.reveal .contact-link{
     opacity:0;transition:opacity 0.55s cubic-bezier(.22,1,.36,1);transition-delay:var(--rd,0s);
   }
-  .reveal.visible .lt-item,.reveal.visible .vid-card,.reveal.visible .contact-link{opacity:1;}
+  .reveal.visible .vid-card,.reveal.visible .contact-link{opacity:1;}
 }
 
 /* SITE HAZE — fixed backdrop, present behind every section for the whole length of the page.
@@ -108,25 +108,37 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .sec-pill{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue);background:var(--blue-l);padding:4px 12px;border-radius:20px;font-weight:500;white-space:nowrap;}
 .sec-line{flex:1;height:1px;background:var(--border);}
 
+/* SCROLL CROSSFADE — opacity/transform on .scroll-fade elements are driven continuously by
+   scroll position in the script below (reversible in both directions), not by a one-time
+   IntersectionObserver toggle like .reveal (still used by Content/Skills/Contact). */
+.scroll-fade{will-change:opacity,transform;}
+
+/* ABOUT — photo runs full-bleed to the true left edge of the viewport (this section drops
+   .section's left padding/max-width for exactly that reason, the same way .hero opts out of it),
+   then fades out on its right edge into the text via a mask-image gradient. */
+#about{max-width:none;padding:3rem 5vw 3rem 0;}
+.about-row{display:flex;align-items:center;}
+.about-photo-slot{flex:0 0 56%;aspect-ratio:auto;height:640px;border-radius:0 18px 18px 0;position:relative;margin-right:-90px;-webkit-mask-image:linear-gradient(to right,#000 55%,transparent 92%);mask-image:linear-gradient(to right,#000 55%,transparent 92%),linear-gradient(to bottom,transparent 0%,#000 6%,#000 94%,transparent 100%);-webkit-mask-composite:source-in;mask-composite:intersect;}
+.about-photo-slot .isi{font-size:34px;}
+.about-photo-slot .isl{font-size:14px;}
+.about-text{flex:1 1 44%;position:relative;z-index:1;padding-left:70px;}
+.about-title{font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,4.5vw,3.4rem);font-weight:400;letter-spacing:-0.02em;margin-bottom:1.1rem;line-height:1.05;}
+.about-title span{color:var(--orange);}
+.about-p{font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:1rem;}
+.about-p:last-child{margin-bottom:0;}
+
 /* EXPERIENCE CAROUSEL */
-#experience{max-width:1260px;padding-top:1.5rem;}
-#experience .sec-header{margin-bottom:1rem;}
-.carousel-wrap{position:relative;padding:0 0 .5rem;}
-.carousel-row{display:flex;align-items:flex-start;gap:1.5rem;}
-.exp-toggle-list{width:172px;flex-shrink:0;height:480px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;padding-right:4px;}
-.exp-toggle-list::-webkit-scrollbar{width:4px;}
-.exp-toggle-list::-webkit-scrollbar-thumb{background:var(--border-h);border-radius:3px;}
-.exp-toggle-item{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:10px;border:1px solid transparent;background:none;cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;width:100%;transition:background 0.2s,border-color 0.2s;}
-.exp-toggle-item:hover{background:var(--blue-l);}
-.exp-toggle-item.active{background:var(--blue-l);border-color:var(--blue-m);}
-.eti-logo{width:28px;height:28px;border-radius:7px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--border);font-size:13px;}
-.eti-logo img{width:100%;height:100%;object-fit:contain;padding:3px;}
-.eti-name{font-size:11.5px;font-weight:600;color:var(--text);line-height:1.25;}
-.exp-toggle-item.active .eti-name{color:var(--blue);}
-.carousel-stage{position:relative;height:480px;perspective:1700px;pointer-events:none;flex:1;min-width:0;}
+#experience{max-width:1320px;padding-top:1.5rem;}
+.carousel-wrap{position:relative;padding:40px 0 .5rem;}
+/* Sits behind the whole carousel purely by DOM order (it's .carousel-stage's earlier sibling,
+   and .carousel-stage's own perspective gives it a self-contained stacking context) — no z-index
+   needed here to lose to the cards. Positioned so the front card's top edge overlaps and covers
+   the bottom portion of the letters (a deliberate layered-depth effect, not a collision to fix). */
+.exp-bignum{position:absolute;top:30px;left:50%;transform:translateX(-50%);width:100%;text-align:center;font-family:'DM Sans',sans-serif;font-weight:800;font-size:clamp(100px,8vw,120px);letter-spacing:-0.03em;line-height:1;white-space:nowrap;pointer-events:none;background:linear-gradient(to right,var(--orange) 0%,var(--blue) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;opacity:0.38;}
+.carousel-stage{position:relative;height:680px;perspective:1900px;pointer-events:none;width:100%;}
 .carousel-track{position:relative;width:100%;height:100%;transform-style:preserve-3d;}
-.exp-card{position:absolute;top:50%;left:50%;width:340px;transform:translate(-50%,-50%);border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--surface);box-shadow:0 10px 34px rgba(0,48,135,0.14);transition:transform 0.55s cubic-bezier(.22,1,.36,1),opacity 0.55s cubic-bezier(.22,1,.36,1),box-shadow 0.3s,width 0.5s cubic-bezier(.22,1,.36,1);cursor:pointer;}
-.exp-card.open{width:646px;}
+.exp-card{position:absolute;top:50%;left:50%;width:480px;transform:translate(-50%,-50%);border-radius:16px;overflow:hidden;border:1px solid var(--border);background:var(--surface);box-shadow:0 10px 34px rgba(0,48,135,0.14);transition:box-shadow 0.3s,width 0.5s cubic-bezier(.22,1,.36,1);cursor:pointer;}
+.exp-card.open{width:900px;}
 .exp-card.active{cursor:default;box-shadow:0 20px 50px rgba(0,48,135,0.24);}
 .exp-card:not(.active) .xbtn,.exp-card:not(.active) .banner-upload{pointer-events:none;}
 .carousel-nav{display:flex;align-items:center;justify-content:center;gap:1.5rem;margin-top:2px;}
@@ -135,7 +147,7 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .carousel-dots{display:flex;gap:7px;}
 .cdot{width:7px;height:7px;border-radius:50%;background:var(--border-h);cursor:pointer;transition:background 0.2s,width 0.2s;border:none;padding:0;}
 .cdot.active{background:var(--blue);width:20px;border-radius:4px;}
-.card-banner{position:relative;height:155px;overflow:hidden;cursor:default;}
+.card-banner{position:relative;height:320px;overflow:hidden;cursor:default;}
 .banner-bg{position:absolute;inset:0;background:linear-gradient(135deg,var(--blue) 0%,#1a5fa8 45%,var(--orange) 100%);transition:transform 0.5s cubic-bezier(.22,1,.36,1);}
 .card-banner:hover .banner-bg{transform:scale(1.05);}
 .banner-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.4s,transform 0.5s;}
@@ -145,10 +157,10 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .card-banner:hover .banner-scrim{opacity:1;}
 .banner-info{position:absolute;inset:0;padding:.9rem 1rem;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;opacity:0;transform:translateY(8px);transition:opacity 0.35s,transform 0.35s;}
 .card-banner:hover .banner-info{opacity:1;transform:none;}
-.bi-title{font-family:'DM Serif Display',serif;font-size:1rem;color:#fff;font-weight:400;margin-bottom:5px;line-height:1.2;}
+.bi-title{font-family:'DM Serif Display',serif;font-size:1.2rem;color:#fff;font-weight:400;margin-bottom:5px;line-height:1.2;}
 .bi-chips{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;}
-.bic{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:500;background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.2);}
-.banner-logo{position:absolute;top:9px;left:9px;width:38px;height:38px;border-radius:7px;overflow:hidden;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.15);}
+.bic{font-size:11px;padding:2px 7px;border-radius:4px;font-weight:500;background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.2);}
+.banner-logo{position:absolute;top:9px;left:9px;width:44px;height:44px;border-radius:7px;overflow:hidden;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.15);}
 .banner-logo img{width:100%;height:100%;object-fit:contain;padding:3px;}
 .lw{background:#fff;}.ld{background:#111;}.lg{background:#f5f5f5;}
 .banner-date{position:absolute;top:9px;right:9px;font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(0,0,0,0.42);color:rgba(255,255,255,0.88);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.12);}
@@ -157,12 +169,12 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .ubtn{font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(0,0,0,0.4);color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;}
 .card-body{padding:1.2rem 1.3rem;display:flex;align-items:flex-start;column-gap:0;transition:column-gap 0.5s cubic-bezier(.22,1,.36,1);}
 .exp-card.open .card-body{column-gap:1.2rem;}
-.card-main{flex:none;width:294px;}
+.card-main{flex:none;width:420px;}
 .card-top{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.4rem;margin-bottom:0;}
-.card-role{font-size:14px;font-weight:600;letter-spacing:-0.01em;}
-.card-org{font-size:11.5px;color:var(--muted);margin-top:1px;}
+.card-role{font-size:16px;font-weight:600;letter-spacing:-0.01em;}
+.card-org{font-size:12.5px;color:var(--muted);margin-top:1px;}
 .card-divider{width:36px;height:2px;background:var(--border-h);margin:.7rem auto;}
-.card-desc{font-size:13px;color:#555;line-height:1.6;margin-bottom:.9rem;text-align:center;}
+.card-desc{font-size:14px;color:#555;line-height:1.65;margin-bottom:.9rem;text-align:center;}
 .xbtn{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:500;color:var(--blue);background:none;border:none;cursor:pointer;padding:0;font-family:'DM Sans',sans-serif;transition:color 0.15s;}
 .xbtn:hover{color:var(--orange);}
 .xi{font-size:13px;transition:transform 0.3s cubic-bezier(.22,1,.36,1);}
@@ -170,7 +182,7 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .xpanel{flex:none;display:grid;grid-template-columns:0fr;transition:grid-template-columns 0.5s cubic-bezier(.22,1,.36,1);}
 .exp-card.open .xpanel{grid-template-columns:1fr;}
 .xpanel-i{overflow:hidden;min-width:0;}
-.xbody{width:290px;padding-left:1.2rem;border-left:1px solid var(--border);display:flex;flex-direction:column;gap:.9rem;height:0;overflow:hidden;}
+.xbody{width:400px;padding-left:1.2rem;border-left:1px solid var(--border);display:flex;flex-direction:column;gap:.9rem;height:0;overflow:hidden;}
 .exp-card.open .xbody{height:auto;overflow:visible;}
 .bl{list-style:none;display:flex;flex-direction:column;gap:6px;}
 .bl li{display:flex;gap:8px;font-size:12.5px;color:#555;line-height:1.5;}
@@ -189,49 +201,76 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .psi{font-size:13px;color:var(--blue);pointer-events:none;}
 .psl{font-size:10px;color:var(--blue);pointer-events:none;}
 
-/* LEADERSHIP — TIMELINE */
-.lead-timeline{position:relative;display:flex;justify-content:space-between;align-items:center;height:280px;margin:1rem 0 2.25rem;padding:0 .5rem;}
-.lead-timeline::before{content:'';position:absolute;top:50%;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--orange));transform:translateY(-50%);z-index:0;}
-.lt-item{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:6px;width:128px;cursor:pointer;}
-.lt-item.lt-top{transform:translateY(-72px);}
-.lt-item.lt-bottom{transform:translateY(72px);}
-.lt-item.active{z-index:10;}
-.lt-stub{width:2px;height:22px;background:var(--border-h);}
-.lt-date{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;}
-.lt-photo{position:relative;width:92px;height:92px;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,var(--blue) 0%,#1a5fa8 45%,var(--orange) 100%);display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 6px 18px rgba(0,48,135,0.18);border:3px solid #fff;transition:transform 0.25s,box-shadow 0.25s;}
-.lt-item:hover .lt-photo{transform:scale(1.05);}
-.lt-item.active .lt-photo{box-shadow:0 0 0 3px var(--blue),0 10px 24px rgba(0,48,135,0.28);overflow:visible;}
-.lt-photo img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0;transition:opacity .3s;}
-.lt-photo img.on{opacity:1;}
-.lt-upload{position:absolute;bottom:3px;right:3px;opacity:0;transition:opacity .2s;z-index:3;}
-.lt-item:hover .lt-upload{opacity:1;}
-.lt-expand{position:absolute;top:50%;left:50%;width:270px;transform:translate(-50%,-50%) scale(.1);opacity:0;background:var(--surface);border-radius:14px;box-shadow:0 24px 55px rgba(0,48,135,0.3);padding:1.1rem 1.3rem;z-index:5;pointer-events:none;transition:transform .4s cubic-bezier(.22,1,.36,1),opacity .3s;text-align:center;overflow:hidden;}
-.lt-item.active .lt-expand{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:auto;overflow:visible;}
-.lt-expand .card-top{margin-bottom:0;}
-.lt-expand .bl{text-align:left;margin-top:.7rem;}
+/* LEADERSHIP — STATIONARY TIMELINE (the line/dots/big year never move or get replaced; only the
+   photo circle's `left` animates along the line to the new entry's spot, and the info text below
+   fades to the new copy — nothing about the page/section itself changes on nav). */
+#leadership{max-width:1240px;position:relative;}
+/* Same oversized-gradient-title treatment as .exp-bignum (Work Experience), scaled down for the
+   longer phrase so it still fits on one line — sits behind .lt-visual by DOM order, with the
+   photo circle's top edge overlapping the bottom of the letters for the same layered-depth look. */
+.lead-bignum{position:absolute;top:20px;left:50%;transform:translateX(-50%);width:100%;text-align:center;font-family:'DM Sans',sans-serif;font-weight:800;font-size:clamp(60px,6vw,90px);letter-spacing:-0.03em;line-height:1;white-space:nowrap;pointer-events:none;background:linear-gradient(to right,var(--orange) 0%,var(--blue) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;opacity:0.38;}
+.lt-visual{position:relative;height:340px;margin-top:-5px;margin-bottom:1.5rem;}
+.lt-bignum{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-weight:400;font-size:min(28vw,320px);color:rgba(0,48,135,0.06);white-space:nowrap;letter-spacing:-0.04em;pointer-events:none;z-index:0;user-select:none;transition:opacity 0.18s;}
+.lt-line{position:absolute;top:50%;left:20px;right:20px;height:2px;background:var(--border-h);z-index:1;}
+.lt-dot{position:absolute;top:50%;width:11px;height:11px;border-radius:50%;background:var(--surface);border:2px solid var(--border-h);transform:translate(-50%,-50%);cursor:pointer;transition:background 0.2s,border-color 0.2s,width 0.2s,height 0.2s;z-index:2;padding:0;}
+.lt-dot:hover{border-color:var(--blue-m);}
+.lt-dot.active{width:15px;height:15px;background:var(--blue);border-color:var(--blue);}
+.lt-photo-circle{position:absolute;top:50%;width:250px;height:250px;border-radius:50%;overflow:hidden;z-index:3;background:linear-gradient(135deg,var(--blue) 0%,#1a5fa8 45%,var(--orange) 100%);box-shadow:0 14px 38px rgba(0,48,135,0.22);border:6px solid var(--bg);cursor:pointer;transform:translate(-50%,-50%);transition:left 0.45s cubic-bezier(.22,1,.36,1),transform 0.25s;}
+.lt-photo-circle:hover{transform:translate(-50%,-50%) scale(1.035);}
+.lt-photo-circle img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0;transition:opacity .3s;}
+.lt-photo-circle img.on{opacity:1;}
+.lt-upload{position:absolute;bottom:10px;right:10px;opacity:0;transition:opacity .2s;z-index:4;}
+.lt-photo-circle:hover .lt-upload{opacity:1;}
+.lt-info{text-align:center;max-width:480px;margin:0 auto;transition:opacity 0.18s;}
+.lt-badge{display:inline-block;font-size:11px;letter-spacing:0.08em;font-weight:600;color:var(--blue);background:var(--blue-l);padding:4px 12px;border-radius:20px;margin-bottom:.7rem;}
+.lt-role{font-family:'DM Serif Display',serif;font-size:1.6rem;font-weight:400;letter-spacing:-0.01em;margin-bottom:.3rem;}
+.lt-org-date{font-size:13px;color:var(--muted);margin-bottom:.8rem;}
+.lt-brief{font-size:14px;color:#555;line-height:1.65;}
+.lt-nav{display:flex;align-items:center;justify-content:center;gap:1.5rem;margin-top:1.5rem;}
+.lt-pdots{display:flex;gap:6px;}
+.lt-pdot{width:18px;height:5px;border-radius:3px;background:var(--border-h);border:none;padding:0;cursor:pointer;transition:background 0.2s,width 0.2s;}
+.lt-pdot.active{background:var(--blue);width:26px;}
+.lt-modal{position:fixed;inset:0;z-index:1000;background:rgba(0,10,30,0.75);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:2rem;}
+.lt-modal.open{display:flex;}
+.lt-modal-inner{position:relative;background:var(--surface);border-radius:16px;max-width:440px;width:100%;padding:2rem 2rem 1.75rem;box-shadow:0 30px 80px rgba(0,0,0,0.35);}
+.lt-modal-inner .card-top{margin-bottom:0;}
+.lt-modal-inner .bl{text-align:left;margin-top:.9rem;}
+.lt-modal-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:var(--blue-l);border:none;color:var(--blue);font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s,color 0.2s;}
+.lt-modal-close:hover{background:var(--orange);color:#fff;}
 
-/* CONTENT */
-.content-outer{background:var(--blue);border-radius:18px;overflow:hidden;}
-.content-inner{padding:2rem 2rem 1.5rem;}
-.content-title{font-family:'DM Serif Display',serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:400;line-height:0.95;letter-spacing:-0.03em;color:#fff;margin-bottom:1.75rem;}
-.content-title span{color:var(--orange);}
-.tabs{display:flex;border-bottom:1px solid rgba(255,255,255,0.12);margin-bottom:1.75rem;}
-.tab{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);padding:.6rem 0;margin-right:2rem;cursor:pointer;position:relative;font-weight:500;border:none;background:none;font-family:'DM Sans',sans-serif;transition:color 0.2s;}
-.tab::after{content:'';position:absolute;bottom:-1px;left:0;width:0;height:2px;background:var(--orange);transition:width 0.3s cubic-bezier(.22,1,.36,1);}
-.tab.active{color:#fff;}
-.tab.active::after{width:100%;}
+/* CONTENT — no background box; phones float directly on the page. Title uses the same oversized
+   gradient-text treatment as Work Experience / Leadership & Development. Since the phones no
+   longer sit on a dark box, the page-level text (tabs, CTA) switches to dark-on-light colors —
+   everything INSIDE a phone screen (title, platform, tag, view count) keeps its light color
+   since each screen still has its own dark scrim behind that text regardless of page background. */
+#content{position:relative;}
+.content-bignum{position:absolute;top:20px;left:50%;transform:translateX(-50%);width:100%;text-align:center;font-family:'DM Sans',sans-serif;font-weight:800;font-size:clamp(70px,7vw,100px);letter-spacing:-0.03em;line-height:1;white-space:nowrap;pointer-events:none;background:linear-gradient(to right,var(--orange) 0%,var(--blue) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;opacity:0.38;}
+.content-outer{margin-top:70px;}
+.content-inner{padding:0;}
+/* Category selector — centered pill buttons, glassmorphic when inactive, blue-gradient +
+   lifted when active. Replaces the old underline-tab indicator entirely (no ::after needed —
+   the pill's own background/shadow IS the active indicator). */
+.tabs{display:flex;justify-content:center;flex-wrap:wrap;gap:.65rem;margin:0 0 2rem;}
+.tab{font-size:13.5px;letter-spacing:0.01em;text-transform:none;color:var(--text);padding:.7rem 1.5rem;margin-right:0;cursor:pointer;font-weight:600;border-radius:999px;border:1px solid rgba(255,255,255,0.55);background:rgba(255,255,255,0.35);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font-family:'DM Sans',sans-serif;transition:background 0.3s ease,color 0.3s ease,border-color 0.3s ease,box-shadow 0.3s ease,transform 0.3s ease;}
+.tab:hover{background:rgba(255,255,255,0.55);border-color:rgba(255,255,255,0.75);transform:translateY(-1px);}
+.tab.active{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-bright) 100%);color:#fff;border-color:transparent;box-shadow:0 10px 24px rgba(0,48,135,0.3),0 2px 8px rgba(0,48,135,0.18);transform:translateY(-2px);}
+.tab.active:hover{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-bright) 100%);transform:translateY(-2px);}
 .tab-panel{display:none;animation:fadeUp 0.35s cubic-bezier(.22,1,.36,1);}
-.tab-panel.active{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.tab-panel.active{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;padding:0 4px;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.vid-card{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:9/16;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);transition:transform 0.25s cubic-bezier(.22,1,.36,1),border-color 0.2s;text-decoration:none;display:block;}
-.vid-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,0.25);}
+/* Phone-mockup card: thick dark bezel + a notch pseudo-element make each thumbnail read as a
+   phone screen rather than a plain tile. Background is a brand-gradient placeholder that shows
+   through wherever a real thumbnail isn't set yet. */
+.vid-card{position:relative;border-radius:30px;overflow:hidden;aspect-ratio:9/16;background:linear-gradient(135deg,var(--blue) 0%,#1a5fa8 45%,var(--orange) 100%);border:7px solid #161616;box-shadow:0 18px 40px rgba(0,0,0,0.3),inset 0 0 0 1px rgba(255,255,255,0.05);transition:transform 0.25s cubic-bezier(.22,1,.36,1),border-color 0.2s,box-shadow 0.25s;text-decoration:none;display:block;}
+.vid-card::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:38%;height:16px;background:#161616;border-radius:0 0 12px 12px;z-index:6;pointer-events:none;}
+.vid-card:hover{transform:translateY(-6px);border-color:#2c2c2c;box-shadow:0 26px 55px rgba(0,0,0,0.38),inset 0 0 0 1px rgba(255,255,255,0.08);}
 .vid-card:hover .play-btn{background:var(--orange);border-color:var(--orange);}
 .vid-card:hover .vid-scrim{opacity:.9;}
 .vid-thumb{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0;}
 .vid-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:absolute;inset:0;}
-.vp-icon{font-size:2rem;opacity:0.3;}
-.vp-label{font-size:10px;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:0.08em;}
-.vid-scrim{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,20,70,0.92) 30%,rgba(0,0,0,0.05) 100%);opacity:.72;transition:opacity 0.3s;}
+.vp-icon{font-size:2rem;opacity:0.5;}
+.vp-label{font-size:10px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:0.08em;}
+.vid-scrim{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.75) 30%,rgba(0,0,0,0.05) 100%);opacity:.72;transition:opacity 0.3s;}
 .play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;transition:background 0.2s,border-color 0.2s;}
 .play-btn svg{margin-left:3px;}
 .vid-tag{position:absolute;top:9px;left:9px;font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,0.15);color:#fff;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.2);}
@@ -244,14 +283,15 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .pdot{width:5px;height:5px;border-radius:50%;background:var(--orange);}
 .vid-link{font-size:10px;color:rgba(255,255,255,0.45);text-transform:uppercase;text-decoration:none;letter-spacing:0.06em;}
 .vid-card:hover .vid-link{color:#fff;}
-.content-cta{border-top:1px solid rgba(255,255,255,0.1);margin-top:1.75rem;padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
-.cta-l strong{color:#fff;font-size:15px;display:block;margin-bottom:2px;}
-.cta-l p{font-size:13px;color:rgba(255,255,255,0.5);}
-.cta-btns{display:flex;gap:8px;}
-.btn-cw{background:#fff;color:var(--blue);font-weight:600;font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 18px;border-radius:7px;text-decoration:none;display:inline-flex;align-items:center;transition:transform 0.15s,background 0.15s;}
-.btn-cw:hover{background:#f0f4ff;transform:translateY(-1px);}
-.btn-cow{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.25);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 18px;border-radius:7px;text-decoration:none;display:inline-flex;align-items:center;transition:background 0.15s,transform 0.15s;}
-.btn-cow:hover{background:rgba(255,255,255,0.08);transform:translateY(-1px);}
+/* Social links row — glassmorphic boxes matching the pill-button aesthetic above, each linking
+   out to a profile in a new tab. */
+.social-row{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;border-top:1px solid var(--border);margin-top:1.75rem;padding-top:1.75rem;}
+.social-box{display:flex;align-items:center;gap:.65rem;padding:.7rem 1.3rem .7rem .7rem;border-radius:16px;background:rgba(255,255,255,0.35);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.55);text-decoration:none;color:var(--text);font-weight:600;font-size:13.5px;transition:transform 0.25s ease,box-shadow 0.25s ease,background 0.25s ease,border-color 0.25s ease;}
+.social-box:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(0,0,0,0.12);background:rgba(255,255,255,0.6);border-color:rgba(255,255,255,0.8);}
+.social-icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;}
+.social-ig .social-icon{background:linear-gradient(135deg,#f9ce34,#ee2a7b 45%,#6228d7);}
+.social-tt .social-icon{background:#000;}
+.social-fb .social-icon{background:#1877F2;font-family:Georgia,serif;font-weight:700;font-size:20px;font-style:italic;}
 
 /* CONTENT — click-to-embed video modal (new component; existing card styles above are untouched) */
 .video-modal{position:fixed;inset:0;z-index:1000;background:rgba(0,10,30,0.75);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:2rem;}
@@ -261,6 +301,32 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .video-modal-frame iframe{width:100%;height:100%;border:0;display:block;}
 .video-modal-close{position:absolute;top:10px;right:10px;z-index:2;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.15);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.25);color:#fff;font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s,border-color 0.2s;}
 .video-modal-close:hover{background:var(--orange);border-color:var(--orange);}
+
+/* INTERESTS — same oversized gradient title as Work Experience/Leadership/Content, then a bento-
+   style masonry grid. Real cards reuse .int-slot/lip() (the same upload-preview pattern as the
+   About photo) for their background; "coming soon" cards are static, no upload. */
+#interests{position:relative;}
+.interests-bignum{position:absolute;top:20px;left:50%;transform:translateX(-50%);width:100%;text-align:center;font-family:'DM Sans',sans-serif;font-weight:800;font-size:clamp(70px,7vw,100px);letter-spacing:-0.03em;line-height:1;white-space:nowrap;pointer-events:none;background:linear-gradient(to right,var(--orange) 0%,var(--blue) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;opacity:0.38;}
+.interests-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:190px;grid-auto-flow:dense;gap:16px;margin-top:70px;}
+.int-card{position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,var(--blue) 0%,#1a5fa8 45%,var(--orange) 100%);transition:transform 0.25s cubic-bezier(.22,1,.36,1),box-shadow 0.25s;}
+/* Higher-specificity overrides for cards that are also .int-slot (the shared upload-preview
+   class, which otherwise wins on plain background/hover rules regardless of source order since
+   .int-card and .int-slot alone have equal specificity). */
+.int-card.int-slot{aspect-ratio:auto;border:none;background:linear-gradient(135deg,var(--blue) 0%,#1a5fa8 45%,var(--orange) 100%);}
+.int-card:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(0,48,135,0.22);}
+.int-card.int-slot:hover{background:linear-gradient(135deg,var(--blue) 0%,#1a5fa8 45%,var(--orange) 100%);transform:translateY(-4px);box-shadow:0 16px 34px rgba(0,48,135,0.22);}
+.int-card-lg{grid-column:span 2;}
+.int-card-tall{grid-row:span 2;}
+.int-card-scrim{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,10,30,0.85) 25%,rgba(0,0,0,0.05) 65%);pointer-events:none;}
+.int-card-info{position:absolute;left:0;right:0;bottom:0;padding:1.1rem 1.2rem;pointer-events:none;}
+.int-card-eyebrow{display:block;font-size:10px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:rgba(255,255,255,0.7);margin-bottom:.3rem;}
+.int-card-title{font-family:'DM Sans',sans-serif;font-size:1.35rem;font-weight:700;color:#fff;margin-bottom:.3rem;letter-spacing:-0.01em;}
+.int-card-desc{font-size:12.5px;color:rgba(255,255,255,0.78);line-height:1.45;}
+.int-card-soon{background:var(--blue-l);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:default;}
+.int-card-soon:hover{transform:none;box-shadow:none;}
+.int-card-soon .vp-icon{opacity:0.35;color:var(--blue);}
+.int-card-soon .vp-label{color:var(--blue);opacity:0.6;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;}
+.int-card.int-slot .isi,.int-card.int-slot .isl{color:#fff;}
 
 /* SKILLS */
 .skills-section{display:flex;flex-direction:column;gap:1.75rem;}
@@ -282,22 +348,9 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .sp-icon{font-size:16px;flex-shrink:0;}
 .sp-role{font-weight:500;font-size:13px;}
 .sp-org{font-size:12px;color:var(--muted);}
-.interest-list{display:flex;flex-direction:column;gap:1.5px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
-.int-row{background:var(--surface);}
-.int-header{display:flex;align-items:center;gap:14px;padding:1.2rem 1.5rem;cursor:pointer;transition:background 0.15s;}
-.int-row:hover .int-header{background:#fafaf8;}
-.int-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-.int-meta{flex:1;}
-.int-name{font-size:15px;font-weight:500;}
-.int-sub{font-size:13px;color:var(--muted);}
-.int-chev{font-size:13px;color:var(--muted);transition:transform 0.3s cubic-bezier(.22,1,.36,1);}
-.int-row.open .int-chev{transform:rotate(180deg);}
-.int-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows 0.4s cubic-bezier(.22,1,.36,1);}
-.int-row.open .int-panel{grid-template-rows:1fr;border-top:1px solid var(--border);}
-.int-panel-i{overflow:hidden;}
-.int-body{padding:1.5rem;display:flex;flex-direction:column;gap:1.1rem;}
-.int-desc{font-size:14px;color:var(--muted);line-height:1.6;}
-.int-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+/* .int-slot/.isi/.isl are shared with the About section's photo upload slot and the new
+   Interests bento cards below — kept here, everything else that was specific to the old
+   Interests accordion (rows/panels/gallery/links form) has been removed. */
 .int-slot{aspect-ratio:1;border-radius:10px;border:1.5px dashed rgba(0,48,135,0.2);background:var(--blue-l);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all 0.2s;overflow:hidden;position:relative;}
 .int-slot:hover{border-color:var(--blue);background:#dce8f7;transform:scale(1.02);}
 .int-slot input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
@@ -306,17 +359,6 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .int-slot.hp .isi,.int-slot.hp .isl{display:none;}
 .isi{font-size:16px;color:var(--blue);pointer-events:none;}
 .isl{font-size:12px;color:var(--blue);pointer-events:none;}
-.int-links-wrap p{font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:.5rem;}
-.int-link-row{display:flex;gap:7px;}
-.int-link-input{flex:1;padding:8px 12px;font-family:'DM Sans',sans-serif;font-size:13px;border:1px solid var(--border);border-radius:7px;outline:none;transition:border-color 0.2s;}
-.int-link-input:focus{border-color:var(--blue);}
-.int-link-add{padding:8px 14px;font-family:'DM Sans',sans-serif;font-size:13px;border:none;border-radius:7px;background:var(--blue);color:#fff;cursor:pointer;font-weight:500;}
-.int-links-display{display:flex;flex-direction:column;gap:5px;margin-top:.5rem;}
-.int-link-item{display:flex;align-items:center;gap:8px;font-size:13px;padding:6px 10px;background:var(--bg);border-radius:7px;}
-.int-link-item a{color:var(--blue);text-decoration:none;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.int-link-item a:hover{text-decoration:underline;}
-.int-link-rm{font-size:16px;color:var(--muted);cursor:pointer;background:none;border:none;}
-.int-link-rm:hover{color:#c00;}
 
 /* CONTACT */
 .contact-split{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
@@ -340,11 +382,12 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
 <div class="site-haze"></div>
 
 <!-- HERO -->
-<div class="hero" id="hero">
+<div class="hero scroll-fade" id="hero">
   <div class="hero-haze"></div>
   <div class="hero-nav">
     <div class="nav-logo"><img src="assets/mb-logo.png" alt="MB Logo"></div>
     <ul class="nav-links">
+      <li><a href="#about">About</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#leadership">Leadership</a></li>
       <li><a href="#content">Content</a></li>
@@ -364,61 +407,66 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
   </div>
 </div>
 
+<!-- ABOUT -->
+<div class="section scroll-fade" id="about">
+  <div class="about-row">
+    <div class="int-slot about-photo-slot hp">
+      <span class="isi">+</span><span class="isl">Add photo</span>
+      <input type="file" accept="image/*" onchange="lip(this)">
+      <img src="assets/IMG_2748.jpg" alt="Matthew Buchman">
+    </div>
+    <div class="about-text">
+      <h2 class="about-title">About <span>Me</span></h2>
+      <p class="about-p">Placeholder — replace this with your own story: what drives you, what you're studying, and the kind of role or industry you're chasing next. Keep it to a few short sentences so it reads well next to your photo.</p>
+      <p class="about-p">Add a second paragraph here if you want more room — background, values, or a personal detail that makes you memorable.</p>
+    </div>
+  </div>
+</div>
+
 <!-- EXPERIENCE -->
-<div class="section reveal" id="experience">
-  <div class="sec-header"><span class="sec-pill">Work experience</span><div class="sec-line"></div></div>
+<div class="section scroll-fade" id="experience">
   <div class="carousel-wrap">
-    <div class="carousel-row">
-      <div class="exp-toggle-list" id="exp-toggle-list">
-        <button class="exp-toggle-item" onclick="goToCard(0)"><span class="eti-logo"><img src="assets/Woodfield.webp"></span><span class="eti-name">Member Services Attendant</span></button>
-        <button class="exp-toggle-item" onclick="goToCard(1)"><span class="eti-logo"><img src="assets/GHead.webp"></span><span class="eti-name">Student Manager</span></button>
-        <button class="exp-toggle-item" onclick="goToCard(2)"><span class="eti-logo"><img src="assets/Elevate Sports.webp"></span><span class="eti-name">NIL Marketing Intern</span></button>
-        <button class="exp-toggle-item" onclick="goToCard(3)"><span class="eti-logo"><img src="assets/Lifetime.webp"></span><span class="eti-name">Facility Management Associate</span></button>
-        <button class="exp-toggle-item" onclick="goToCard(4)"><span class="eti-logo"><img src="assets/GSC.webp"></span><span class="eti-name">Event Management Intern</span></button>
-        <button class="exp-toggle-item" onclick="goToCard(5)"><span class="eti-logo">🐊</span><span class="eti-name">Gator Guest Services</span></button>
-        <button class="exp-toggle-item" onclick="goToCard(6)"><span class="eti-logo">⚽</span><span class="eti-name">FIFA World Cup Volunteer</span></button>
-      </div>
+      <div class="exp-bignum">WORK EXPERIENCE</div>
       <div class="carousel-stage" id="exp-stage">
       <div class="carousel-track" id="exp-track">
 
-        <div class="exp-card" id="card-0" onclick="goToCard(0)">
+        <div class="exp-card" id="card-0" onclick="cardClick(0,this,event)">
           <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo on" id="bp-0" src="assets/WE Woodfield.jpg"><div class="banner-scrim"></div><div class="banner-logo lg"><img src="assets/Woodfield.webp"></div><div class="banner-date">Dec 2021 – Nov 2024</div><div class="banner-info"><div class="bi-title">Member Services Attendant</div><div class="bi-chips"><span class="bic">Woodfield Country Club · Boca Raton, FL</span></div></div><div class="banner-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-0')"></label></div></div>
           <div class="card-body"><div class="card-main"><div class="card-top"><div><div class="card-role">Member Services Attendant</div><div class="card-org">Woodfield Country Club · Boca Raton, FL</div></div></div><div class="card-divider"></div><p class="card-desc">Delivered exceptional member service while supporting daily operations at a premier private country club, coordinating court activities, managing reservations, and assisting with event coordination.</p><button class="xbtn" onclick="event.stopPropagation();tx('card-0',this)"><span>See details</span><span class="xi">▾</span></button></div><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Supported daily operations for 5,000+ residents, coordinating schedules across 20 tennis and pickleball courts to maximize court availability and member experience.</li><li>Managed member inquiries, retail transactions, court reservations, and lesson bookings for a team of 10 tennis professionals, providing efficient and personalized service.</li><li>Assisted with club events, facility operations, and day-to-day logistics to ensure a seamless experience for members, guests, and staff.</li></ul></div></div></div></div>
         </div>
 
-        <div class="exp-card" id="card-1" onclick="goToCard(1)">
+        <div class="exp-card" id="card-1" onclick="cardClick(1,this,event)">
           <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo on" id="bp-1" src="assets/WE Gator Student Manger.webp"><div class="banner-scrim"></div><div class="banner-logo lw"><img src="assets/GHead.webp"></div><div class="banner-date">Jan 2024 – Dec 2025</div><div class="banner-info"><div class="bi-title">Student Manager</div><div class="bi-chips"><span class="bic">University of Florida Football · Gainesville, FL</span></div></div><div class="banner-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-1')"></label></div></div>
           <div class="card-body"><div class="card-main"><div class="card-top"><div><div class="card-role">Student Manager</div><div class="card-org">University of Florida Football · Gainesville, FL</div></div></div><div class="card-divider"></div><p class="card-desc">Contributed to the daily success of a Division I football program by supporting equipment operations, practice execution, and game-day logistics for 130+ student-athletes and coaches.</p><button class="xbtn" onclick="event.stopPropagation();tx('card-1',this)"><span>See details</span><span class="xi">▾</span></button></div><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Managed and organized a 10,000+ piece equipment inventory, ensuring players and coaches were fully equipped for practices, games, travel, and daily football operations.</li><li>Prepared the field, locker room, and sidelines while supporting the running back, offensive line, and defensive line position groups during practices and pregame preparation.</li><li>Operated the official practice and scrimmage game clock, maintaining direct communication with Head Coach Billy Napier to ensure accurate game timing, scoring, and situational execution.</li></ul></div></div></div></div>
         </div>
 
-        <div class="exp-card" id="card-2" onclick="goToCard(2)">
+        <div class="exp-card" id="card-2" onclick="cardClick(2,this,event)">
           <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo on" id="bp-2" src="assets/WE Elevate Sports.jpg"><div class="banner-scrim"></div><div class="banner-logo lw"><img src="assets/Elevate Sports.webp"></div><div class="banner-date">Apr 2025 – Jul 2025</div><div class="banner-info"><div class="bi-title">NIL Marketing Intern</div><div class="bi-chips"><span class="bic">Elevate Sports Management · Miami, FL</span></div></div><div class="banner-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-2')"></label></div></div>
           <div class="card-body"><div class="card-main"><div class="card-top"><div><div class="card-role">NIL Marketing Intern</div><div class="card-org">Elevate Sports Management · Miami, FL</div></div></div><div class="card-divider"></div><p class="card-desc">Supported collegiate athletes in building their personal brands and navigating the evolving NIL landscape by developing marketing strategies, managing partnerships, and creating opportunities that aligned with their long-term career goals.</p><button class="xbtn" onclick="event.stopPropagation();tx('card-2',this)"><span>See details</span><span class="xi">▾</span></button></div><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Developed marketing and branding strategies for 5 collegiate athletes, managing social media positioning and facilitating NIL partnerships with Adidas, McDonald's, DripDrop, and W by Jake Paul.</li><li>Negotiated, structured, and managed NIL sponsorship agreements, ensuring partnership deliverables were executed successfully while maintaining strong relationships with corporate partners.</li><li>Collaborated with athletes and national brands to align endorsement opportunities with each athlete's long-term personal brand, career goals, and marketability.</li></ul></div></div></div></div>
         </div>
 
-        <div class="exp-card" id="card-3" onclick="goToCard(3)">
+        <div class="exp-card" id="card-3" onclick="cardClick(3,this,event)">
           <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo on" id="bp-3" src="assets/WE LifeTime.jpg"><div class="banner-scrim"></div><div class="banner-logo ld"><img src="assets/Lifetime.webp"></div><div class="banner-date">May 2025 – Aug 2025</div><div class="banner-info"><div class="bi-title">Facility Management Associate</div><div class="bi-chips"><span class="bic">Lifetime Fitness · Boca Raton, FL</span></div></div><div class="banner-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-3')"></label></div></div>
           <div class="card-body"><div class="card-main"><div class="card-top"><div><div class="card-role">Facility Management Associate</div><div class="card-org">Lifetime Fitness · Boca Raton, FL</div></div></div><div class="card-divider"></div><p class="card-desc">Kept a flagship 100,000 sq. ft. facility running day-in, day-out — learning operational consistency and the importance of member experience at scale.</p><button class="xbtn" onclick="event.stopPropagation();tx('card-3',this)"><span>See details</span><span class="xi">▾</span></button></div><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Collaborated with a 15-person team on opening/closing procedures for 1,500+ daily members.</li><li>Ensured equipment functionality, maintained amenities, and addressed member inquiries.</li></ul><div class="hls"><span class="ho">100,000 sq. ft.</span><span class="ho">1,500+ members</span><span class="hb">15-person team</span></div></div></div></div></div>
         </div>
 
-        <div class="exp-card" id="card-4" onclick="goToCard(4)">
+        <div class="exp-card" id="card-4" onclick="cardClick(4,this,event)">
           <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo on" id="bp-4" src="assets/WE GSC.jpg" style="object-position:center 15%;"><div class="banner-scrim"></div><div class="banner-logo lw"><img src="assets/GSC.webp"></div><div class="banner-date">Jan 2026 – Present</div><div class="banner-info"><div class="bi-title">Event Management Intern</div><div class="bi-chips"><span class="bic">Gainesville Sports Commission · Gainesville, FL</span></div></div><div class="banner-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-4')"></label></div></div>
           <div class="card-body"><div class="card-main"><div class="card-top"><div><div class="card-role">Event Management Intern</div><div class="card-org">Gainesville Sports Commission · Gainesville, FL</div></div></div><div class="card-divider"></div><p class="card-desc">Working at the intersection of sports, tourism, and event operations — coordinating vendor relationships and on-site execution for thousands from 90+ countries.</p><button class="xbtn" onclick="event.stopPropagation();tx('card-4',this)"><span>See details</span><span class="xi">▾</span></button></div><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Orchestrate marketing and event operations for 5,000+ athletes from 90+ countries across local, regional, and national sporting events.</li><li>Plan itineraries, coordinate vendors, and execute on-site events to enhance the participant experience.</li></ul><div class="hls"><span class="hb">5,000+ athletes</span><span class="hb">90+ countries</span><span class="ho">Vendor coordination</span></div></div></div></div></div>
         </div>
 
-        <div class="exp-card" id="card-5" onclick="goToCard(5)">
+        <div class="exp-card" id="card-5" onclick="cardClick(5,this,event)">
           <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo on" id="bp-5" src="assets/WE Gat Guest Services.webp"><div class="banner-scrim"></div><div class="banner-date">2025 – Present</div><div class="banner-info"><div class="bi-title">Gator Guest Services</div><div class="bi-chips"><span class="bic">University of Florida · Gainesville, FL</span></div></div><div class="banner-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-5')"></label></div></div>
           <div class="card-body"><div class="card-main"><div class="card-top"><div><div class="card-role">Gator Guest Services</div><div class="card-org">University of Florida · Gainesville, FL</div></div></div><div class="card-divider"></div><p class="card-desc">More details on this role coming soon.</p><button class="xbtn" onclick="event.stopPropagation();tx('card-5',this)"><span>See details</span><span class="xi">▾</span></button></div><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Details and photos coming soon.</li></ul></div></div></div></div>
         </div>
 
-        <div class="exp-card" id="card-6" onclick="goToCard(6)">
+        <div class="exp-card" id="card-6" onclick="cardClick(6,this,event)">
           <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo on" id="bp-6" src="assets/WE FIFA.jpg"><div class="banner-scrim"></div><div class="banner-date">Summer 2026</div><div class="banner-info"><div class="bi-title">FIFA World Cup Volunteer 2026</div><div class="bi-chips"><span class="bic">FIFA World Cup 2026 · United States</span></div></div><div class="banner-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-6')"></label></div></div>
           <div class="card-body"><div class="card-main"><div class="card-top"><div><div class="card-role">FIFA World Cup Volunteer 2026</div><div class="card-org">FIFA World Cup 2026 · United States</div></div></div><div class="card-divider"></div><p class="card-desc">More details on this role coming soon.</p><button class="xbtn" onclick="event.stopPropagation();tx('card-6',this)"><span>See details</span><span class="xi">▾</span></button></div><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Details and photos coming soon.</li></ul></div></div></div></div>
         </div>
 
       </div>
       </div>
-    </div>
     <div class="carousel-nav">
       <button class="cnav-btn" onclick="carPrev()" aria-label="Previous experience">‹</button>
       <div class="carousel-dots" id="exp-dots">
@@ -436,80 +484,67 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
 </div>
 
 <!-- LEADERSHIP -->
-<div class="section reveal" id="leadership">
-  <div class="sec-header"><span class="sec-pill">Leadership & development</span><div class="sec-line"></div></div>
+<div class="section scroll-fade" id="leadership">
+  <div class="lead-bignum">LEADERSHIP &amp; DEVELOPMENT</div>
 
-  <div class="lead-timeline" id="lead-timeline">
-    <div class="lt-item lt-top" onclick="ltToggle(this)">
-      <div class="lt-photo"><img class="on" id="lt-img-3" src="assets/L&amp;D Warrington.jpg" style="transform:scale(0.85)"><span>💹</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-3')"></label></div>
-        <div class="lt-expand"><div class="card-top"><div><div class="card-role">Member</div><div class="card-org">Exploring Financial Economics (EFE)</div></div></div><div class="card-divider"></div><p class="card-desc">More details on this role coming soon.</p><ul class="bl"><li>Details coming soon.</li></ul></div>
-      </div>
-      <div class="lt-date">Sep 2023</div>
-      <div class="lt-stub"></div>
+  <!-- The line/dots/photo/text below are populated once by renderLeadership() from the LEADERSHIP
+       array, then updated in place by ltGoTo() — the line and dots never move; only the photo's
+       `left` animates to the new entry's spot and the text fades to the new copy. -->
+  <div class="lt-visual">
+    <div class="lt-bignum" id="lt-bignum"></div>
+    <div class="lt-line" id="lt-line"></div>
+    <div class="lt-photo-circle" id="lt-photo-circle" onclick="openLtModal(ltIdx)">
+      <img class="on" id="lt-current-img">
+      <div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-current-img')"></label></div>
     </div>
-    <div class="lt-item lt-bottom" onclick="ltToggle(this)">
-      <div class="lt-stub"></div>
-      <div class="lt-date">Apr 2024</div>
-      <div class="lt-photo"><img class="on" id="lt-img-4" src="assets/L&amp;D FLA.jfif" style="transform:scale(0.85)"><span>🧭</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-4')"></label></div>
-        <div class="lt-expand"><div class="card-top"><div><div class="card-role">Member</div><div class="card-org">Florida Leadership Academy (FLA)</div></div></div><div class="card-divider"></div><p class="card-desc">More details on this role coming soon.</p><ul class="bl"><li>Details coming soon.</li></ul></div>
-      </div>
-    </div>
-    <div class="lt-item lt-top" onclick="ltToggle(this)">
-      <div class="lt-photo"><img class="on" id="lt-img-6" src="assets/L&amp;D Sports Analytics.jpg"><span>📊</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-6')"></label></div>
-        <div class="lt-expand"><div class="card-top"><div><div class="card-role">Member</div><div class="card-org">UF Sports Analytics</div></div></div><div class="card-divider"></div><p class="card-desc">More details on this role coming soon.</p><ul class="bl"><li>Details coming soon.</li></ul></div>
-      </div>
-      <div class="lt-date">Aug 2024</div>
-      <div class="lt-stub"></div>
-    </div>
-    <div class="lt-item lt-bottom" onclick="ltToggle(this)">
-      <div class="lt-stub"></div>
-      <div class="lt-date">Sep 2024</div>
-      <div class="lt-photo"><img class="on" id="lt-img-0" src="assets/L&amp;D MSL.webp"><span>⚡</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-0')"></label></div>
-        <div class="lt-expand"><div class="card-top"><div><div class="card-role">Co-Founder & Membership Director</div><div class="card-org">Mu Sigma Lambda</div></div></div><div class="card-divider"></div><p class="card-desc">Co-founded the first national co-ed fraternity for sports industry professionals, building a 110-person chapter from scratch.</p><ul class="bl"><li>Directs sales, membership, and event strategy including the annual Sales Summit.</li><li>Engages alumni to lead workshops and secures high-profile industry speakers for member development.</li></ul></div>
-      </div>
-    </div>
-    <div class="lt-item lt-top" onclick="ltToggle(this)">
-      <div class="lt-photo"><img class="on" id="lt-img-2" src="assets/L&amp;D BIGEVENT.jpg"><span>🎓</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-2')"></label></div>
-        <div class="lt-expand"><div class="card-top"><div><div class="card-role">Assistant Director of Internal Affairs</div><div class="card-org">UF Big Event</div></div></div><div class="card-divider"></div><p class="card-desc">Partners with local organizations and Student Government to streamline site assignments and manage check-in operations for the largest single-day community service event at UF.</p><ul class="bl"><li>Coordinates logistics and communications for 1,400+ volunteers completing community projects across Gainesville.</li><li>Partners with SG leaders and local organizations to manage site assignments efficiently.</li></ul></div>
-      </div>
-      <div class="lt-date">Aug 2025</div>
-      <div class="lt-stub"></div>
-    </div>
-    <div class="lt-item lt-bottom" onclick="ltToggle(this)">
-      <div class="lt-stub"></div>
-      <div class="lt-date">Sep 2025</div>
-      <div class="lt-photo"><img class="on" id="lt-img-1" src="assets/L&amp;D GMSO.jfif"><span>🏆</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-1')"></label></div>
-        <div class="lt-expand"><div class="card-top"><div><div class="card-role">Assistant Director of Membership & Events</div><div class="card-org">Gator Sports Management Organization</div></div></div><div class="card-divider"></div><p class="card-desc">Leads initiatives connecting students with sports industry professionals through networking events, panels, and collaborations.</p><ul class="bl"><li>Manages onboarding of 50+ new members each cycle, engaging students early to support integration.</li><li>Organizes panels and networking events that connect students with real sports industry professionals.</li></ul></div>
-      </div>
-    </div>
-    <div class="lt-item lt-top" onclick="ltToggle(this)">
-      <div class="lt-photo"><img class="on" id="lt-img-5" src="assets/L&amp;D Special Olympics.jpg"><span>🏅</span><div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-img-5')"></label></div>
-        <div class="lt-expand"><div class="card-top"><div><div class="card-role">Volunteer</div><div class="card-org">Special Olympics</div></div></div><div class="card-divider"></div><p class="card-desc">More details on this role coming soon.</p><ul class="bl"><li>Details coming soon.</li></ul></div>
-      </div>
-      <div class="lt-date">Jan 2026</div>
-      <div class="lt-stub"></div>
+  </div>
+  <div class="lt-info" id="lt-info">
+    <span class="lt-badge" id="lt-badge"></span>
+    <h3 class="lt-role" id="lt-role"></h3>
+    <div class="lt-org-date" id="lt-org-date"></div>
+    <p class="lt-brief" id="lt-brief"></p>
+  </div>
+  <div class="lt-nav">
+    <button class="cnav-btn" onclick="ltPrev()" aria-label="Previous">‹</button>
+    <div class="lt-pdots" id="lt-pdots"></div>
+    <button class="cnav-btn" onclick="ltNext()" aria-label="Next">›</button>
+  </div>
+
+  <div class="lt-modal" id="lt-modal" onclick="if(event.target===this)closeLtModal()">
+    <div class="lt-modal-inner">
+      <button class="lt-modal-close" onclick="closeLtModal()" aria-label="Close">×</button>
+      <div class="lt-modal-body" id="lt-modal-body"></div>
     </div>
   </div>
 </div>
 
 <!-- CONTENT -->
-<div class="section reveal" id="content">
-  <div class="sec-header"><span class="sec-pill">Content creation</span><div class="sec-line"></div></div>
+<div class="section reveal scroll-fade" id="content">
+  <div class="content-bignum">CONTENT CREATION</div>
   <div class="content-outer">
     <div class="content-inner">
-      <h2 class="content-title">Con<span>tent</span></h2>
       <div class="tabs">
         <button class="tab active" onclick="switchTab('lifestyle',this)">Lifestyle</button>
         <button class="tab" onclick="switchTab('75hard',this)">75 Hard</button>
-        <button class="tab" onclick="switchTab('sports',this)">Sports Internship</button>
+        <button class="tab" onclick="switchTab('sports',this)">Sports Internship Advice</button>
       </div>
       <!-- Panels are populated by renderVideoTabs() in the script below, from the VIDEOS array in videos.js -->
       <div id="panel-lifestyle" class="tab-panel active"></div>
       <div id="panel-75hard" class="tab-panel"></div>
       <div id="panel-sports" class="tab-panel"></div>
-      <div class="content-cta">
-        <div class="cta-l"><strong>Follow along @mattyb2111</strong><p>Open to brand partnerships, NIL deals, and collaborations in sports & business.</p></div>
-        <div class="cta-btns"><a href="https://www.tiktok.com/@mattyb2111" target="_blank" class="btn-cw">TikTok ↗</a><a href="#contact" class="btn-cow">Get in touch</a></div>
+      <div class="social-row">
+        <a href="https://www.instagram.com/matthew_buchman/" target="_blank" class="social-box social-ig">
+          <span class="social-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span>
+          <span class="social-label">Instagram</span>
+        </a>
+        <a href="https://www.tiktok.com/@mattyb2111" target="_blank" class="social-box social-tt">
+          <span class="social-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16.5 3c.4 2 2 3.6 4 3.9v3a7 7 0 0 1-4-1.3v6.6a5.8 5.8 0 1 1-5.8-5.8c.3 0 .6 0 .9.1v3.1a2.7 2.7 0 1 0 1.9 2.6V3h3z"/></svg></span>
+          <span class="social-label">TikTok</span>
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61551800372534" target="_blank" class="social-box social-fb">
+          <span class="social-icon">f</span>
+          <span class="social-label">Facebook</span>
+        </a>
       </div>
     </div>
   </div>
@@ -521,9 +556,42 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
   </div>
 </div>
 
+<!-- INTERESTS -->
+<div class="section scroll-fade" id="interests">
+  <div class="interests-bignum">INTERESTS</div>
+  <div class="interests-grid">
+    <div class="int-card int-card-lg int-slot">
+      <span class="isi">+</span><span class="isl">Add photo</span>
+      <input type="file" accept="image/*" onchange="lip(this)"><img class="h">
+      <div class="int-card-scrim"></div>
+      <div class="int-card-info"><span class="int-card-eyebrow">Creative</span><h3 class="int-card-title">Art</h3><p class="int-card-desc">Recreational & digital art</p></div>
+    </div>
+    <div class="int-card int-slot">
+      <span class="isi">+</span><span class="isl">Add photo</span>
+      <input type="file" accept="image/*" onchange="lip(this)"><img class="h">
+      <div class="int-card-scrim"></div>
+      <div class="int-card-info"><span class="int-card-eyebrow">Culture</span><h3 class="int-card-title">Sneakers</h3><p class="int-card-desc">Sneaker culture & collection</p></div>
+    </div>
+    <div class="int-card int-card-tall int-slot">
+      <span class="isi">+</span><span class="isl">Add photo</span>
+      <input type="file" accept="image/*" onchange="lip(this)"><img class="h">
+      <div class="int-card-scrim"></div>
+      <div class="int-card-info"><span class="int-card-eyebrow">Analytics</span><h3 class="int-card-title">Sports Statistics</h3><p class="int-card-desc">Analytics & data in sports</p></div>
+    </div>
+    <div class="int-card int-slot">
+      <span class="isi">+</span><span class="isl">Add photo</span>
+      <input type="file" accept="image/*" onchange="lip(this)"><img class="h">
+      <div class="int-card-scrim"></div>
+      <div class="int-card-info"><span class="int-card-eyebrow">Discipline</span><h3 class="int-card-title">Bowling</h3><p class="int-card-desc">High school varsity captain</p></div>
+    </div>
+    <div class="int-card int-card-soon"><span class="vp-icon">🖼️</span><span class="vp-label">Coming soon</span></div>
+    <div class="int-card int-card-lg int-card-soon"><span class="vp-icon">🖼️</span><span class="vp-label">Coming soon</span></div>
+  </div>
+</div>
+
 <!-- SKILLS -->
 <div class="section reveal" id="skills">
-  <div class="sec-header"><span class="sec-pill">Skills & interests</span><div class="sec-line"></div></div>
+  <div class="sec-header"><span class="sec-pill">Skills</span><div class="sec-line"></div></div>
   <div class="skills-section">
     <div class="skill-cat">
       <h3>Software</h3>
@@ -554,15 +622,6 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
       <div class="skill-panel" id="sp-ops"><div class="sp-header"><span class="sp-name">Sports operations — used in:</span><button class="sp-close" onclick="cskill('sp-ops')">×</button></div><div class="sp-list"><div class="sp-item"><span class="sp-icon">🏈</span><div><div class="sp-role">Student Manager</div><div class="sp-org">UF Football — daily ops for D1 program, 130+ athletes</div></div></div><div class="sp-item"><span class="sp-icon">🏟️</span><div><div class="sp-role">Event Management Intern</div><div class="sp-org">Gainesville Sports Commission — multi-sport event operations</div></div></div></div></div>
       <div class="skill-panel" id="sp-client"><div class="sp-header"><span class="sp-name">Client relations — used in:</span><button class="sp-close" onclick="cskill('sp-client')">×</button></div><div class="sp-list"><div class="sp-item"><span class="sp-icon">🎾</span><div><div class="sp-role">Member Services Attendant</div><div class="sp-org">Woodfield Country Club — daily service for 5,000+ residents</div></div></div><div class="sp-item"><span class="sp-icon">📣</span><div><div class="sp-role">NIL Marketing Intern</div><div class="sp-org">Elevate — corporate partner communication</div></div></div></div></div>
       <div class="skill-panel" id="sp-vendor"><div class="sp-header"><span class="sp-name">Vendor coordination — used in:</span><button class="sp-close" onclick="cskill('sp-vendor')">×</button></div><div class="sp-list"><div class="sp-item"><span class="sp-icon">🏟️</span><div><div class="sp-role">Event Management Intern</div><div class="sp-org">Gainesville Sports Commission — multi-vendor coordination</div></div></div><div class="sp-item"><span class="sp-icon">💪</span><div><div class="sp-role">Facility Management Associate</div><div class="sp-org">Lifetime Fitness — vendor & maintenance coordination</div></div></div></div></div>
-    </div>
-    <div class="skill-cat">
-      <h3>Interests</h3>
-      <div class="interest-list">
-        <div class="int-row"><div class="int-header" onclick="ti(this.closest('.int-row'))"><div class="int-icon" style="background:#f0eeff;">🎨</div><div class="int-meta"><div class="int-name">Art</div><div class="int-sub">Recreational & digital art</div></div><span class="int-chev">▾</span></div><div class="int-panel"><div class="int-panel-i"><div class="int-body"><p class="int-desc">I create both recreational and digital art as a creative outlet alongside my work in sports and business.</p><div class="int-gallery"><div class="int-slot"><span class="isi">+</span><span class="isl">Add artwork</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div><div class="int-slot"><span class="isi">+</span><span class="isl">Add artwork</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div><div class="int-slot"><span class="isi">+</span><span class="isl">Add artwork</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div></div><div class="int-links-wrap"><p>Links</p><div class="int-link-row"><input class="int-link-input" placeholder="Portfolio, Instagram, etc." id="li-art"><button class="int-link-add" onclick="addLink('art')">Add</button></div><div class="int-links-display" id="ld-art"></div></div></div></div></div></div>
-        <div class="int-row"><div class="int-header" onclick="ti(this.closest('.int-row'))"><div class="int-icon" style="background:#fff0ec;">👟</div><div class="int-meta"><div class="int-name">Sneakers</div><div class="int-sub">Sneaker culture & collection</div></div><span class="int-chev">▾</span></div><div class="int-panel"><div class="int-panel-i"><div class="int-body"><p class="int-desc">Sneakers are a passion — from collecting to following drops, colorways, and the culture around footwear.</p><div class="int-gallery"><div class="int-slot"><span class="isi">+</span><span class="isl">Add photo</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div><div class="int-slot"><span class="isi">+</span><span class="isl">Add photo</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div><div class="int-slot"><span class="isi">+</span><span class="isl">Add photo</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div></div><div class="int-links-wrap"><p>Links</p><div class="int-link-row"><input class="int-link-input" placeholder="StockX, GOAT, Instagram, etc." id="li-sneakers"><button class="int-link-add" onclick="addLink('sneakers')">Add</button></div><div class="int-links-display" id="ld-sneakers"></div></div></div></div></div></div>
-        <div class="int-row"><div class="int-header" onclick="ti(this.closest('.int-row'))"><div class="int-icon" style="background:#e8eef7;">🎳</div><div class="int-meta"><div class="int-name">Bowling</div><div class="int-sub">High school varsity captain</div></div><span class="int-chev">▾</span></div><div class="int-panel"><div class="int-panel-i"><div class="int-body"><p class="int-desc">Competed as varsity bowling captain in high school — bowling taught me focus, consistency, and how to perform under pressure.</p><div class="int-gallery"><div class="int-slot"><span class="isi">+</span><span class="isl">Add photo</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div><div class="int-slot"><span class="isi">+</span><span class="isl">Add photo</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div><div class="int-slot"><span class="isi">+</span><span class="isl">Add photo</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div></div><div class="int-links-wrap"><p>Links</p><div class="int-link-row"><input class="int-link-input" placeholder="Videos, scores, team page, etc." id="li-bowling"><button class="int-link-add" onclick="addLink('bowling')">Add</button></div><div class="int-links-display" id="ld-bowling"></div></div></div></div></div></div>
-        <div class="int-row"><div class="int-header" onclick="ti(this.closest('.int-row'))"><div class="int-icon" style="background:#e8eef7;">📊</div><div class="int-meta"><div class="int-name">Sports Statistics</div><div class="int-sub">Analytics & data in sports</div></div><span class="int-chev">▾</span></div><div class="int-panel"><div class="int-panel-i"><div class="int-body"><p class="int-desc">Fascinated by the intersection of data and sports — from player analytics to performance metrics and how numbers shape modern sports decisions.</p><div class="int-gallery"><div class="int-slot"><span class="isi">+</span><span class="isl">Add image</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div><div class="int-slot"><span class="isi">+</span><span class="isl">Add image</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div><div class="int-slot"><span class="isi">+</span><span class="isl">Add image</span><input type="file" accept="image/*" onchange="lip(this)"><img class="h"></div></div><div class="int-links-wrap"><p>Links</p><div class="int-link-row"><input class="int-link-input" placeholder="Projects, articles, tools, etc." id="li-sports"><button class="int-link-add" onclick="addLink('sports')">Add</button></div><div class="int-links-display" id="ld-sports"></div></div></div></div></div></div>
-      </div>
     </div>
   </div>
 </div>
@@ -643,7 +702,7 @@ function closeVideoModal(){
   document.getElementById('video-modal').classList.remove('open');
   document.getElementById('video-modal-frame').innerHTML='';
 }
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeVideoModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeVideoModal();closeLtModal();}});
 
 /* REVEAL */
 const revObs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.08});
@@ -656,35 +715,102 @@ function staggerGroups(containerSelector,itemSelector,step=0.06,max=0.6){
     });
   });
 }
-staggerGroups('#exp-toggle-list','.exp-toggle-item');
-staggerGroups('#lead-timeline','.lt-item');
 staggerGroups('.tab-panel','.vid-card');
 staggerGroups('.skill-chips','.skill-chip');
-staggerGroups('.interest-list','.int-row');
 staggerGroups('.contact-links','.contact-link');
 
 /* EXPERIENCE */
-function tx(id,btn){const c=document.getElementById(id),o=c.classList.toggle('open');btn.querySelector('span:first-child').textContent=o?'Hide details':'See details';}
+function tx(id,btn){const c=document.getElementById(id);setCardOpen(c,!c.classList.contains('open'));}
 function lp(input){if(!input.files||!input.files[0])return;const s=input.closest('.ps'),img=s.querySelector('img'),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.remove('h');s.classList.add('hp');};r.readAsDataURL(input.files[0]);}
 function lb(input,id){if(!input.files||!input.files[0])return;const img=document.getElementById(id),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.add('on');};r.readAsDataURL(input.files[0]);}
 function lip(input){if(!input.files||!input.files[0])return;const s=input.closest('.int-slot'),img=s.querySelector('img'),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.remove('h');s.classList.add('hp');};r.readAsDataURL(input.files[0]);}
 
-/* LEADERSHIP TIMELINE */
-function ltToggle(item){
-  const wasActive=item.classList.contains('active');
-  document.querySelectorAll('#lead-timeline .lt-item').forEach(el=>el.classList.remove('active'));
-  if(!wasActive)item.classList.add('active');
+/* LEADERSHIP — STATIONARY TIMELINE
+   The line, its dots, and the nav never move or get rebuilt. Only three things change on
+   navigation: the photo circle's `left` (CSS-transitions along the line to the new entry's
+   fixed spot), and the bignum/info text (a quick fade-out, swap content, fade-in — not a
+   page/section-wide transition).
+   TO ADD A NEW ENTRY: push a new object onto LEADERSHIP below (img, dateFull, year, role,
+   org, brief, bullets) — the line's dots, nav dots, and each stop's position regenerate from
+   this array's length. */
+const LEADERSHIP=[
+  {img:'assets/L&D Warrington.jpg',imgStyle:'transform:scale(0.85)',dateFull:'Sep 2023',year:'2023',role:'Member',org:'Exploring Financial Economics (EFE)',brief:'More details on this role coming soon.',bullets:['Details coming soon.']},
+  {img:'assets/L&D FLA.jfif',imgStyle:'transform:scale(0.85)',dateFull:'Apr 2024',year:'2024',role:'Member',org:'Florida Leadership Academy (FLA)',brief:'More details on this role coming soon.',bullets:['Details coming soon.']},
+  {img:'assets/L&D Sports Analytics.jpg',dateFull:'Aug 2024',year:'2024',role:'Member',org:'UF Sports Analytics',brief:'More details on this role coming soon.',bullets:['Details coming soon.']},
+  {img:'assets/L&D MSL.webp',dateFull:'Sep 2024',year:'2024',role:'Co-Founder & Membership Director',org:'Mu Sigma Lambda',brief:'Co-founded the first national co-ed fraternity for sports industry professionals, building a 110-person chapter from scratch.',bullets:['Directs sales, membership, and event strategy including the annual Sales Summit.','Engages alumni to lead workshops and secures high-profile industry speakers for member development.']},
+  {img:'assets/L&D BIGEVENT.jpg',dateFull:'Aug 2025',year:'2025',role:'Assistant Director of Internal Affairs',org:'UF Big Event',brief:'Partners with local organizations and Student Government to streamline site assignments and manage check-in operations for the largest single-day community service event at UF.',bullets:['Coordinates logistics and communications for 1,400+ volunteers completing community projects across Gainesville.','Partners with SG leaders and local organizations to manage site assignments efficiently.']},
+  {img:'assets/L&D GMSO.jfif',dateFull:'Sep 2025',year:'2025',role:'Assistant Director of Membership & Events',org:'Gator Sports Management Organization',brief:'Leads initiatives connecting students with sports industry professionals through networking events, panels, and collaborations.',bullets:['Manages onboarding of 50+ new members each cycle, engaging students early to support integration.','Organizes panels and networking events that connect students with real sports industry professionals.']},
+  {img:'assets/L&D Special Olympics.jpg',dateFull:'Jan 2026',year:'2026',role:'Volunteer',org:'Special Olympics',brief:'More details on this role coming soon.',bullets:['Details coming soon.']},
+];
+let ltIdx=0,ltFadeTimer=null;
+const ltDotPos=k=>LEADERSHIP.length>1?(15+(k/(LEADERSHIP.length-1))*70):50; // inset 15%-85% so the 250px photo circle at the first/last stop doesn't clip past the container edge
+
+function renderLeadership(){
+  document.getElementById('lt-line').innerHTML=LEADERSHIP.map((d,j)=>
+    `<button class="lt-dot" style="left:${ltDotPos(j)}%" onclick="ltGoTo(${j})" aria-label="Go to ${d.dateFull}"></button>`
+  ).join('');
+  document.getElementById('lt-pdots').innerHTML=LEADERSHIP.map((l,i)=>
+    `<button class="lt-pdot" onclick="ltGoTo(${i})" aria-label="Slide ${i+1}"></button>`
+  ).join('');
+  document.getElementById('lt-photo-circle').style.left=ltDotPos(0)+'%';
+  applyLtEntry(0);
+  updateLtActiveStates();
 }
+function applyLtEntry(i){
+  const l=LEADERSHIP[i];
+  const img=document.getElementById('lt-current-img');
+  img.src=l.img;
+  img.style.cssText=l.imgStyle||'';
+  img.classList.add('on');
+  document.getElementById('lt-bignum').textContent=l.year;
+  document.getElementById('lt-badge').textContent=l.year;
+  document.getElementById('lt-role').textContent=l.role;
+  document.getElementById('lt-org-date').textContent=`${l.org} · ${l.dateFull}`;
+  document.getElementById('lt-brief').textContent=l.brief;
+}
+function updateLtActiveStates(){
+  document.querySelectorAll('#lt-line .lt-dot').forEach((d,i)=>d.classList.toggle('active',i===ltIdx));
+  document.querySelectorAll('#lt-pdots .lt-pdot').forEach((d,i)=>d.classList.toggle('active',i===ltIdx));
+}
+function ltGoTo(i){
+  const n=LEADERSHIP.length;
+  const target=((i%n)+n)%n;
+  if(target===ltIdx)return;
+  ltIdx=target;
+  document.getElementById('lt-photo-circle').style.left=ltDotPos(ltIdx)+'%';
+  updateLtActiveStates();
+  const info=document.getElementById('lt-info'),bignum=document.getElementById('lt-bignum');
+  info.style.opacity=0;
+  bignum.style.opacity=0;
+  clearTimeout(ltFadeTimer);
+  ltFadeTimer=setTimeout(()=>{
+    applyLtEntry(ltIdx);
+    info.style.opacity=1;
+    bignum.style.opacity=1;
+  },180);
+}
+function ltPrev(){ltGoTo(ltIdx-1);}
+function ltNext(){ltGoTo(ltIdx+1);}
+document.addEventListener('keydown',e=>{
+  if(document.activeElement&&['INPUT','TEXTAREA'].includes(document.activeElement.tagName))return;
+  const r=document.getElementById('leadership').getBoundingClientRect();
+  if(r.top<window.innerHeight&&r.bottom>0){
+    if(e.key==='ArrowLeft'){ltPrev();}
+    if(e.key==='ArrowRight'){ltNext();}
+  }
+});
+function openLtModal(i){
+  const l=LEADERSHIP[i];
+  document.getElementById('lt-modal-body').innerHTML=`<div class="card-top"><div><div class="card-role">${l.role}</div><div class="card-org">${l.org} · ${l.dateFull}</div></div></div><div class="card-divider"></div><p class="card-desc">${l.brief}</p><ul class="bl">${l.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>`;
+  document.getElementById('lt-modal').classList.add('open');
+}
+function closeLtModal(){document.getElementById('lt-modal').classList.remove('open');}
+renderLeadership();
 
 /* CLOSE OPEN CARDS ON ANY CLICK, INSIDE OR OUTSIDE (the xbtn/upload buttons stop propagation, so this never fights their own toggle) */
 document.addEventListener('click',(e)=>{
   document.querySelectorAll('.exp-card.open').forEach(card=>{
-    card.classList.remove('open');
-    const label=card.querySelector('.xbtn span:first-child');
-    if(label)label.textContent='See details';
-  });
-  document.querySelectorAll('#lead-timeline .lt-item.active').forEach(item=>{
-    if(!item.contains(e.target))item.classList.remove('active');
+    setCardOpen(card,false);
   });
 });
 
@@ -695,42 +821,118 @@ function switchTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classL
 function tskill(btn,pid){const on=btn.classList.contains('active');document.querySelectorAll('.skill-chip').forEach(c=>c.classList.remove('active'));document.querySelectorAll('.skill-panel').forEach(p=>p.classList.remove('open'));if(!on){btn.classList.add('active');document.getElementById(pid).classList.add('open');}}
 function cskill(id){document.getElementById(id).classList.remove('open');document.querySelectorAll('.skill-chip').forEach(c=>c.classList.remove('active'));}
 
-/* INTERESTS */
-function ti(row){row.classList.toggle('open');}
-function addLink(key){const inp=document.getElementById('li-'+key),val=inp.value.trim();if(!val)return;const c=document.getElementById('ld-'+key),item=document.createElement('div');item.className='int-link-item';item.innerHTML=`<a href="${val}" target="_blank">${val}</a><button class="int-link-rm" onclick="this.closest('.int-link-item').remove()">×</button>`;c.appendChild(item);inp.value='';}
-
-/* EXPERIENCE CAROUSEL */
-let expIdx=0;
+/* EXPERIENCE CAROUSEL
+   expPos is a continuous, real-valued position (not an integer index) — every card's transform
+   is a function of its distance from expPos, and expPos itself advances a little every animation
+   frame while spinning. That's what makes the rotation feel like a constantly-turning wheel
+   instead of "sit still, jump to the next card, sit still again": there is no discrete per-card
+   CSS transition on transform/opacity (removed from .exp-card's transition list for exactly this
+   reason — a transition chasing a target that moves every 16ms just produces a laggy, rubbery
+   motion, not a smooth one). Manual nav (arrows/dots/side-card click) sets settleTarget and the
+   frame loop eases expPos toward it — still continuous motion, just aimed at a specific card. */
+const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const EXP_COUNT=document.querySelectorAll('#exp-track .exp-card').length;
+const SPIN_SPEED=1/2667; // index-units per ms — ~2.67s to cross the gap between adjacent cards (25% slower still)
+const SETTLE_MS=380; // fixed-duration eased snap for manual nav — swift and decisive, not an asymptotic crawl
+const RESUME_DELAY_MS=2200;
+let expPos=0,settleTarget=null,settleFrom=0,settleDelta=0,settleStartTs=null,spinning=false,spinLockedOpen=false,resumeSpinTimer=null,lastFrameTs=null;
+
+function easeOutCubic(t){return 1-Math.pow(1-t,3);}
+function startSettle(target){
+  let delta=target-expPos;
+  if(delta>EXP_COUNT/2)delta-=EXP_COUNT;
+  if(delta<-EXP_COUNT/2)delta+=EXP_COUNT;
+  settleFrom=expPos;
+  settleDelta=delta;
+  settleStartTs=null;
+  settleTarget=target;
+}
+
+function nearestIdx(){return ((Math.round(expPos)%EXP_COUNT)+EXP_COUNT)%EXP_COUNT;}
+
 function layoutCarousel(){
   const cards=document.querySelectorAll('#exp-track .exp-card');
   const n=cards.length;
+  const active=nearestIdx();
   cards.forEach((card,i)=>{
-    let diff=i-expIdx;
+    let diff=i-expPos;
     if(diff>n/2)diff-=n;
     if(diff<-n/2)diff+=n;
     const abs=Math.abs(diff);
-    const tx=diff*230,tz=-abs*170,rot=diff*-34;
+    const tx=diff*325,tz=-abs*240,rot=diff*-34;
     const scale=Math.max(0.6,1-abs*0.15);
     const opacity=abs>3?0:Math.max(0,1-abs*0.3);
     card.style.transform=`translate(-50%,-50%) translateX(${tx}px) translateZ(${tz}px) rotateY(${rot}deg) scale(${scale})`;
     card.style.opacity=opacity;
-    card.style.zIndex=100-abs;
+    card.style.zIndex=Math.round(1000-abs*100);
     card.style.pointerEvents=abs>3?'none':'auto';
-    const isActive=diff===0;
-    if(!isActive&&card.classList.contains('open')){
-      card.classList.remove('open');
-      const label=card.querySelector('.xbtn span:first-child');
-      if(label)label.textContent='See details';
-    }
+    const isActive=i===active;
+    if(!isActive&&card.classList.contains('open'))setCardOpen(card,false);
     card.classList.toggle('active',isActive);
   });
-  document.querySelectorAll('#exp-dots .cdot').forEach((d,i)=>d.classList.toggle('active',i===expIdx));
-  document.querySelectorAll('#exp-toggle-list .exp-toggle-item').forEach((item,i)=>item.classList.toggle('active',i===expIdx));
+  document.querySelectorAll('#exp-dots .cdot').forEach((d,i)=>d.classList.toggle('active',i===active));
 }
-function goToCard(i){expIdx=((i%EXP_COUNT)+EXP_COUNT)%EXP_COUNT;layoutCarousel();}
-function carPrev(){goToCard(expIdx-1);}
-function carNext(){goToCard(expIdx+1);}
+
+function spinFrame(ts){
+  if(lastFrameTs==null)lastFrameTs=ts;
+  const dt=Math.min(ts-lastFrameTs,50);
+  lastFrameTs=ts;
+  if(settleTarget!=null){
+    if(settleStartTs==null)settleStartTs=ts;
+    const t=Math.min((ts-settleStartTs)/SETTLE_MS,1);
+    const eased=easeOutCubic(t);
+    expPos=(((settleFrom+settleDelta*eased)%EXP_COUNT)+EXP_COUNT)%EXP_COUNT;
+    if(t>=1){
+      expPos=((settleTarget%EXP_COUNT)+EXP_COUNT)%EXP_COUNT;
+      settleTarget=null;
+    }
+  }else if(spinning){
+    expPos=(expPos+dt*SPIN_SPEED+EXP_COUNT)%EXP_COUNT;
+  }
+  layoutCarousel();
+  requestAnimationFrame(spinFrame);
+}
+requestAnimationFrame(spinFrame);
+
+/* Card open/close is centralized here so both the "See details" button (tx()) and clicking the
+   already-active card (cardClick()) manage the same open state + auto-spin pause consistently. */
+function setCardOpen(card,open){
+  card.classList.toggle('open',open);
+  const label=card.querySelector('.xbtn span:first-child');
+  if(label)label.textContent=open?'Hide details':'See details';
+  if(open){
+    const idx=Array.from(document.querySelectorAll('#exp-track .exp-card')).indexOf(card);
+    expPos=idx;
+    settleTarget=null;
+    spinLockedOpen=true;
+    pauseAutoSpin();
+    clearTimeout(resumeSpinTimer);
+    layoutCarousel();
+  }else{
+    spinLockedOpen=false;
+    scheduleResumeSpin();
+  }
+}
+
+/* Clicking the card that's already front-and-center opens/closes its details (and pauses the
+   spin); clicking a side card just eases the wheel to bring it to the front, same as before. */
+function cardClick(i,el,e){
+  if(i===nearestIdx()){
+    e.stopPropagation();
+    setCardOpen(el,!el.classList.contains('open'));
+  }else{
+    goToCard(i);
+  }
+}
+
+function goToCard(i,manual=true){
+  const target=((i%EXP_COUNT)+EXP_COUNT)%EXP_COUNT;
+  if(reduceMotion){expPos=target;settleTarget=null;layoutCarousel();}
+  else{startSettle(target);}
+  if(manual){pauseAutoSpin();scheduleResumeSpin();}
+}
+function carPrev(){goToCard(nearestIdx()-1,true);}
+function carNext(){goToCard(nearestIdx()+1,true);}
 
 document.addEventListener('keydown',e=>{
   if(document.activeElement&&['INPUT','TEXTAREA'].includes(document.activeElement.tagName))return;
@@ -741,16 +943,84 @@ document.addEventListener('keydown',e=>{
   }
 });
 
+/* Auto-spin: continuously rotating while the carousel is on screen, paused only by drag/open-
+   card/manual nav (hovering does NOT pause it), resuming a couple seconds after the interaction
+   ends. Off entirely for prefers-reduced-motion (manual nav still works there, just snaps
+   instead of easing). */
+function startAutoSpin(){if(!reduceMotion&&!spinLockedOpen)spinning=true;}
+function pauseAutoSpin(){spinning=false;}
+function scheduleResumeSpin(){
+  clearTimeout(resumeSpinTimer);
+  resumeSpinTimer=setTimeout(()=>{if(!spinLockedOpen)startAutoSpin();},RESUME_DELAY_MS);
+}
+const expObserver=new IntersectionObserver(entries=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting){if(!spinLockedOpen)startAutoSpin();}
+    else{pauseAutoSpin();clearTimeout(resumeSpinTimer);}
+  });
+},{threshold:0.3});
+expObserver.observe(document.getElementById('experience'));
+
 let dragX=null;
 const expStage=document.getElementById('exp-stage');
-expStage.addEventListener('pointerdown',e=>{dragX=e.clientX;});
+expStage.addEventListener('pointerdown',e=>{dragX=e.clientX;pauseAutoSpin();clearTimeout(resumeSpinTimer);});
 document.addEventListener('pointerup',e=>{
   if(dragX===null)return;
   const dx=e.clientX-dragX;dragX=null;
-  if(dx>60)carPrev();else if(dx<-60)carNext();
+  if(dx>60)carPrev();
+  else if(dx<-60)carNext();
+  else if(!spinLockedOpen)scheduleResumeSpin();
 });
 
 layoutCarousel();
+
+/* SCROLL CROSSFADE — continuous, reversible fade for Hero/About/Experience/Leadership as they
+   enter/leave the viewport (Content/Skills/Contact keep the simpler one-time .reveal fade-up). */
+const scrollFadeEls=Array.from(document.querySelectorAll('.scroll-fade'));
+const aboutPhoto=document.querySelector('#about .about-photo-slot');
+const aboutText=document.querySelector('#about .about-text');
+function fadeProgress(el){
+  const vh=window.innerHeight;
+  const r=el.getBoundingClientRect();
+  const elCenter=r.top+r.height/2;
+  const dist=Math.abs(elCenter-vh/2);
+  // Inner/outer scale with the element's own height, not just the viewport: a short section
+  // (Hero/About/Leadership) uses the plain vh-based band, but a tall one (Experience, with its
+  // heading sitting well above the carousel) would otherwise start fading the instant you've
+  // scrolled enough to center the carousel instead of the section's raw midpoint — the heading
+  // and carousel can't both sit at that midpoint when the section is much taller than the
+  // viewport. Scaling the band by height keeps the whole tall section at full opacity through
+  // that scroll range instead of dimming while the carousel is still nicely in view.
+  const inner=Math.max(vh*0.22,r.height*0.32);
+  const outer=inner+vh*0.68;
+  if(dist<=inner)return 1;
+  if(dist>=outer)return 0;
+  return 1-(dist-inner)/(outer-inner);
+}
+function updateScrollFades(){
+  scrollFadeEls.forEach(el=>{
+    const t=reduceMotion?1:fadeProgress(el);
+    el.style.opacity=t;
+    el.style.transform=reduceMotion?'none':`translateY(${(1-t)*28}px)`;
+    if(el.id==='about'&&aboutPhoto&&aboutText){
+      const photoT=reduceMotion?1:Math.max(Math.min(t*1.35,1),0);
+      const textT=reduceMotion?1:Math.max(Math.min((t-0.22)*1.35,1),0);
+      aboutPhoto.style.opacity=photoT;
+      aboutText.style.opacity=textT;
+      aboutText.style.transform=reduceMotion?'none':`translateY(${(1-textT)*16}px)`;
+    }
+  });
+}
+let scrollFadeTicking=false;
+function requestScrollFadeTick(){
+  if(!scrollFadeTicking){
+    requestAnimationFrame(()=>{updateScrollFades();scrollFadeTicking=false;});
+    scrollFadeTicking=true;
+  }
+}
+window.addEventListener('scroll',requestScrollFadeTick,{passive:true});
+window.addEventListener('resize',requestScrollFadeTick);
+updateScrollFades();
 </script>
 </body>
 </html>
