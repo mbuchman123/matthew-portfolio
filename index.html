@@ -664,7 +664,8 @@ function renderVideoCard(v,idx){
   }
   const posStyle=v.thumbnailPosition?` style="object-position:${v.thumbnailPosition};"`:'';
   const viewsHTML=v.views!=null?`<span class="vid-views">▷ ${v.views}</span>`:'';
-  return `<a class="vid-card" href="${v.url}" onclick="return openVideoModal(event,${idx})"><img class="vid-thumb" src="${v.thumbnail}"${posStyle}><div class="vid-scrim"></div><span class="vid-tag">Live</span>${viewsHTML}<div class="play-btn">${PLAY_SVG}</div><div class="vid-bottom"><div class="vid-title">${v.caption}</div>${metaHTML}<span class="vid-link">View ↗</span></div></div></a>`;
+  const tagHTML=v.hideTag?'':'<span class="vid-tag">Live</span>';
+  return `<a class="vid-card" href="${v.url}" onclick="return openVideoModal(event,${idx})"><img class="vid-thumb" src="${v.thumbnail}"${posStyle}><div class="vid-scrim"></div>${tagHTML}${viewsHTML}<div class="play-btn">${PLAY_SVG}</div><div class="vid-bottom"><div class="vid-title">${v.caption}</div>${metaHTML}<span class="vid-link">View ↗</span></div></div></a>`;
 }
 
 function renderVideoTabs(){
