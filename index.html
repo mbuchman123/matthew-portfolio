@@ -179,9 +179,6 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .bl{list-style:none;display:flex;flex-direction:column;gap:6px;}
 .bl li{display:flex;gap:8px;font-size:12.5px;color:#555;line-height:1.5;}
 .bl li::before{content:"•";color:var(--muted);flex-shrink:0;}
-.hls{display:flex;flex-wrap:wrap;gap:4px;}
-.hb{font-size:11px;padding:2px 9px;background:var(--blue-l);color:var(--blue);border-radius:20px;font-weight:500;}
-.ho{font-size:11px;padding:2px 9px;background:var(--orange-l);color:var(--orange);border-radius:20px;font-weight:500;}
 .pl{font-size:10px;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);}
 .prow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:4px;}
 .ps{aspect-ratio:4/3;border-radius:7px;border:1.5px dashed rgba(0,48,135,0.2);background:var(--blue-l);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;transition:all 0.2s;overflow:hidden;position:relative;}
@@ -286,10 +283,18 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .social-fb .social-icon{background:#1877F2;font-family:Georgia,serif;font-weight:700;font-size:20px;font-style:italic;}
 
 /* CONTENT — click-to-embed video modal (new component; existing card styles above are untouched) */
-.video-modal{position:fixed;inset:0;z-index:1000;background:rgba(0,10,30,0.75);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:2rem;}
+/* Video lightbox — a small centered embed, deliberately with no dark page backdrop and no
+   solid frame/background of its own (just the bare iframe + a close button floating over the
+   page); see the interest-modal's identical "just the box, no larger frame" treatment above. */
+.video-modal{position:fixed;inset:0;z-index:1000;background:transparent;display:none;align-items:center;justify-content:center;padding:2rem;}
 .video-modal.open{display:flex;}
-.video-modal-inner{position:relative;background:#000;border-radius:14px;overflow:hidden;max-width:420px;width:100%;aspect-ratio:9/16;box-shadow:0 30px 80px rgba(0,0,0,0.5);}
-.video-modal-frame{width:100%;height:100%;}
+.video-modal-inner{position:relative;background:#fff;border:3px solid #000;border-radius:14px;overflow:hidden;max-width:280px;width:100%;height:510px;box-shadow:0 30px 80px rgba(0,0,0,0.5);}
+/* The iframe renders at its normal full size (420px, matching the un-scaled-down modal it was
+   built for) so TikTok/Instagram's own responsive layout isn't forced into a viewport smaller
+   than it expects — cutting content off rather than shrinking it. transform:scale(.5) on this
+   wrapper then visually shrinks the whole rendered result down to exactly fill the 210px box
+   (top left origin, 420*.5=210), so nothing is cropped, it's just scaled down like a photo. */
+.video-modal-frame{position:absolute;top:12px;left:0;width:420px;aspect-ratio:9/16;transform:scale(.6667);transform-origin:top left;}
 .video-modal-frame iframe{width:100%;height:100%;border:0;display:block;}
 .video-modal-close{position:absolute;top:10px;right:10px;z-index:2;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.15);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.25);color:#fff;font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s,border-color 0.2s;}
 .video-modal-close:hover{background:var(--orange);border-color:var(--orange);}
@@ -314,10 +319,6 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .int-card-eyebrow{display:block;font-size:10px;font-weight:600;letter-spacing:0.09em;text-transform:uppercase;color:rgba(255,255,255,0.7);margin-bottom:.3rem;}
 .int-card-title{font-family:'DM Sans',sans-serif;font-size:1.35rem;font-weight:700;color:#fff;margin-bottom:.3rem;letter-spacing:-0.01em;}
 .int-card-desc{font-size:12.5px;color:rgba(255,255,255,0.78);line-height:1.45;}
-.int-card-soon{background:var(--blue-l);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:default;}
-.int-card-soon:hover{transform:none;box-shadow:none;}
-.int-card-soon .vp-icon{opacity:0.35;color:var(--blue);}
-.int-card-soon .vp-label{color:var(--blue);opacity:0.6;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;}
 .int-card.int-slot .isi,.int-card.int-slot .isl{color:#fff;}
 
 #skills{position:relative;}
@@ -373,6 +374,29 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .int-slot.hp .isi,.int-slot.hp .isl{display:none;}
 .isi{font-size:16px;color:var(--blue);pointer-events:none;}
 .isl{font-size:12px;color:var(--blue);pointer-events:none;}
+/* Interest info modal — clicking a filled-in interest card (int-slot.hp) now opens this instead
+   of re-triggering the main-photo file picker (that <input> was removed from the 6 real cards
+   for exactly this reason). im-upload reuses the .int-slot upload-preview pattern at a smaller
+   size for the "add more specific photos" row; see limg() below, the modal-scoped twin of lip(). */
+.interest-modal{position:fixed;inset:0;z-index:1000;background:transparent;display:none;align-items:center;justify-content:center;padding:2rem;}
+.interest-modal.open{display:flex;}
+.interest-modal-inner{position:relative;z-index:0;background:var(--surface);border-radius:16px;max-width:420px;width:100%;padding:2rem 2rem 1.75rem;box-shadow:0 30px 80px rgba(0,0,0,0.35);overflow:hidden;}
+.interest-modal-inner::before,.interest-modal-inner::after{content:'';position:absolute;z-index:-1;pointer-events:none;filter:blur(20px);}
+.interest-modal-inner::before{top:-15%;left:-20%;width:80%;height:60%;background:radial-gradient(circle,rgba(250,70,22,0.5),transparent 70%);}
+.interest-modal-inner::after{bottom:-15%;right:-20%;width:80%;height:60%;background:radial-gradient(circle,rgba(0,48,135,0.5),transparent 70%);}
+.interest-modal-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:var(--blue-l);border:none;color:var(--blue);font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s,color 0.2s;}
+.interest-modal-close:hover{background:var(--orange);color:#fff;}
+.interest-modal-title{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.6rem;padding-right:2rem;}
+.interest-modal-desc{font-size:14px;line-height:1.55;color:var(--muted);margin-bottom:1.4rem;}
+.interest-modal-uploads{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.im-upload{aspect-ratio:1;border-radius:10px;border:1.5px dashed rgba(0,48,135,0.2);background:var(--blue-l);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:all 0.2s;overflow:hidden;position:relative;}
+.im-upload:hover{border-color:var(--blue);background:#dce8f7;transform:scale(1.02);}
+.im-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.im-upload img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px;}
+.im-upload img.h{display:none;}
+.im-upload.hp .isi,.im-upload.hp .isl{display:none;}
+.im-upload .isi{font-size:14px;}
+.im-upload .isl{font-size:8px;text-align:center;padding:0 4px;}
 
 /* CONTACT */
 .contact-split{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
@@ -460,23 +484,23 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
         </div>
 
         <div class="exp-card" id="card-3" onclick="cardClick(3,this,event)">
-          <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo on" id="bp-3" src="assets/WE LifeTime.jpg"><div class="banner-scrim"></div><div class="banner-logo ld"><img src="assets/Lifetime.webp"></div><div class="banner-date">May 2025 – Aug 2025</div><div class="banner-info"><div class="bi-title">Facility Management Associate</div><div class="bi-chips"><span class="bic">Lifetime Fitness · Boca Raton, FL</span></div></div><div class="banner-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-3')"></label></div></div>
-          <div class="card-body"><div class="card-main"><div class="card-top"><div><div class="card-role">Facility Management Associate</div><div class="card-org">Lifetime Fitness · Boca Raton, FL</div></div></div><div class="card-divider"></div><p class="card-desc">Kept a flagship 100,000 sq. ft. facility running day-in, day-out — learning operational consistency and the importance of member experience at scale.</p><button class="xbtn" onclick="event.stopPropagation();tx('card-3',this)"><span>See details</span><span class="xi">▾</span></button></div><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Collaborated with a 15-person team on opening/closing procedures for 1,500+ daily members.</li><li>Ensured equipment functionality, maintained amenities, and addressed member inquiries.</li></ul><div class="hls"><span class="ho">100,000 sq. ft.</span><span class="ho">1,500+ members</span><span class="hb">15-person team</span></div></div></div></div></div>
+          <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo on" id="bp-3" src="assets/WE LifeTime.jpg"><div class="banner-scrim"></div><div class="banner-logo ld"><img src="assets/Lifetime.webp"></div><div class="banner-date">May 2025 – Aug 2025</div><div class="banner-info"><div class="bi-title">Facility Management Associate</div><div class="bi-chips"><span class="bic">Life Time Fitness · Boca Raton, FL</span></div></div><div class="banner-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-3')"></label></div></div>
+          <div class="card-body"><div class="card-main"><div class="card-top"><div><div class="card-role">Facility Management Associate</div><div class="card-org">Life Time Fitness · Boca Raton, FL</div></div></div><div class="card-divider"></div><p class="card-desc">Helped support the daily operations of a 100,000 sq. ft. fitness facility by keeping the club running smoothly and creating a positive experience for more than 1,500 members each day.</p><button class="xbtn" onclick="event.stopPropagation();tx('card-3',this)"><span>See details</span><span class="xi">▾</span></button></div><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Worked with a 15 person operations team to complete opening and closing procedures and prepare the facility for daily operations.</li><li>Maintained fitness equipment, amenities, and common areas by performing routine inspections and addressing operational needs to keep the club clean, safe, and fully functional.</li><li>Assisted members with questions, facility needs, and day to day requests while providing friendly customer service and helping create a welcoming environment.</li></ul></div></div></div></div>
         </div>
 
         <div class="exp-card" id="card-4" onclick="cardClick(4,this,event)">
           <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo on" id="bp-4" src="assets/WE GSC.jpg" style="object-position:center 15%;"><div class="banner-scrim"></div><div class="banner-logo lw"><img src="assets/GSC.webp"></div><div class="banner-date">Jan 2026 – Present</div><div class="banner-info"><div class="bi-title">Event Management Intern</div><div class="bi-chips"><span class="bic">Gainesville Sports Commission · Gainesville, FL</span></div></div><div class="banner-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-4')"></label></div></div>
-          <div class="card-body"><div class="card-main"><div class="card-top"><div><div class="card-role">Event Management Intern</div><div class="card-org">Gainesville Sports Commission · Gainesville, FL</div></div></div><div class="card-divider"></div><p class="card-desc">Working at the intersection of sports, tourism, and event operations — coordinating vendor relationships and on-site execution for thousands from 90+ countries.</p><button class="xbtn" onclick="event.stopPropagation();tx('card-4',this)"><span>See details</span><span class="xi">▾</span></button></div><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Orchestrate marketing and event operations for 5,000+ athletes from 90+ countries across local, regional, and national sporting events.</li><li>Plan itineraries, coordinate vendors, and execute on-site events to enhance the participant experience.</li></ul><div class="hls"><span class="hb">5,000+ athletes</span><span class="hb">90+ countries</span><span class="ho">Vendor coordination</span></div></div></div></div></div>
+          <div class="card-body"><div class="card-main"><div class="card-top"><div><div class="card-role">Event Management Intern</div><div class="card-org">Gainesville Sports Commission · Gainesville, FL</div></div></div><div class="card-divider"></div><p class="card-desc">Supported the planning and execution of local, regional, and national sporting events by coordinating logistics, working with vendors, and helping deliver a seamless experience for thousands of athletes, coaches, and spectators.</p><button class="xbtn" onclick="event.stopPropagation();tx('card-4',this)"><span>See details</span><span class="xi">▾</span></button></div><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Helped coordinate event operations for sporting events that welcomed more than 5,000 athletes representing over 90 countries.</li><li>Planned event itineraries, coordinated vendors and community partners, including organizing donated meals for 200+ staff members and volunteers each day through local restaurants such as Bolay, Miller's Ale House, Jersey Mike's, Metro Diner, and others.</li><li>Assisted with venue setup, participant services, and on site event execution while working closely with staff, volunteers, vendors, and community partners to ensure events ran smoothly.</li></ul></div></div></div></div>
         </div>
 
         <div class="exp-card" id="card-5" onclick="cardClick(5,this,event)">
           <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo on" id="bp-5" src="assets/WE Gat Guest Services.webp"><div class="banner-scrim"></div><div class="banner-date">2025 – Present</div><div class="banner-info"><div class="bi-title">Gator Guest Services</div><div class="bi-chips"><span class="bic">University of Florida · Gainesville, FL</span></div></div><div class="banner-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-5')"></label></div></div>
-          <div class="card-body"><div class="card-main"><div class="card-top"><div><div class="card-role">Gator Guest Services</div><div class="card-org">University of Florida · Gainesville, FL</div></div></div><div class="card-divider"></div><p class="card-desc">More details on this role coming soon.</p><button class="xbtn" onclick="event.stopPropagation();tx('card-5',this)"><span>See details</span><span class="xi">▾</span></button></div><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Details and photos coming soon.</li></ul></div></div></div></div>
+          <div class="card-body"><div class="card-main"><div class="card-top"><div><div class="card-role">Gator Guest Services</div><div class="card-org">University of Florida · Gainesville, FL</div></div></div><div class="card-divider"></div><p class="card-desc">Help create a welcoming and enjoyable game day experience by assisting fans, supporting event operations, and serving as a representative of the University of Florida Athletic Association during home athletic events.</p><button class="xbtn" onclick="event.stopPropagation();tx('card-5',this)"><span>See details</span><span class="xi">▾</span></button></div><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Welcome and assist fans by answering questions, resolving concerns, and providing information to help create a positive game day experience.</li><li>Support event operations by enforcing venue policies, managing guest flow, and working alongside Athletic Association staff to ensure events run safely and efficiently.</li><li>Serve as a point of contact between fans, Gator Boosters, event staff, and the Athletic Department while representing the University of Florida and helping create a great game day experience.</li></ul></div></div></div></div>
         </div>
 
         <div class="exp-card" id="card-6" onclick="cardClick(6,this,event)">
-          <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo on" id="bp-6" src="assets/WE FIFA.jpg"><div class="banner-scrim"></div><div class="banner-date">Summer 2026</div><div class="banner-info"><div class="bi-title">FIFA World Cup Volunteer 2026</div><div class="bi-chips"><span class="bic">FIFA World Cup 2026 · United States</span></div></div><div class="banner-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-6')"></label></div></div>
-          <div class="card-body"><div class="card-main"><div class="card-top"><div><div class="card-role">FIFA World Cup Volunteer 2026</div><div class="card-org">FIFA World Cup 2026 · United States</div></div></div><div class="card-divider"></div><p class="card-desc">More details on this role coming soon.</p><button class="xbtn" onclick="event.stopPropagation();tx('card-6',this)"><span>See details</span><span class="xi">▾</span></button></div><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Details and photos coming soon.</li></ul></div></div></div></div>
+          <div class="card-banner"><div class="banner-bg"></div><img class="banner-photo on" id="bp-6" src="assets/WE FIFA.jpg"><div class="banner-scrim"></div><div class="banner-date">Summer 2026</div><div class="banner-info"><div class="bi-title">FIFA World Cup Volunteer 2026</div><div class="bi-chips"><span class="bic">FIFA World Cup 2026 · Miami, FL</span></div></div><div class="banner-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'bp-6')"></label></div></div>
+          <div class="card-body"><div class="card-main"><div class="card-top"><div><div class="card-role">FIFA World Cup Volunteer 2026</div><div class="card-org">FIFA World Cup 2026 · Miami, FL</div></div></div><div class="card-divider"></div><p class="card-desc">Supported transportation operations and Fan Fest activities by assisting fans from around the world, providing event support, and helping create a positive tournament experience.</p><button class="xbtn" onclick="event.stopPropagation();tx('card-6',this)"><span>See details</span><span class="xi">▾</span></button></div><div class="xpanel"><div class="xpanel-i"><div class="xbody"><ul class="bl"><li>Assisted with transportation operations by directing more than 100 visitors, answering questions, and helping guests navigate between venues, transit locations, and tournament activities.</li><li>Supported Fan Fest operations by welcoming fans, providing event information, and helping create a positive experience for roughly 30,000 attendees each day.</li><li>Worked alongside volunteers, event staff, and community partners to support the day to day operations of one of the world's largest sporting events.</li></ul></div></div></div></div>
         </div>
 
       </div>
@@ -574,32 +598,44 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
 <div class="section scroll-fade" id="interests">
   <div class="interests-bignum">INTERESTS</div>
   <div class="interests-grid">
-    <div class="int-card int-card-lg int-slot">
-      <span class="isi">+</span><span class="isl">Add photo</span>
-      <input type="file" accept="image/*" onchange="lip(this)"><img class="h">
+    <div class="int-card int-card-lg int-slot hp" onclick="openInterestModal(0)">
+      <img src="assets/int-art.jpg">
       <div class="int-card-scrim"></div>
       <div class="int-card-info"><span class="int-card-eyebrow">Creative</span><h3 class="int-card-title">Art</h3><p class="int-card-desc">Recreational & digital art</p></div>
     </div>
-    <div class="int-card int-slot">
-      <span class="isi">+</span><span class="isl">Add photo</span>
-      <input type="file" accept="image/*" onchange="lip(this)"><img class="h">
+    <div class="int-card int-slot hp" onclick="openInterestModal(1)">
+      <img src="assets/int-sneakers.webp">
       <div class="int-card-scrim"></div>
       <div class="int-card-info"><span class="int-card-eyebrow">Culture</span><h3 class="int-card-title">Sneakers</h3><p class="int-card-desc">Sneaker culture & collection</p></div>
     </div>
-    <div class="int-card int-card-tall int-slot">
-      <span class="isi">+</span><span class="isl">Add photo</span>
-      <input type="file" accept="image/*" onchange="lip(this)"><img class="h">
+    <div class="int-card int-card-tall int-slot hp" onclick="openInterestModal(2)">
+      <img src="assets/int-sports-stats.jpg" style="object-position:50% 15%;">
       <div class="int-card-scrim"></div>
-      <div class="int-card-info"><span class="int-card-eyebrow">Analytics</span><h3 class="int-card-title">Sports Statistics</h3><p class="int-card-desc">Analytics & data in sports</p></div>
+      <div class="int-card-info"><span class="int-card-eyebrow">Media</span><h3 class="int-card-title">Content Creation</h3><p class="int-card-desc">Behind-the-scenes & creative work</p></div>
     </div>
-    <div class="int-card int-slot">
-      <span class="isi">+</span><span class="isl">Add photo</span>
-      <input type="file" accept="image/*" onchange="lip(this)"><img class="h">
+    <div class="int-card int-slot hp" onclick="openInterestModal(3)">
+      <img src="assets/int-bowling.jpg">
       <div class="int-card-scrim"></div>
       <div class="int-card-info"><span class="int-card-eyebrow">Discipline</span><h3 class="int-card-title">Bowling</h3><p class="int-card-desc">High school varsity captain</p></div>
     </div>
-    <div class="int-card int-card-soon"><span class="vp-icon">🖼️</span><span class="vp-label">Coming soon</span></div>
-    <div class="int-card int-card-lg int-card-soon"><span class="vp-icon">🖼️</span><span class="vp-label">Coming soon</span></div>
+    <div class="int-card int-slot hp" onclick="openInterestModal(4)">
+      <img src="assets/int-fitness.jpg">
+      <div class="int-card-scrim"></div>
+      <div class="int-card-info"><span class="int-card-eyebrow">Wellness</span><h3 class="int-card-title">Fitness & Health</h3><p class="int-card-desc">Training, gym life & staying active</p></div>
+    </div>
+    <div class="int-card int-card-lg int-slot hp" onclick="openInterestModal(5)">
+      <img src="assets/int-content-creation.jpg">
+      <div class="int-card-scrim"></div>
+      <div class="int-card-info"><span class="int-card-eyebrow">Analytics</span><h3 class="int-card-title">Sports Statistics</h3><p class="int-card-desc">Analytics & data in sports</p></div>
+    </div>
+  </div>
+  <div class="interest-modal" id="interest-modal" onclick="if(event.target===this)closeInterestModal()">
+    <div class="interest-modal-inner">
+      <button class="interest-modal-close" onclick="closeInterestModal()" aria-label="Close">×</button>
+      <h3 class="interest-modal-title" id="im-title"></h3>
+      <p class="interest-modal-desc" id="im-desc"></p>
+      <div class="interest-modal-uploads" id="im-uploads"></div>
+    </div>
   </div>
 </div>
 
@@ -695,7 +731,7 @@ function closeVideoModal(){
   document.getElementById('video-modal').classList.remove('open');
   document.getElementById('video-modal-frame').innerHTML='';
 }
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeVideoModal();closeLtModal();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeVideoModal();closeLtModal();closeInterestModal();}});
 
 /* REVEAL */
 const revObs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.08});
@@ -717,6 +753,33 @@ function lp(input){if(!input.files||!input.files[0])return;const s=input.closest
 function lb(input,id){if(!input.files||!input.files[0])return;const img=document.getElementById(id),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.add('on');};r.readAsDataURL(input.files[0]);}
 function lip(input){if(!input.files||!input.files[0])return;const s=input.closest('.int-slot'),img=s.querySelector('img'),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.remove('h');s.classList.add('hp');};r.readAsDataURL(input.files[0]);}
 
+/* INTERESTS — info modal
+   Clicking a filled-in interest card opens this instead of the main-photo file picker (that
+   input was removed from the 6 real cards). INTERESTS_INFO is indexed in the same order the
+   cards appear in the grid. The 3 "add more photos" boxes are rebuilt fresh every time the
+   modal opens (limg() is the modal-scoped twin of lip(), scoped to .im-upload instead of
+   .int-slot) — like every other upload slot on this site, these are client-side-only FileReader
+   previews and don't persist between visits. */
+const INTERESTS_INFO=[
+  {title:'Art',desc:"I've always liked sketching and painting as a way to unwind — mostly pencil and digital work, nothing too serious, just something creative outside of sports and business."},
+  {title:'Sneakers',desc:"Collecting sneakers turned into a real hobby for me — I like following new releases and collabs and the design stories behind different colorways."},
+  {title:'Content Creation',desc:"I post short-form videos on TikTok and Instagram — sports career advice, lifestyle content, and documenting my 75 Hard challenge."},
+  {title:'Bowling',desc:"I bowled competitively in high school as varsity captain, and I still get back on the lanes whenever I get the chance."},
+  {title:'Fitness & Health',desc:"Staying active is a daily priority for me — strength training, running, and generally pushing myself physically and mentally."},
+  {title:'Sports Statistics',desc:"I'm always digging into box scores and advanced metrics across football, baseball, and basketball — the analytics side of sports is genuinely fun for me."},
+];
+function limg(input){if(!input.files||!input.files[0])return;const s=input.closest('.im-upload'),img=s.querySelector('img'),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.remove('h');s.classList.add('hp');};r.readAsDataURL(input.files[0]);}
+function openInterestModal(i){
+  const it=INTERESTS_INFO[i];
+  document.getElementById('im-title').textContent=it.title;
+  document.getElementById('im-desc').textContent=it.desc;
+  document.getElementById('im-uploads').innerHTML=Array.from({length:3}).map(()=>
+    `<div class="im-upload"><span class="isi">+</span><span class="isl">Add photo</span><input type="file" accept="image/*" onchange="limg(this)"><img class="h"></div>`
+  ).join('');
+  document.getElementById('interest-modal').classList.add('open');
+}
+function closeInterestModal(){document.getElementById('interest-modal').classList.remove('open');}
+
 /* LEADERSHIP — STATIONARY TIMELINE
    The line, its dots, and the nav never move or get rebuilt. Only three things change on
    navigation: the photo circle's `left` (CSS-transitions along the line to the new entry's
@@ -726,13 +789,13 @@ function lip(input){if(!input.files||!input.files[0])return;const s=input.closes
    org, brief, bullets) — the line's dots, nav dots, and each stop's position regenerate from
    this array's length. */
 const LEADERSHIP=[
-  {img:'assets/L&D Warrington.jpg',imgStyle:'transform:scale(0.85)',dateFull:'Sep 2023',year:'2023',role:'Member',org:'Exploring Financial Economics (EFE)',brief:'More details on this role coming soon.',bullets:['Details coming soon.']},
-  {img:'assets/L&D FLA.jfif',imgStyle:'transform:scale(0.85)',dateFull:'Apr 2024',year:'2024',role:'Member',org:'Florida Leadership Academy (FLA)',brief:'More details on this role coming soon.',bullets:['Details coming soon.']},
-  {img:'assets/L&D Sports Analytics.jpg',dateFull:'Aug 2024',year:'2024',role:'Member',org:'UF Sports Analytics',brief:'More details on this role coming soon.',bullets:['Details coming soon.']},
-  {img:'assets/L&D MSL.webp',dateFull:'Sep 2024',year:'2024',role:'Co-Founder & Membership Director',org:'Mu Sigma Lambda',brief:'Co-founded the first national co-ed fraternity for sports industry professionals, building a 110-person chapter from scratch.',bullets:['Directs sales, membership, and event strategy including the annual Sales Summit.','Engages alumni to lead workshops and secures high-profile industry speakers for member development.']},
-  {img:'assets/L&D BIGEVENT.jpg',dateFull:'Aug 2025',year:'2025',role:'Assistant Director of Internal Affairs',org:'UF Big Event',brief:'Partners with local organizations and Student Government to streamline site assignments and manage check-in operations for the largest single-day community service event at UF.',bullets:['Coordinates logistics and communications for 1,400+ volunteers completing community projects across Gainesville.','Partners with SG leaders and local organizations to manage site assignments efficiently.']},
-  {img:'assets/L&D GMSO.jfif',dateFull:'Sep 2025',year:'2025',role:'Assistant Director of Membership & Events',org:'Gator Sports Management Organization',brief:'Leads initiatives connecting students with sports industry professionals through networking events, panels, and collaborations.',bullets:['Manages onboarding of 50+ new members each cycle, engaging students early to support integration.','Organizes panels and networking events that connect students with real sports industry professionals.']},
-  {img:'assets/L&D Special Olympics.jpg',dateFull:'Jan 2026',year:'2026',role:'Volunteer',org:'Special Olympics',brief:'More details on this role coming soon.',bullets:['Details coming soon.']},
+  {img:'assets/L&D FLA.jfif',dateFull:'Apr 2023 – Oct 2023',year:'2023',role:'Member',org:'Florida Leadership Academy (FLA)',brief:'Selected as one of the top 100 Warrington College of Business sophomores to strengthen leadership, professionalism, and career readiness through a competitive leadership development program.',bullets:['Participated in weekly leadership development sessions led by professionals across the corporate, nonprofit, government, and higher education sectors.','Strengthened communication, teamwork, and problem solving skills through case studies, hands on activities, and discussions focused on emotionally intelligent leadership.',"Worked with a team of five to develop and deliver a 20 minute case presentation for Royal Caribbean, presenting recommendations to increase sales and strengthen retail partnerships."]},
+  {img:'assets/L&D Warrington.jpg',imgStyle:'object-fit:contain',circleBg:'#001f60',dateFull:'Sep 2023',year:'2023',role:'Member',org:'Exploring Financial Economics (EFE)',brief:"Participated in the University of Florida's Finance Professional Development Program, gaining exposure to careers in finance while building technical knowledge and professional skills through industry focused training.",bullets:['Completed weekly workshops covering corporate finance, investment banking, fintech, wealth management, and other areas of the finance industry.','Strengthened technical and professional skills through team based projects, interview preparation, resume development, and market analysis.','Connected with finance professionals, faculty, and upperclassmen through networking events, roundtable discussions, and career development programming.']},
+  {img:'assets/L&D Sports Analytics.jpg',dateFull:'Aug 2024',year:'2024',role:'Sports Data Analyst',org:'UF Sports Analytics',brief:'Analyze player performance data and apply sports analytics techniques to identify trends, evaluate performance, and develop data driven insights for decision making.',bullets:["Analyzed more than 500 player performance metrics using the University of Florida's HiPerGator computing system to identify trends and support performance analysis.",'Applied coding and data analysis techniques through hands on projects, case studies, and sports analytics workshops.','Led discussions with fellow students on sports analytics concepts, using data to evaluate player performance and analyze trends in sports betting markets.']},
+  {img:'assets/L&D MSL.webp',dateFull:'Sep 2024',year:'2024',role:'Co-Founder & Membership Director',org:'Mu Sigma Lambda',brief:"Helped establish the University of Florida's chapter of Mu Sigma Lambda by recruiting members, building relationships, and creating opportunities for students interested in the sports industry.",bullets:['Co-founded the organization and helped grow membership to more than 100 active students through recruitment, outreach, and campus engagement.','Planned networking events, professional development workshops, and alumni speaker sessions that connected members with professionals across the sports industry.',"Worked with the executive board to shape the organization's growth, strengthen member involvement, and create valuable opportunities for students pursuing careers in sports."]},
+  {img:'assets/L&D BIGEVENT.jpg',dateFull:'Aug 2025',year:'2025',role:'Assistant Director of Internal Affairs',org:'UF Big Event',brief:"Supported the planning and execution of the University of Florida's largest day of community service by coordinating logistics, working with campus partners, and helping organize more than 1,400 student volunteers.",bullets:['Coordinated volunteer site assignments and logistics for more than 1,400 student volunteers across dozens of community service locations throughout Gainesville.','Partnered with Student Government, campus organizations, and community partners to streamline planning and support event operations.','Managed volunteer check in, day of communication, and on site logistics to help ensure a smooth experience for volunteers and community partners.']},
+  {img:'assets/L&D GMSO.jfif',dateFull:'Sep 2025',year:'2025',role:'Assistant Director of Membership & Events',org:'Gator Sports Management Organization',brief:'Help grow the organization by recruiting new members, developing engaging programming, and creating opportunities that connect students with careers in the sports industry.',bullets:['Recruit prospective members by promoting the organization, connecting with students, and encouraging involvement within the club.','Develop new event ideas and programming designed to attract new members while increasing engagement and retention among current members.','Organize networking events, professional development opportunities, and guest speaker sessions for students interested in the sports industry.']},
+  {img:'assets/L&D Special Olympics.jpg',dateFull:'Jan 2026',year:'2026',role:'Volunteer Director',org:'Special Olympics Florida',brief:'Helped oversee the execution of a Special Olympics track and field competition by coordinating volunteers, supporting event operations, and creating a positive experience for more than 50 athletes.',bullets:['Guided volunteers throughout the event by answering questions, assigning responsibilities, and ensuring activities stayed on schedule.','Oversaw event operations, athlete staging, and competition logistics to help provide a smooth and organized experience for more than 50 athletes.','Worked alongside event staff to address issues as they arose, support volunteers, and keep competitions running efficiently.']},
 ];
 let ltIdx=0,ltFadeTimer=null;
 const ltDotPos=k=>LEADERSHIP.length>1?(15+(k/(LEADERSHIP.length-1))*70):50; // inset 15%-85% so the 250px photo circle at the first/last stop doesn't clip past the container edge
@@ -754,6 +817,7 @@ function applyLtEntry(i){
   img.src=l.img;
   img.style.cssText=l.imgStyle||'';
   img.classList.add('on');
+  document.getElementById('lt-photo-circle').style.background=l.circleBg||'';
   document.getElementById('lt-bignum').textContent=l.year;
   document.getElementById('lt-badge').textContent=l.year;
   document.getElementById('lt-role').textContent=l.role;

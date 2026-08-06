@@ -135,11 +135,4 @@ const VIDEOS = [
     caption: 'Networking is about relationships, not opportunities',
     hideTag: true,
   },
-  {
-    tab: 'sports',
-    platform: 'tiktok',
-    status: 'soon',
-    icon: '🏟️',
-    caption: 'Breaking into sports business as a student',
-  },
 ];
