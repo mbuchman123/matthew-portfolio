@@ -342,6 +342,30 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .skill-box.active .box-icon{background:rgba(255,255,255,0.2);color:#fff;}
 .box-name{font-weight:700;font-size:13px;line-height:1.2;margin-top:auto;color:var(--text);transition:font-size .3s,margin-top .3s,color .3s;}
 .skill-box.active .box-name{font-size:20px;font-family:'DM Serif Display',serif;font-weight:400;margin-top:1rem;color:#fff;}
+/* Skills with a real icon image (img-icon, set in renderSkillBoxes when s.icon is an <img> rather
+   than an inline SVG — this now covers every entry in both the Software and Professional rows)
+   drop the card treatment entirely in the compact state — no background/border/shadow square,
+   just the icon (a drop-shadow filter stands in for the card shadow so it still reads as a
+   distinct clickable tile against the page background) with a plain-text name below it, no
+   background chip. Active/expanded state keeps a real card surface (a fixed-height icon panel up
+   top, name/detail flowing below) since that's a readable content panel, not the idle "square
+   behind every icon" look the compact state was avoiding. */
+.skill-box.img-icon{padding:1rem .6rem .7rem;background:none;border:none;box-shadow:none;align-items:center;}
+.skill-box.img-icon:hover{box-shadow:none;border-color:transparent;}
+.skill-box.img-icon .box-icon{position:relative;width:100%;flex:1 1 auto;min-height:0;background:none;}
+.skill-box.img-icon .box-icon img{width:100%;height:100%;background:none;display:block;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.15));}
+.skill-box.img-icon .box-name{position:relative;z-index:1;margin-top:.5rem;padding:0;background:none;box-shadow:none;color:var(--text);text-align:center;}
+.skill-box.img-icon.active{background:var(--surface);height:520px;padding:1.3rem 1.2rem;align-items:stretch;}
+.skill-box.img-icon.active .box-icon{width:100%;height:200px;flex:none;}
+.skill-box.img-icon.active .box-icon img{filter:none;}
+.skill-box.img-icon.active .box-name{margin-top:.9rem;padding:0;font-size:20px;font-family:'DM Serif Display',serif;font-weight:400;color:var(--text);text-align:left;}
+.skill-box.img-icon.active .box-detail{position:relative;z-index:1;padding:0;background:var(--surface);}
+.skill-box.img-icon.active .box-eyebrow{color:var(--accent);}
+.skill-box.img-icon.active .sp-item{background:var(--bg);}
+.skill-box.img-icon.active .sp-role{color:var(--text);}
+.skill-box.img-icon.active .sp-org{color:var(--muted);}
+.skill-box.img-icon .box-close{z-index:3;color:var(--muted);}
+.skill-box.img-icon .box-close:hover{color:var(--text);}
 .box-close{display:none;position:absolute;top:14px;right:16px;font-size:20px;line-height:1;color:rgba(255,255,255,0.8);background:none;border:none;cursor:pointer;padding:2px 6px;}
 .skill-box.active .box-close{display:block;}
 .box-close:hover{color:#fff;}
@@ -362,6 +386,12 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
   .box-name{margin-top:0;font-size:13px;}
   .skill-box.active{height:auto;flex-direction:column;align-items:flex-start;padding:1.3rem 1.2rem;}
   .skill-box.active .box-name{margin-top:.9rem;font-size:19px;}
+  .skill-box.img-icon{padding:.6rem 1.05rem;background:none;}
+  .skill-box.img-icon .box-icon{width:36px;height:36px;flex:none;}
+  .skill-box.img-icon .box-icon img{filter:drop-shadow(0 4px 8px rgba(0,0,0,0.15));}
+  .skill-box.img-icon .box-name{margin-top:0;text-align:left;}
+  .skill-box.img-icon.active{height:auto;padding:1.3rem 1.2rem;}
+  .skill-box.img-icon.active .box-icon{width:100%;height:150px;}
 }
 /* .int-slot/.isi/.isl are shared with the About section's photo upload slot and the new
    Interests bento cards below — kept here, everything else that was specific to the old
@@ -394,6 +424,7 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .im-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
 .im-upload img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:9px;}
 .im-upload img.h{display:none;}
+.im-upload.hp{background:#fff;border:1.5px solid #000;}
 .im-upload.hp .isi,.im-upload.hp .isl{display:none;}
 .im-upload .isi{font-size:14px;}
 .im-upload .isl{font-size:8px;text-align:center;padding:0 4px;}
@@ -455,8 +486,9 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
     </div>
     <div class="about-text">
       <h2 class="about-title">About <span>Me</span></h2>
-      <p class="about-p">Placeholder — replace this with your own story: what drives you, what you're studying, and the kind of role or industry you're chasing next. Keep it to a few short sentences so it reads well next to your photo.</p>
-      <p class="about-p">Add a second paragraph here if you want more room — background, values, or a personal detail that makes you memorable.</p>
+      <p class="about-p">My name is Matthew Buchman, and I'm studying Business Administration with a specialization in Sports Management at the University of Florida. During my time at UF, I've gained experience across college athletics, event operations, sports marketing, and student leadership.</p>
+      <p class="about-p">I've had the opportunity to work with Florida Football, the Gainesville Sports Commission, and other sports organizations, while also helping build a sports business fraternity from the ground up. These experiences have helped me learn more about the industry and where I want to take my career.</p>
+      <p class="about-p">As I head into my final year, I'm continuing to gain new experiences, build new connections, and learn more about the sports industry. My goal is to take what I've learned and turn it into a career on the business side of sports.</p>
     </div>
   </div>
 </div>
@@ -609,7 +641,7 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
       <div class="int-card-info"><span class="int-card-eyebrow">Culture</span><h3 class="int-card-title">Sneakers</h3><p class="int-card-desc">Sneaker culture & collection</p></div>
     </div>
     <div class="int-card int-card-tall int-slot hp" onclick="openInterestModal(2)">
-      <img src="assets/int-sports-stats.jpg" style="object-position:50% 15%;">
+      <img src="assets/int-sports-stats.jpg" style="object-position:50% 0%;">
       <div class="int-card-scrim"></div>
       <div class="int-card-info"><span class="int-card-eyebrow">Media</span><h3 class="int-card-title">Content Creation</h3><p class="int-card-desc">Behind-the-scenes & creative work</p></div>
     </div>
@@ -663,9 +695,9 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
       <p class="contact-p">Open to internships, collaborations, and conversations about sports, events, and business. Based in Gainesville, FL.</p>
       <div class="contact-links">
         <a href="https://www.linkedin.com/in/matthew-buchman" class="contact-link" target="_blank"><span class="c-icon">in</span>linkedin.com/in/matthew-buchman</a>
-        <a href="mailto:djmbbuchman@icloud.com" class="contact-link"><span class="c-icon">@</span>djmbbuchman@icloud.com</a>
+        <a href="mailto:buchmanmatthew26@gmail.com" class="contact-link"><span class="c-icon">@</span>buchmanmatthew26@gmail.com</a>
         <a href="tel:5615040672" class="contact-link"><span class="c-icon">☎</span>(561) 504-0672</a>
-        <a href="https://www.tiktok.com/@mattyb2111" class="contact-link" target="_blank"><span class="c-icon" style="font-size:11px">tt</span>@mattyb2111</a>
+        <a href="https://www.instagram.com/matthew_buchman/" class="contact-link" target="_blank"><span class="c-icon" style="font-size:11px">ig</span>@matthew_buchman</a>
       </div>
     </div>
     <form>
@@ -678,7 +710,7 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
 </div>
 
 <footer>
-  <div class="footer-logo"><img src="assets/logo.webp" alt="MB"></div>
+  <div class="footer-logo"><img src="assets/mb-logo.png" alt="MB"></div>
   <span>Matthew Buchman · University of Florida · 2026</span>
 </footer>
 
@@ -756,26 +788,39 @@ function lip(input){if(!input.files||!input.files[0])return;const s=input.closes
 /* INTERESTS — info modal
    Clicking a filled-in interest card opens this instead of the main-photo file picker (that
    input was removed from the 6 real cards). INTERESTS_INFO is indexed in the same order the
-   cards appear in the grid. The 3 "add more photos" boxes are rebuilt fresh every time the
-   modal opens (limg() is the modal-scoped twin of lip(), scoped to .im-upload instead of
-   .int-slot) — like every other upload slot on this site, these are client-side-only FileReader
-   previews and don't persist between visits. */
+   cards appear in the grid. The 3 "add more photos" boxes are rebuilt fresh every time the modal
+   opens; each optionally starts pre-filled from a `photos` array (real assets/ files, shown to
+   every visitor) rather than empty — same convention as every other photo slot on the site (see
+   the Image handling note in CLAUDE.md). Any slot without a preset photo still falls back to the
+   empty "+ Add photo" state, and even a pre-filled slot can still be swapped via limg() (the
+   modal-scoped twin of lip(), scoped to .im-upload instead of .int-slot) — but like every other
+   upload slot, that swap is a client-side-only FileReader preview and doesn't persist. */
 const INTERESTS_INFO=[
-  {title:'Art',desc:"I've always liked sketching and painting as a way to unwind — mostly pencil and digital work, nothing too serious, just something creative outside of sports and business."},
-  {title:'Sneakers',desc:"Collecting sneakers turned into a real hobby for me — I like following new releases and collabs and the design stories behind different colorways."},
-  {title:'Content Creation',desc:"I post short-form videos on TikTok and Instagram — sports career advice, lifestyle content, and documenting my 75 Hard challenge."},
-  {title:'Bowling',desc:"I bowled competitively in high school as varsity captain, and I still get back on the lanes whenever I get the chance."},
-  {title:'Fitness & Health',desc:"Staying active is a daily priority for me — strength training, running, and generally pushing myself physically and mentally."},
-  {title:'Sports Statistics',desc:"I'm always digging into box scores and advanced metrics across football, baseball, and basketball — the analytics side of sports is genuinely fun for me."},
+  {title:'Art',desc:"I've always liked sketching and painting as a way to unwind — mostly pencil and digital work, nothing too serious, just something creative outside of sports and business.",
+   photos:['assets/int-art-1.jpg','assets/int-art-2.png','assets/int-art-3.jpg'],photoBg:'#000'},
+  {title:'Sneakers',desc:"Collecting sneakers turned into a real hobby for me — I like following new releases and collabs and the design stories behind different colorways.",
+   photos:['assets/int-sneakers-1.jpg','assets/int-sneakers-2.jpg','assets/int-sneakers-3.jpg']},
+  {title:'Content Creation',desc:"I post short-form videos on TikTok and Instagram — sports career advice, lifestyle content, and documenting my 75 Hard challenge.",
+   photos:['assets/int-content-1.jpg','assets/int-content-2.jpg','assets/int-content-3.jpg'],photoFit:'cover',photoPos:'50% 0%'},
+  {title:'Bowling',desc:"I bowled competitively in high school as varsity captain, and I still get back on the lanes whenever I get the chance.",
+   photos:['assets/int-bowling-1.jpg','assets/int-bowling-2.jpg','assets/int-bowling-3.jpg'],photoFit:'cover'},
+  {title:'Fitness & Health',desc:"Staying active is a daily priority for me — strength training, running, and generally pushing myself physically and mentally.",
+   photos:['assets/int-fitness-1.jpg','assets/int-fitness-2.jpg','assets/int-fitness-3.jpg'],photoFit:'cover'},
+  {title:'Sports Statistics',desc:"I'm always digging into box scores and advanced metrics across football, baseball, and basketball — the analytics side of sports is genuinely fun for me.",
+   photos:['assets/int-stats-1.jpg','assets/int-stats-2.jpg','assets/int-stats-3.jpg'],photoFit:'cover',photoPos:'0% 0%'},
 ];
 function limg(input){if(!input.files||!input.files[0])return;const s=input.closest('.im-upload'),img=s.querySelector('img'),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.remove('h');s.classList.add('hp');};r.readAsDataURL(input.files[0]);}
 function openInterestModal(i){
   const it=INTERESTS_INFO[i];
   document.getElementById('im-title').textContent=it.title;
   document.getElementById('im-desc').textContent=it.desc;
-  document.getElementById('im-uploads').innerHTML=Array.from({length:3}).map(()=>
-    `<div class="im-upload"><span class="isi">+</span><span class="isl">Add photo</span><input type="file" accept="image/*" onchange="limg(this)"><img class="h"></div>`
-  ).join('');
+  document.getElementById('im-uploads').innerHTML=Array.from({length:3}).map((_,idx)=>{
+    const src=it.photos&&it.photos[idx];
+    const fit=it.photoFit||'contain';
+    const pos=it.photoPos||'50% 50%';
+    const bg=src&&it.photoBg?` style="background:${it.photoBg};"`:'';
+    return `<div class="im-upload${src?' hp':''}"${bg}><span class="isi">+</span><span class="isl">Add photo</span><input type="file" accept="image/*" onchange="limg(this)"><img class="${src?'':'h'}"${src?` src="${src}" style="object-fit:${fit};object-position:${pos};"`:''}></div>`;
+  }).join('');
   document.getElementById('interest-modal').classList.add('open');
 }
 function closeInterestModal(){document.getElementById('interest-modal').classList.remove('open');}
@@ -878,25 +923,25 @@ function switchTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classL
    them into two category rows and wires up the click-to-expand behavior — see the comment
    above openBox() below for how a box grows in place instead of opening a separate panel. */
 const SKILLS_BOOK=[
-  {name:'Microsoft Word',category:'Software',color:'var(--blue)',icon:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/></svg>',
+  {name:'Microsoft Word',category:'Software',color:'var(--blue)',icon:'<img src="assets/skill-word-clean.png" style="width:100%;height:100%;object-fit:contain;">',
    usedIn:[{icon:'🏟️',role:'Event Management Intern',org:'Gainesville Sports Commission — itinerary & communications drafting'},{icon:'🏈',role:'Student Manager',org:'UF Football — travel logistics documentation'},{icon:'🎓',role:'Mu Sigma Lambda',org:'Co-Founder — chapter documents & event planning'}]},
-  {name:'Excel',category:'Software',color:'var(--orange)',icon:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21V9M12 21V3M20 21v-7"/></svg>',
+  {name:'Excel',category:'Software',color:'var(--orange)',icon:'<img src="assets/skill-excel-clean.png" style="width:100%;height:100%;object-fit:contain;">',
    usedIn:[{icon:'🏟️',role:'Event Management Intern',org:'Gainesville Sports Commission — athlete & vendor tracking'},{icon:'🏈',role:'Student Manager',org:'UF Football — 10,000+ item inventory management'},{icon:'💪',role:'Facility Management Associate',org:'Lifetime Fitness — operational scheduling & reporting'}]},
-  {name:'PowerPoint',category:'Software',color:'var(--blue-bright)',icon:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>',
+  {name:'PowerPoint',category:'Software',color:'var(--blue-bright)',icon:'<img src="assets/skill-powerpoint-clean.png" style="width:100%;height:100%;object-fit:contain;">',
    usedIn:[{icon:'📣',role:'NIL Marketing Intern',org:'Elevate Sports Management — brand strategy presentations'},{icon:'🎓',role:'Mu Sigma Lambda',org:'Co-Founder — Sales Summit & speaker event decks'}]},
-  {name:'Python',category:'Software',color:'var(--blue)',icon:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg>',
-   usedIn:[{icon:'📊',role:'Academic & personal projects',org:'UF Coursework — data analysis and sports statistics'}]},
-  {name:'Canva',category:'Software',color:'var(--orange)',icon:'<svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg>',
+  {name:'CapCut',category:'Software',color:'var(--blue)',icon:'<img src="assets/skill-capcut-clean.png" style="width:100%;height:100%;object-fit:contain;">',
+   usedIn:[{icon:'🎬',role:'Content Creator',org:'TikTok & Instagram — editing short-form videos'}]},
+  {name:'Canva',category:'Software',color:'var(--orange)',icon:'<img src="assets/skill-canva-clean.png" style="width:100%;height:100%;object-fit:contain;">',
    usedIn:[{icon:'📣',role:'NIL Marketing Intern',org:'Elevate — athlete social media graphics & branding assets'},{icon:'🏟️',role:'Event Management Intern',org:'Gainesville Sports Commission — event marketing materials'},{icon:'🎓',role:'GSMO & Mu Sigma Lambda',org:'Leadership — promotional content & membership materials'}]},
-  {name:'Event Management',category:'Professional',color:'var(--orange)',icon:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+  {name:'Event Management',category:'Professional',color:'var(--orange)',icon:'<img src="assets/skill-eventmgmt-clean.png" style="width:100%;height:100%;object-fit:contain;">',
    usedIn:[{icon:'🏟️',role:'Event Management Intern',org:'Gainesville Sports Commission — full event lifecycle, 5,000+ athletes'},{icon:'🎾',role:'Member Services Attendant',org:'Woodfield Country Club — court scheduling & event coordination'},{icon:'🏅',role:'Assistant Director',org:'UF Big Event — 1,400+ volunteer event logistics'}]},
-  {name:'NIL & Sponsorship',category:'Professional',color:'var(--blue)',icon:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 9h20L12 21z"/><path d="M7 3h10l4 6-9 12L2 9z"/></svg>',
+  {name:'NIL & Sponsorship',category:'Professional',color:'var(--blue)',icon:'<img src="assets/skill-nil-clean.png" style="width:100%;height:100%;object-fit:contain;">',
    usedIn:[{icon:'📣',role:'NIL Marketing Intern',org:'Elevate Sports Management — negotiated & managed NIL deals for 5 athletes'}]},
-  {name:'Sports Operations',category:'Professional',color:'var(--blue-bright)',icon:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18M6 5.5c2.5 3 2.5 10.5 0 13.5M18 5.5c-2.5 3-2.5 10.5 0 13.5"/></svg>',
+  {name:'Sports Operations',category:'Professional',color:'var(--blue-bright)',icon:'<img src="assets/skill-sportsops-clean.png" style="width:100%;height:100%;object-fit:contain;">',
    usedIn:[{icon:'🏈',role:'Student Manager',org:'UF Football — daily ops for D1 program, 130+ athletes'},{icon:'🏟️',role:'Event Management Intern',org:'Gainesville Sports Commission — multi-sport event operations'}]},
-  {name:'Client Relations',category:'Professional',color:'var(--orange)',icon:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2 20c0-3.3 2.7-6 6-6s6 2.7 6 6M13 20c.3-2.3 2-4 4.5-4 2 0 3.7 1.2 4.2 3"/></svg>',
+  {name:'Client Relations',category:'Professional',color:'var(--orange)',icon:'<img src="assets/skill-clientrel-clean.png" style="width:100%;height:100%;object-fit:contain;">',
    usedIn:[{icon:'🎾',role:'Member Services Attendant',org:'Woodfield Country Club — daily service for 5,000+ residents'},{icon:'📣',role:'NIL Marketing Intern',org:'Elevate — corporate partner communication'}]},
-  {name:'Vendor Coordination',category:'Professional',color:'var(--blue)',icon:'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8M12 13v8"/></svg>',
+  {name:'Vendor Coordination',category:'Professional',color:'var(--blue)',icon:'<img src="assets/skill-vendor-clean.png" style="width:100%;height:100%;object-fit:contain;">',
    usedIn:[{icon:'🏟️',role:'Event Management Intern',org:'Gainesville Sports Commission — multi-vendor coordination'},{icon:'💪',role:'Facility Management Associate',org:'Lifetime Fitness — vendor & maintenance coordination'}]},
 ];
 let boxActive=-1;
@@ -927,7 +972,7 @@ function renderSkillBoxes(){
     SKILLS_BOOK.filter(s=>s.category===cat).forEach(s=>{
       const idx=i++;
       const box=document.createElement('button');
-      box.className='skill-box';
+      box.className='skill-box'+(s.icon.startsWith('<img')?' img-icon':'');
       box.style.setProperty('--tint',tint[cat]);
       box.style.setProperty('--accent',s.color);
       box.style.setProperty('--active-grad',grad[cat]);
@@ -959,7 +1004,7 @@ document.addEventListener('keydown',(e)=>{
    frame loop eases expPos toward it — still continuous motion, just aimed at a specific card. */
 const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const EXP_COUNT=document.querySelectorAll('#exp-track .exp-card').length;
-const SPIN_SPEED=1/2667; // index-units per ms — ~2.67s to cross the gap between adjacent cards (25% slower still)
+const SPIN_SPEED=1/6668; // index-units per ms — 40% of the previous speed (~6.67s to cross the gap between adjacent cards)
 const SETTLE_MS=380; // fixed-duration eased snap for manual nav — swift and decisive, not an asymptotic crawl
 const RESUME_DELAY_MS=2200;
 let expPos=0,settleTarget=null,settleFrom=0,settleDelta=0,settleStartTs=null,spinning=false,spinLockedOpen=false,resumeSpinTimer=null,lastFrameTs=null;
