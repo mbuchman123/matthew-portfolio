@@ -199,6 +199,12 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
    photo circle's top edge overlapping the bottom of the letters for the same layered-depth look. */
 .lead-bignum{position:absolute;top:20px;left:50%;transform:translateX(-50%);width:100%;text-align:center;font-family:'DM Sans',sans-serif;font-weight:800;font-size:clamp(60px,6vw,90px);letter-spacing:-0.03em;line-height:1;white-space:nowrap;pointer-events:none;background:linear-gradient(to right,var(--orange) 0%,var(--blue) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;opacity:0.38;}
 .lt-visual{position:relative;height:340px;margin-top:-5px;margin-bottom:1.5rem;}
+.lt-side-arrow{position:absolute;top:50%;transform:translateY(-50%) scale(1.4,1.7);z-index:5;background:none;border:none;padding:0;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:800;font-size:88px;line-height:1;color:transparent;opacity:0.95;-webkit-text-stroke:3px var(--blue);paint-order:stroke fill;transition:opacity 0.2s,transform 0.2s;}
+.lt-side-arrow:hover{opacity:1;}
+.lt-side-arrow.prev{left:-24px;}
+.lt-side-arrow.prev:hover{transform:translateY(-50%) scale(1.4,1.7) translateX(-4px);}
+.lt-side-arrow.next{right:-24px;}
+.lt-side-arrow.next:hover{transform:translateY(-50%) scale(1.4,1.7) translateX(4px);}
 .lt-bignum{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-weight:400;font-size:min(28vw,320px);color:rgba(0,48,135,0.06);white-space:nowrap;letter-spacing:-0.04em;pointer-events:none;z-index:0;user-select:none;transition:opacity 0.18s;}
 .lt-line{position:absolute;top:50%;left:20px;right:20px;height:2px;background:var(--border-h);z-index:1;}
 .lt-dot{position:absolute;top:50%;width:11px;height:11px;border-radius:50%;background:var(--surface);border:2px solid var(--border-h);transform:translate(-50%,-50%);cursor:pointer;transition:background 0.2s,border-color 0.2s,width 0.2s,height 0.2s;z-index:2;padding:0;}
@@ -219,9 +225,9 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .lt-pdots{display:flex;gap:6px;}
 .lt-pdot{width:18px;height:5px;border-radius:3px;background:var(--border-h);border:none;padding:0;cursor:pointer;transition:background 0.2s,width 0.2s;}
 .lt-pdot.active{background:var(--blue);width:26px;}
-.lt-modal{position:fixed;inset:0;z-index:1000;background:rgba(0,10,30,0.75);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:2rem;}
+.lt-modal{position:fixed;inset:0;z-index:1000;background:transparent;display:none;align-items:center;justify-content:center;padding:2rem;}
 .lt-modal.open{display:flex;}
-.lt-modal-inner{position:relative;background:var(--surface);border-radius:16px;max-width:440px;width:100%;padding:2rem 2rem 1.75rem;box-shadow:0 30px 80px rgba(0,0,0,0.35);}
+.lt-modal-inner{position:relative;background:var(--surface);border-radius:16px;border:2px solid #000;max-width:440px;width:100%;padding:2rem 2rem 1.75rem;box-shadow:0 30px 80px rgba(0,0,0,0.35);}
 .lt-modal-inner .card-top{margin-bottom:0;}
 .lt-modal-inner .bl{text-align:left;margin-top:.9rem;}
 .lt-modal-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:var(--blue-l);border:none;color:var(--blue);font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s,color 0.2s;}
@@ -334,7 +340,7 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .skills-row-label{text-align:center;font-family:'DM Sans',sans-serif;font-weight:800;font-size:clamp(23px,2.25vw,33px);letter-spacing:-0.03em;line-height:1;text-transform:uppercase;color:var(--blue);opacity:0.38;margin:0 0 .9rem;}
 .skills-row-label:not(:first-child){margin-top:1.8rem;}
 .skills-row{display:flex;gap:14px;align-items:flex-end;}
-.skill-box{position:relative;flex:1 1 0;min-width:0;height:168px;border-radius:20px;background:var(--surface);border:1px solid var(--border);padding:1.3rem 1.2rem;display:flex;flex-direction:column;cursor:pointer;text-align:left;overflow:hidden;box-shadow:0 6px 16px rgba(0,0,0,0.05);transition:flex-grow .5s cubic-bezier(.22,1,.36,1),height .5s cubic-bezier(.22,1,.36,1),background .35s,box-shadow .35s,transform .3s,border-color .3s;}
+.skill-box{position:relative;flex:1 1 0;min-width:0;height:120px;border-radius:20px;background:var(--surface);border:1px solid var(--border);padding:1.3rem 1.2rem;display:flex;flex-direction:column;cursor:pointer;text-align:left;overflow:hidden;box-shadow:0 6px 16px rgba(0,0,0,0.05);transition:flex-grow .5s cubic-bezier(.22,1,.36,1),flex-basis .5s cubic-bezier(.22,1,.36,1),height .5s cubic-bezier(.22,1,.36,1),background .35s,box-shadow .35s,transform .3s,border-color .3s;}
 .skill-box:hover{border-color:var(--accent);box-shadow:0 14px 28px rgba(0,0,0,0.1);transform:translateY(-3px);}
 .skill-box.active{flex-grow:2.4;height:378px;background:var(--active-grad);border-color:transparent;box-shadow:0 26px 54px rgba(0,0,0,0.22);transform:translateY(-8px);cursor:default;z-index:2;}
 .skill-box.active:hover{transform:translateY(-8px);}
@@ -347,51 +353,61 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
    drop the card treatment entirely in the compact state — no background/border/shadow square,
    just the icon (a drop-shadow filter stands in for the card shadow so it still reads as a
    distinct clickable tile against the page background) with a plain-text name below it, no
-   background chip. Active/expanded state keeps a real card surface (a fixed-height icon panel up
-   top, name/detail flowing below) since that's a readable content panel, not the idle "square
-   behind every icon" look the compact state was avoiding. */
-.skill-box.img-icon{padding:1rem .6rem .7rem;background:none;border:none;box-shadow:none;align-items:center;}
+   background chip. Clicking flips the card like a trading card: renderBoxHTML wraps the content in
+   .skill-flip (transform-style:preserve-3d, rotated 180deg on .active) containing two absolutely
+   stacked .skill-face panels (front = icon+name, back = name+"used in" list, pre-rotated 180deg
+   with backface-visibility:hidden so only one face is ever visible). .skill-box needs `perspective`
+   set for the 3D rotation to read as a flip rather than a flat squash. .skill-box.img-icon.active
+   sets its own height/flex-grow (kept square, not the taller/wider shape the generic .skill-box.active
+   rule above would otherwise give it) — .skill-back centers its content vertically
+   (justify-content:center) and still scrolls internally (overflow-y:auto) as a fallback for a
+   longer "used in" list than the square has room for. There's no close button on the card — the
+   global click listener below closes whichever box is active on any click outside it (same pattern
+   as the Experience carousel's close-on-outside-click), and Escape/re-clicking the same box work too. */
+.skill-box.img-icon{padding:0;background:none;border:none;box-shadow:none;perspective:1200px;}
 .skill-box.img-icon:hover{box-shadow:none;border-color:transparent;}
-.skill-box.img-icon .box-icon{position:relative;width:100%;flex:1 1 auto;min-height:0;background:none;}
-.skill-box.img-icon .box-icon img{width:100%;height:100%;background:none;display:block;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.15));}
-.skill-box.img-icon .box-name{position:relative;z-index:1;margin-top:.5rem;padding:0;background:none;box-shadow:none;color:var(--text);text-align:center;}
-.skill-box.img-icon.active{background:var(--surface);height:520px;padding:1.3rem 1.2rem;align-items:stretch;}
-.skill-box.img-icon.active .box-icon{width:100%;height:200px;flex:none;}
-.skill-box.img-icon.active .box-icon img{filter:none;}
-.skill-box.img-icon.active .box-name{margin-top:.9rem;padding:0;font-size:20px;font-family:'DM Serif Display',serif;font-weight:400;color:var(--text);text-align:left;}
-.skill-box.img-icon.active .box-detail{position:relative;z-index:1;padding:0;background:var(--surface);}
-.skill-box.img-icon.active .box-eyebrow{color:var(--accent);}
-.skill-box.img-icon.active .sp-item{background:var(--bg);}
-.skill-box.img-icon.active .sp-role{color:var(--text);}
-.skill-box.img-icon.active .sp-org{color:var(--muted);}
-.skill-box.img-icon .box-close{z-index:3;color:var(--muted);}
-.skill-box.img-icon .box-close:hover{color:var(--text);}
-.box-close{display:none;position:absolute;top:14px;right:16px;font-size:20px;line-height:1;color:rgba(255,255,255,0.8);background:none;border:none;cursor:pointer;padding:2px 6px;}
-.skill-box.active .box-close{display:block;}
-.box-close:hover{color:#fff;}
+.skill-flip{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.22,1,.36,1);}
+.skill-box.img-icon.active .skill-flip{transform:rotateY(180deg);}
+.skill-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;}
+.skill-front{padding:.7rem .5rem .5rem;align-items:center;}
+.skill-box.img-icon .skill-front .box-icon{position:relative;width:100%;flex:1 1 auto;min-height:0;background:none;}
+.skill-box.img-icon .skill-front .box-icon img{width:100%;height:100%;background:none;display:block;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.15));}
+.skill-box.img-icon .skill-front .box-name{position:relative;z-index:1;margin-top:.5rem;padding:0;background:none;box-shadow:none;color:var(--text);text-align:center;}
+.skill-back{transform:rotateY(180deg);background:var(--surface);padding:.6rem;overflow-y:auto;border-radius:20px;justify-content:center;}
+.skill-box.img-icon .skill-back .box-name{margin:0 0 .3rem;padding:0;font-size:16px;font-family:'DM Serif Display',serif;font-weight:400;color:var(--text);text-align:center;}
+.skill-box.img-icon .skill-back .box-eyebrow{color:var(--accent);}
+.skill-box.img-icon .skill-back .sp-item{background:var(--bg);}
+.skill-box.img-icon .skill-back .sp-role{color:var(--text);}
+.skill-box.img-icon.active .box-detail{margin-top:.25rem;}
+.skill-box.img-icon .skill-back .sp-org{color:var(--muted);}
+.skill-box.img-icon.active{background:var(--surface);height:200px;flex-grow:1.4;}
 .box-detail{opacity:0;max-height:0;overflow:hidden;pointer-events:none;transition:opacity .3s;}
 .skill-box.active .box-detail{opacity:1;max-height:1000px;pointer-events:auto;margin-top:.9rem;transition-delay:.2s;}
-.box-eyebrow{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.85);margin-bottom:.6rem;}
-.box-list{display:flex;flex-direction:column;gap:.55rem;}
+.box-eyebrow{font-size:12px;font-weight:700;color:rgba(255,255,255,0.85);margin-bottom:.3rem;text-align:center;}
+.box-list{display:flex;flex-direction:column;align-items:center;gap:.2rem;min-width:0;width:100%;}
 .skill-box.active .sp-item{background:rgba(255,255,255,0.14);}
 .skill-box.active .sp-role{color:#fff;}
 .skill-box.active .sp-org{color:rgba(255,255,255,0.75);}
-.sp-item{display:flex;align-items:center;gap:10px;font-size:13px;padding:8px 12px;border-radius:8px;background:var(--bg);transition:background 0.15s;}
-.sp-icon{font-size:16px;flex-shrink:0;}
-.sp-role{font-weight:500;font-size:13px;}
-.sp-org{font-size:12px;color:var(--muted);}
+.sp-item{display:flex;align-items:center;gap:6px;font-size:13px;padding:4px 8px;border-radius:6px;background:var(--bg);transition:background 0.15s;max-width:100%;width:100%;}
+.sp-icon{font-size:13px;flex-shrink:0;width:16px;height:16px;display:flex;align-items:center;justify-content:center;}
+.sp-icon img{width:100%;height:100%;object-fit:contain;border-radius:3px;}
+.sp-role{font-weight:500;font-size:11px;line-height:1.2;min-width:0;}
+.sp-org{font-size:9px;line-height:1.2;color:var(--muted);min-width:0;}
 @media (max-width:720px){
+  .lt-side-arrow{font-size:52px;}
+  .lt-side-arrow.prev{left:-8px;}
+  .lt-side-arrow.next{right:-8px;}
   .skills-row{flex-direction:column;align-items:stretch;gap:10px;}
   .skill-box{flex:none;height:auto;min-height:60px;flex-direction:row;align-items:center;gap:12px;padding:.85rem 1.05rem;}
   .box-name{margin-top:0;font-size:13px;}
   .skill-box.active{height:auto;flex-direction:column;align-items:flex-start;padding:1.3rem 1.2rem;}
   .skill-box.active .box-name{margin-top:.9rem;font-size:19px;}
-  .skill-box.img-icon{padding:.6rem 1.05rem;background:none;}
-  .skill-box.img-icon .box-icon{width:36px;height:36px;flex:none;}
-  .skill-box.img-icon .box-icon img{filter:drop-shadow(0 4px 8px rgba(0,0,0,0.15));}
-  .skill-box.img-icon .box-name{margin-top:0;text-align:left;}
-  .skill-box.img-icon.active{height:auto;padding:1.3rem 1.2rem;}
-  .skill-box.img-icon.active .box-icon{width:100%;height:150px;}
+  .skill-box.img-icon{padding:0;background:none;height:52px;}
+  .skill-front{flex-direction:row;align-items:center;gap:10px;padding:.7rem .9rem;}
+  .skill-box.img-icon .skill-front .box-icon{width:30px;height:30px;flex:none;}
+  .skill-box.img-icon .skill-front .box-icon img{filter:drop-shadow(0 4px 8px rgba(0,0,0,0.15));}
+  .skill-box.img-icon .skill-front .box-name{margin-top:0;text-align:left;}
+  .skill-box.img-icon.active{height:185px;}
 }
 /* .int-slot/.isi/.isl are shared with the About section's photo upload slot and the new
    Interests bento cards below — kept here, everything else that was specific to the old
@@ -416,8 +432,8 @@ body{position:relative;font-family:'DM Sans',sans-serif;background:var(--bg);col
 .interest-modal-inner::after{bottom:-15%;right:-20%;width:80%;height:60%;background:radial-gradient(circle,rgba(0,48,135,0.5),transparent 70%);}
 .interest-modal-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:var(--blue-l);border:none;color:var(--blue);font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s,color 0.2s;}
 .interest-modal-close:hover{background:var(--orange);color:#fff;}
-.interest-modal-title{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.6rem;padding-right:2rem;}
-.interest-modal-desc{font-size:14px;line-height:1.55;color:var(--muted);margin-bottom:1.4rem;}
+.interest-modal-title{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.6rem;text-align:center;}
+.interest-modal-desc{font-size:14px;line-height:1.55;color:var(--muted);margin-bottom:1.4rem;text-align:center;}
 .interest-modal-uploads{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
 .im-upload{aspect-ratio:1;border-radius:10px;border:1.5px dashed rgba(0,48,135,0.2);background:var(--blue-l);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:all 0.2s;overflow:hidden;position:relative;}
 .im-upload:hover{border-color:var(--blue);background:#dce8f7;transform:scale(1.02);}
@@ -562,11 +578,13 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
        `left` animates to the new entry's spot and the text fades to the new copy. -->
   <div class="lt-visual">
     <div class="lt-bignum" id="lt-bignum"></div>
+    <button class="lt-side-arrow prev" onclick="ltPrev()" aria-label="Previous">‹</button>
     <div class="lt-line" id="lt-line"></div>
     <div class="lt-photo-circle" id="lt-photo-circle" onclick="openLtModal(ltIdx)">
       <img class="on" id="lt-current-img">
       <div class="lt-upload"><label class="ubtn" onclick="event.stopPropagation()">📷<input type="file" accept="image/*" style="display:none" onchange="lb(this,'lt-current-img')"></label></div>
     </div>
+    <button class="lt-side-arrow next" onclick="ltNext()" aria-label="Next">›</button>
   </div>
   <div class="lt-info" id="lt-info">
     <span class="lt-badge" id="lt-badge"></span>
@@ -575,9 +593,7 @@ footer{background:var(--blue);padding:2rem 5vw;display:flex;justify-content:spac
     <p class="lt-brief" id="lt-brief"></p>
   </div>
   <div class="lt-nav">
-    <button class="cnav-btn" onclick="ltPrev()" aria-label="Previous">‹</button>
     <div class="lt-pdots" id="lt-pdots"></div>
-    <button class="cnav-btn" onclick="ltNext()" aria-label="Next">›</button>
   </div>
 
   <div class="lt-modal" id="lt-modal" onclick="if(event.target===this)closeLtModal()">
@@ -796,17 +812,17 @@ function lip(input){if(!input.files||!input.files[0])return;const s=input.closes
    modal-scoped twin of lip(), scoped to .im-upload instead of .int-slot) — but like every other
    upload slot, that swap is a client-side-only FileReader preview and doesn't persist. */
 const INTERESTS_INFO=[
-  {title:'Art',desc:"I've always liked sketching and painting as a way to unwind — mostly pencil and digital work, nothing too serious, just something creative outside of sports and business.",
+  {title:'Art',desc:"Something I've always enjoyed as a way to be creative, whether it's drawing, designing, or just trying something new.",
    photos:['assets/int-art-1.jpg','assets/int-art-2.png','assets/int-art-3.jpg'],photoBg:'#000'},
-  {title:'Sneakers',desc:"Collecting sneakers turned into a real hobby for me — I like following new releases and collabs and the design stories behind different colorways.",
+  {title:'Sneakers',desc:"I've always been into sneakers and enjoy learning about different shoes, designs, and the culture around them.",
    photos:['assets/int-sneakers-1.jpg','assets/int-sneakers-2.jpg','assets/int-sneakers-3.jpg']},
-  {title:'Content Creation',desc:"I post short-form videos on TikTok and Instagram — sports career advice, lifestyle content, and documenting my 75 Hard challenge.",
+  {title:'Content Creation',desc:"I enjoy creating content around my experiences in sports and sharing things I've learned that could help other students.",
    photos:['assets/int-content-1.jpg','assets/int-content-2.jpg','assets/int-content-3.jpg'],photoFit:'cover',photoPos:'50% 0%'},
-  {title:'Bowling',desc:"I bowled competitively in high school as varsity captain, and I still get back on the lanes whenever I get the chance.",
+  {title:'Bowling',desc:"A sport I grew up playing competitively, eventually becoming a varsity captain and placing at the state competition in Orlando.",
    photos:['assets/int-bowling-1.jpg','assets/int-bowling-2.jpg','assets/int-bowling-3.jpg'],photoFit:'cover'},
-  {title:'Fitness & Health',desc:"Staying active is a daily priority for me — strength training, running, and generally pushing myself physically and mentally.",
+  {title:'Fitness & Health',desc:"Staying active is a big part of my everyday life, whether I'm lifting, running, or working toward a new fitness goal.",
    photos:['assets/int-fitness-1.jpg','assets/int-fitness-2.jpg','assets/int-fitness-3.jpg'],photoFit:'cover'},
-  {title:'Sports Statistics',desc:"I'm always digging into box scores and advanced metrics across football, baseball, and basketball — the analytics side of sports is genuinely fun for me.",
+  {title:'Sports Statistics',desc:"I've always liked looking deeper into the numbers behind sports and using stats to better understand players, teams, and trends.",
    photos:['assets/int-stats-1.jpg','assets/int-stats-2.jpg','assets/int-stats-3.jpg'],photoFit:'cover',photoPos:'0% 0%'},
 ];
 function limg(input){if(!input.files||!input.files[0])return;const s=input.closest('.im-upload'),img=s.querySelector('img'),r=new FileReader();r.onload=e=>{img.src=e.target.result;img.classList.remove('h');s.classList.add('hp');};r.readAsDataURL(input.files[0]);}
@@ -924,36 +940,39 @@ function switchTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classL
    above openBox() below for how a box grows in place instead of opening a separate panel. */
 const SKILLS_BOOK=[
   {name:'Microsoft Word',category:'Software',color:'var(--blue)',icon:'<img src="assets/skill-word-clean.png" style="width:100%;height:100%;object-fit:contain;">',
-   usedIn:[{icon:'🏟️',role:'Event Management Intern',org:'Gainesville Sports Commission — itinerary & communications drafting'},{icon:'🏈',role:'Student Manager',org:'UF Football — travel logistics documentation'},{icon:'🎓',role:'Mu Sigma Lambda',org:'Co-Founder — chapter documents & event planning'}]},
+   usedIn:[{icon:"<img src=\"assets/GSC.webp\">",role:'Event Management Intern',org:'Gainesville Sports Commission: itinerary & communications drafting'},{icon:"<img src=\"assets/GHead.webp\">",role:'Student Manager',org:'UF Football: travel logistics documentation'},{icon:"<img src=\"assets/L&D MSL.webp\">",role:'Mu Sigma Lambda',org:'Co-Founder: chapter documents & event planning'}]},
   {name:'Excel',category:'Software',color:'var(--orange)',icon:'<img src="assets/skill-excel-clean.png" style="width:100%;height:100%;object-fit:contain;">',
-   usedIn:[{icon:'🏟️',role:'Event Management Intern',org:'Gainesville Sports Commission — athlete & vendor tracking'},{icon:'🏈',role:'Student Manager',org:'UF Football — 10,000+ item inventory management'},{icon:'💪',role:'Facility Management Associate',org:'Lifetime Fitness — operational scheduling & reporting'}]},
+   usedIn:[{icon:"<img src=\"assets/GSC.webp\">",role:'Event Management Intern',org:'Gainesville Sports Commission: athlete & vendor tracking'},{icon:"<img src=\"assets/GHead.webp\">",role:'Student Manager',org:'UF Football: 10,000+ item inventory management'},{icon:"<img src=\"assets/Lifetime.webp\">",role:'Facility Management Associate',org:'Lifetime Fitness: operational scheduling & reporting'}]},
   {name:'PowerPoint',category:'Software',color:'var(--blue-bright)',icon:'<img src="assets/skill-powerpoint-clean.png" style="width:100%;height:100%;object-fit:contain;">',
-   usedIn:[{icon:'📣',role:'NIL Marketing Intern',org:'Elevate Sports Management — brand strategy presentations'},{icon:'🎓',role:'Mu Sigma Lambda',org:'Co-Founder — Sales Summit & speaker event decks'}]},
+   usedIn:[{icon:"<img src=\"assets/Elevate Sports.webp\">",role:'NIL Marketing Intern',org:'Elevate Sports Management: brand strategy presentations'},{icon:"<img src=\"assets/L&D MSL.webp\">",role:'Mu Sigma Lambda',org:'Co-Founder: Sales Summit & speaker event decks'}]},
   {name:'CapCut',category:'Software',color:'var(--blue)',icon:'<img src="assets/skill-capcut-clean.png" style="width:100%;height:100%;object-fit:contain;">',
-   usedIn:[{icon:'🎬',role:'Content Creator',org:'TikTok & Instagram — editing short-form videos'}]},
+   usedIn:[{icon:'🎬',role:'Content Creator',org:'TikTok & Instagram: editing short-form videos'}]},
   {name:'Canva',category:'Software',color:'var(--orange)',icon:'<img src="assets/skill-canva-clean.png" style="width:100%;height:100%;object-fit:contain;">',
-   usedIn:[{icon:'📣',role:'NIL Marketing Intern',org:'Elevate — athlete social media graphics & branding assets'},{icon:'🏟️',role:'Event Management Intern',org:'Gainesville Sports Commission — event marketing materials'},{icon:'🎓',role:'GSMO & Mu Sigma Lambda',org:'Leadership — promotional content & membership materials'}]},
+   usedIn:[{icon:"<img src=\"assets/Elevate Sports.webp\">",role:'NIL Marketing Intern',org:'Elevate: athlete social media graphics & branding assets'},{icon:"<img src=\"assets/GSC.webp\">",role:'Event Management Intern',org:'Gainesville Sports Commission: event marketing materials'},{icon:"<img src=\"assets/L&D GMSO.jfif\">",role:'GSMO & Mu Sigma Lambda',org:'Leadership: promotional content & membership materials'}]},
   {name:'Event Management',category:'Professional',color:'var(--orange)',icon:'<img src="assets/skill-eventmgmt-clean.png" style="width:100%;height:100%;object-fit:contain;">',
-   usedIn:[{icon:'🏟️',role:'Event Management Intern',org:'Gainesville Sports Commission — full event lifecycle, 5,000+ athletes'},{icon:'🎾',role:'Member Services Attendant',org:'Woodfield Country Club — court scheduling & event coordination'},{icon:'🏅',role:'Assistant Director',org:'UF Big Event — 1,400+ volunteer event logistics'}]},
+   usedIn:[{icon:"<img src=\"assets/GSC.webp\">",role:'Event Management Intern',org:'Gainesville Sports Commission: full event lifecycle, 5,000+ athletes'},{icon:"<img src=\"assets/Woodfield.webp\">",role:'Member Services Attendant',org:'Woodfield Country Club: court scheduling & event coordination'},{icon:"<img src=\"assets/L&D BIGEVENT.jpg\">",role:'Assistant Director',org:'UF Big Event: 1,400+ volunteer event logistics'}]},
   {name:'NIL & Sponsorship',category:'Professional',color:'var(--blue)',icon:'<img src="assets/skill-nil-clean.png" style="width:100%;height:100%;object-fit:contain;">',
-   usedIn:[{icon:'📣',role:'NIL Marketing Intern',org:'Elevate Sports Management — negotiated & managed NIL deals for 5 athletes'}]},
+   usedIn:[{icon:"<img src=\"assets/Elevate Sports.webp\">",role:'NIL Marketing Intern',org:'Elevate Sports Management: negotiated & managed NIL deals for 5 athletes'}]},
   {name:'Sports Operations',category:'Professional',color:'var(--blue-bright)',icon:'<img src="assets/skill-sportsops-clean.png" style="width:100%;height:100%;object-fit:contain;">',
-   usedIn:[{icon:'🏈',role:'Student Manager',org:'UF Football — daily ops for D1 program, 130+ athletes'},{icon:'🏟️',role:'Event Management Intern',org:'Gainesville Sports Commission — multi-sport event operations'}]},
+   usedIn:[{icon:"<img src=\"assets/GHead.webp\">",role:'Student Manager',org:'UF Football: daily ops for D1 program, 130+ athletes'},{icon:"<img src=\"assets/GSC.webp\">",role:'Event Management Intern',org:'Gainesville Sports Commission: multi-sport event operations'}]},
   {name:'Client Relations',category:'Professional',color:'var(--orange)',icon:'<img src="assets/skill-clientrel-clean.png" style="width:100%;height:100%;object-fit:contain;">',
-   usedIn:[{icon:'🎾',role:'Member Services Attendant',org:'Woodfield Country Club — daily service for 5,000+ residents'},{icon:'📣',role:'NIL Marketing Intern',org:'Elevate — corporate partner communication'}]},
+   usedIn:[{icon:"<img src=\"assets/Woodfield.webp\">",role:'Member Services Attendant',org:'Woodfield Country Club: daily service for 5,000+ residents'},{icon:"<img src=\"assets/Elevate Sports.webp\">",role:'NIL Marketing Intern',org:'Elevate: corporate partner communication'}]},
   {name:'Vendor Coordination',category:'Professional',color:'var(--blue)',icon:'<img src="assets/skill-vendor-clean.png" style="width:100%;height:100%;object-fit:contain;">',
-   usedIn:[{icon:'🏟️',role:'Event Management Intern',org:'Gainesville Sports Commission — multi-vendor coordination'},{icon:'💪',role:'Facility Management Associate',org:'Lifetime Fitness — vendor & maintenance coordination'}]},
+   usedIn:[{icon:"<img src=\"assets/GSC.webp\">",role:'Event Management Intern',org:'Gainesville Sports Commission: multi-vendor coordination'},{icon:"<img src=\"assets/Lifetime.webp\">",role:'Facility Management Associate',org:'Lifetime Fitness: vendor & maintenance coordination'}]},
 ];
 let boxActive=-1;
 function renderBoxHTML(s){
-  return `<button class="box-close" onclick="event.stopPropagation();closeBox();">×</button><div class="box-icon">${s.icon}</div><div class="box-name">${s.name}</div><div class="box-detail"><div class="box-eyebrow">Used in</div><div class="box-list">${s.usedIn.map(u=>`<div class="sp-item"><span class="sp-icon">${u.icon}</span><div><div class="sp-role">${u.role}</div><div class="sp-org">${u.org}</div></div></div>`).join('')}</div></div>`;
+  return `<div class="skill-flip">
+    <div class="skill-face skill-front"><div class="box-icon">${s.icon}</div><div class="box-name">${s.name}</div></div>
+    <div class="skill-face skill-back"><div class="box-name">${s.name}</div><div class="box-detail"><div class="box-eyebrow">Used in:</div><div class="box-list">${s.usedIn.map(u=>`<div class="sp-item"><span class="sp-icon">${u.icon}</span><div><div class="sp-role">${u.role}</div><div class="sp-org">${u.org}</div></div></div>`).join('')}</div></div></div>
+  </div>`;
 }
 /* Clicking a box doesn't swap in a detail panel elsewhere — the box itself is both the trigger
-   and the destination. .active (in the stylesheet) grows its flex-grow/height and swaps in the
-   category gradient background; .box-detail's "used in" list fades in on a CSS transition-delay
-   once the resize is mostly done, no JS timing needed. Unlike the earlier flower design, flex
-   siblings never physically overlap, so every box stays clickable even while another is active —
-   clicking a different box re-targets .active directly, no close-then-open step required. */
+   and the destination. .active flips the card like a trading card (see the .skill-flip/.skill-face
+   comment in the stylesheet) and grows the box a bit at the same time so the back face has room
+   for the full "used in" list. Unlike the earlier flower design, flex siblings never physically
+   overlap, so every box stays clickable even while another is active — clicking a different box
+   re-targets .active directly, no close-then-open step required. */
 function openBox(i){
   if(boxActive===i){closeBox();return;}
   boxActive=i;
@@ -963,6 +982,15 @@ function closeBox(){
   boxActive=-1;
   document.querySelectorAll('.skill-box').forEach(b=>b.classList.remove('active'));
 }
+/* No close button on the card itself (removed in favor of clicking anywhere outside it) — this
+   listener runs on every click via bubbling, same pattern as the Experience carousel's global
+   close-on-outside-click. Clicking the active box itself is handled separately by openBox()'s own
+   toggle-closed check above, so this only needs to catch clicks that land outside every box. */
+document.addEventListener('click',(e)=>{
+  if(boxActive===-1)return;
+  const activeBox=document.querySelectorAll('.skill-box')[boxActive];
+  if(activeBox&&!activeBox.contains(e.target))closeBox();
+});
 function renderSkillBoxes(){
   const grad={Software:'linear-gradient(150deg,var(--blue) 0%,#001c4d 100%)',Professional:'linear-gradient(150deg,var(--orange) 0%,#b52d00 100%)'};
   const tint={Software:'var(--blue-l)',Professional:'var(--orange-l)'};
